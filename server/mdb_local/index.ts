@@ -65,11 +65,6 @@ type TRawTable = {
  */
 export class Table {
   /**
-   * The separator used to separate fields in an entry
-   */
-  static ENTRY_SEP: string = "{<@SEP>}"; 
-  
-  /**
    * The name of the table
    */
   public readonly name: string;
@@ -151,7 +146,7 @@ export class Table {
     for (const fieldname of this.fieldnames) {
       const value = data[fieldname];
       if (!value) throw new Error(`Field '${fieldname}' is missing in data`);
-      stringified_data += `${Table.ENTRY_SEP}${value}${Table.ENTRY_SEP}\n`;
+      stringified_data += `${value}\n`;
     }
 
     if (Object.keys(data).length - 1 > this.fieldnames.length) throw new Error(`Too many fields in data`);
@@ -167,7 +162,7 @@ export class Table {
     if (!fs.existsSync(this.entry_path(id))) return null;
 
     const raw_entry = fs.readFileSync(this.entry_path(id), { encoding: 'utf8', flag: 'r' });
-    const entries = raw_entry.match(new RegExp(`${Table.ENTRY_SEP}(.*?)${Table.ENTRY_SEP}`, 'g')).map((match: string) => match.substring(Table.ENTRY_SEP.length, match.length - Table.ENTRY_SEP.length));
+    const entries = raw_entry.split('\n');
     
     let record: TEntry = {};
     for (let i = 0; i < this.fieldnames.length; i++) {
