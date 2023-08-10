@@ -1,0 +1,1 @@
+.\exe\delete_table.exe
