@@ -154,7 +154,7 @@ export class Table {
       stringified_data += `${Table.ENTRY_SEP}${value}${Table.ENTRY_SEP}\n`;
     }
 
-    if (Object.keys(data).length > this.fieldnames.length) throw new Error(`Too many fields in data`);
+    if (Object.keys(data).length - 1 > this.fieldnames.length) throw new Error(`Too many fields in data`);
     fs.writeFileSync(this.entry_path(id), stringified_data.substring(0, stringified_data.length - 1), { encoding: 'utf8', flag: 'w' });
   }
 
