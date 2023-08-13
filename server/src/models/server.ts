@@ -13,7 +13,7 @@ export type RoomID = ID;
 type TGame = "rps" | "hilo";
 
 /**
- * The server's data
+ * The Server class's data
  */
 type TServer = {
   "rps": {
@@ -27,6 +27,9 @@ type TServer = {
   }
 };
 
+/**
+ * The Server class - handles connections to the server and game events / logic
+ */
 export default class Server {
   /**
    * The ID of every room on the server
