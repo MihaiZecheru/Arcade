@@ -1,13 +1,25 @@
 import Database from "../mdb_local/index";
 Database.connect();
 
+import Server from "./models/server";
 import User from "./models/user";
 
-const express = require("express");
+/** Websocket Server */
+
+import websocket from "ws";
+const ws = new websocket.Server({ port: 8080 });
+
+ws.on("connection", (socket: websocket) => {
+  
+});
+
+/** Express App */
+
+import express from "express";
 const app = express();
 app.use(express.json());
 
-app.get("/register/", async (req: any, res: any) => {
+app.get("/register", async (req: any, res: any) => {
   try {
     const { username, password, email, birthday } = req.body;
     const user_id = await User.generate_id();
@@ -18,7 +30,7 @@ app.get("/register/", async (req: any, res: any) => {
   }
 });
 
-app.get("/login/", async (req: any, res: any) => {
+app.get("/login", async (req: any, res: any) => {
   try {
     const { username, password } = req.body;
     const user = await Database.get_where("Users", "username", username);
@@ -28,10 +40,6 @@ app.get("/login/", async (req: any, res: any) => {
   } catch (err) {
     res.status(400).send(err);
   }
-});
-
-app.get("/server/", (req: any, res: any) => {
-  res.send("Hello world!");
 });
 
 app.listen(3000, () => {
