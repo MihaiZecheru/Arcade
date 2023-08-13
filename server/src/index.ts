@@ -1,23 +1,23 @@
-import Database from "../mdb_local/index";
-Database.connect();
+import express from "express";
+import express_ws from "express-ws";
 
 import Server from "./models/server";
 import User from "./models/user";
 
-/** Websocket Server */
+import Database from "../mdb_local/index";
+Database.connect();
 
-import websocket from "ws";
-const ws = new websocket.Server({ port: 8080 });
-
-ws.on("connection", (socket: websocket) => {
-  
-});
-
-/** Express App */
-
-import express from "express";
 const app = express();
+const ws_app = express_ws(app).app;
 app.use(express.json());
+
+
+
+/************************************/
+/*** Express - Login & Register ***/
+/************************************/
+
+
 
 app.get("/register", async (req: any, res: any) => {
   try {
@@ -42,6 +42,49 @@ app.get("/login", async (req: any, res: any) => {
   }
 });
 
+
+
+/******************************/
+/*** Express - Create Rooms ***/
+/******************************/
+
+
+
+/**
+ * Create a room for the Rock Paper Scissors game
+ * @returns The ID of the room
+ */
+app.post("/rps/create", async (req: any, res: any) => {
+  res.code(200).send(await Server.rps_create_room());
+});
+
+/**
+ * Create a room for the Hi-Lo game
+ * @returns The ID of the room
+ */
+app.post("/hilo/create", async (req: any, res: any) => {
+  // res.code(200).send(await Server.hilo_create_room());
+});
+
+
+
+/***********************************/
+/*** Websocket - Join/Play Games ***/
+/***********************************/
+
+
+
+/**
+ * Websocket for the Rock Paper Scissors game
+ */
+ws_app.ws("/rps/:room_id", (ws: any, req: any) => {
+  const room_id = req.params.room_id;
+  
+  ws.on("message", (msg: any) => {
+    console.log(msg.toString());
+  });
+});
+
 app.listen(3000, () => {
-  console.log("Server listening @ http://localhost:3000");
+  console.log("Express server listening @ http://localhost:3000");
 });
