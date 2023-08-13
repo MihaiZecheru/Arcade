@@ -1,18 +1,7 @@
 import Database from "../../mdb_local/index";
+import uuid, { ID } from "./ID";
 
-function uuid(): string {
-  const _uuid: string = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-    return v.toString(16);
-  });
-
-  // do not allow uuid to begin with a number
-  if (/[0-9]/g.test(_uuid[0])) {
-    return uuid();
-  }
-  
-  return _uuid;
-}
+export type UserID = ID;
 
 export interface IUser {
   user_id: string;
@@ -25,7 +14,7 @@ export interface IUser {
 }
 
 export default class User implements IUser {
-  public user_id: string;
+  public user_id: UserID;
   public username: string;
   public password: string;
   public balance: number;
@@ -34,7 +23,7 @@ export default class User implements IUser {
   public joined: string;
 
   constructor({ user_id, username, password, balance, email, birthday, joined }: IUser) {
-    this.user_id = user_id;
+    this.user_id = user_id as UserID;
     this.username = username;
     this.password = password;
     this.balance = balance;
