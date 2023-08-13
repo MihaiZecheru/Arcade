@@ -1,0 +1,1 @@
+export type rps_choice = "rock" | "paper" | "scissors";
