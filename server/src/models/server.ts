@@ -167,11 +167,16 @@ export default class Server {
   }
 
   /**
-   * Start a rock-paper-scissors game
+   * Start a rock-paper-scissors game and deduct the wager from both players
    * @param room_id The ID of the room that's starting
    */
   public static rps_start_game(room_id: RoomID) {
     this.server.rps[room_id].game_started = true;
+    
+    const room = this.rps_get_room(room_id);
+    room.players.forEach((player: Player) => {
+      this.decrease_user_balance(player.user_id, room.wager);
+    });
   }
 
   /**
