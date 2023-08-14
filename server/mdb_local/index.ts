@@ -158,7 +158,7 @@ export class Table {
    * @param id The id of the entry to get
    * @returns The entry with the given id if it exists, otherwise null
    */
-  public get(id: entryid): TEntry | null {
+  public get<T = TEntry>(id: entryid): T | null {
     if (!fs.existsSync(this.entry_path(id))) return null;
 
     const raw_entry = fs.readFileSync(this.entry_path(id), { encoding: 'utf8', flag: 'r' });
@@ -216,8 +216,17 @@ export class Table {
    * Get all entries in the table
    * @returns Every entry in the table
    */
-  public get_all(): Array<TEntry> {
+  public get_all<T = TEntry>(): Array<T> {
     return fs.readdirSync(this.folder).map((id: string) => this.parseFunction(this.get(parseInt(id))!));
+  }
+  
+  /**
+   * Get all entries in the table in the form of TEntry records.
+   * Used internally to allow filter-queries to be applied to the table entries before parsing them
+   * @returns Every entry in the table without parsing the entry
+   */
+  private get_all_no_parse(): Array<TEntry> {
+    return fs.readdirSync(this.folder).map((id: string) => this.get(parseInt(id))!);
   }
 
   /**
@@ -226,8 +235,8 @@ export class Table {
    * @param filter The filter to apply to each of the entries
    * @returns All entries that pass the given filter
    */
-  public get_with_filter(filter: TEntriesFilter): Array<TEntry> {
-    return this.get_all().filter(filter);
+  public get_with_filter<T = TEntry>(filter: TEntriesFilter): Array<T> {
+    return this.get_all_no_parse().filter(filter).map((entry: TEntry) => this.parseFunction(entry));
   }
 
   /**
@@ -237,8 +246,8 @@ export class Table {
    * @param value The value to compare the given field with
    * @returns All entries where the field with the given name is equal to the given value
    */
-  public get_where(fieldname: fieldname, value: string): Array<TEntry> {
-    return this.get_all().filter((entry: TEntry) => entry[fieldname] === value);
+  public get_where<T = TEntry>(fieldname: fieldname, value: string): Array<T> {
+    return this.get_all_no_parse().filter((entry: TEntry) => entry[fieldname] === value).map((entry: TEntry) => this.parseFunction(entry));
   }
 
   /**
@@ -248,8 +257,8 @@ export class Table {
    * @param value The value to compare the given field with
    * @returns All entries where the field with the given name is not equal to the given value
    */
-  public get_where_not(fieldname: fieldname, value: string): Array<TEntry> {
-    return this.get_all().filter((entry: TEntry) => entry[fieldname] !== value);
+  public get_where_not<T = TEntry>(fieldname: fieldname, value: string): Array<T> {
+    return this.get_all_no_parse().filter((entry: TEntry) => entry[fieldname] !== value).map((entry: TEntry) => this.parseFunction(entry));
   }
 
   /**
@@ -259,8 +268,8 @@ export class Table {
    * @param value The value to compare the given field with
    * @returns All entries where the field with the given name is greater than the given value
    */
-  public get_where_gt(fieldname: fieldname, value: string): Array<TEntry> {
-    return this.get_all().filter((entry: TEntry) => entry[fieldname] > value);
+  public get_where_gt<T = TEntry>(fieldname: fieldname, value: number): Array<T> {
+    return this.get_all_no_parse().filter((entry: TEntry) => parseFloat(entry[fieldname]) > value).map((entry: TEntry) => this.parseFunction(entry));
   }
 
   /**
@@ -270,8 +279,8 @@ export class Table {
    * @param value The value to compare the given field with
    * @returns All entries where the field with the given name is less than the given value
    */
-  public get_where_lt(fieldname: fieldname, value: string): Array<TEntry> {
-    return this.get_all().filter((entry: TEntry) => entry[fieldname] < value);
+  public get_where_lt<T = TEntry>(fieldname: fieldname, value: number): Array<T> {
+    return this.get_all_no_parse().filter((entry: TEntry) => parseFloat(entry[fieldname]) < value).map((entry: TEntry) => this.parseFunction(entry));
   }
 
   /**
@@ -281,8 +290,8 @@ export class Table {
    * @param value The value to compare the given field with
    * @returns All entries where the field with the given name is greater than or equal to the given value
    */
-  public get_where_gte(fieldname: fieldname, value: string): Array<TEntry> {
-    return this.get_all().filter((entry: TEntry) => entry[fieldname] >= value);
+  public get_where_gte<T = TEntry>(fieldname: fieldname, value: number): Array<T> {
+    return this.get_all_no_parse().filter((entry: TEntry) => parseFloat(entry[fieldname]) >= value).map((entry: TEntry) => this.parseFunction(entry));
   }
 
   /**
@@ -292,8 +301,8 @@ export class Table {
    * @param value The value to compare the given field with
    * @returns All entries where the field with the given name is less than or equal to the given value
    */
-  public get_where_lte(fieldname: fieldname, value: string): Array<TEntry> {
-    return this.get_all().filter((entry: TEntry) => entry[fieldname] <= value);
+  public get_where_lte<T = TEntry>(fieldname: fieldname, value: number): Array<T> {
+    return this.get_all_no_parse().filter((entry: TEntry) => parseFloat(entry[fieldname]) <= value).map((entry: TEntry) => this.parseFunction(entry));
   }
 
   /**
@@ -303,8 +312,8 @@ export class Table {
    * @param value The value to compare the given field with
    * @returns All entries where the field with the given name contains the given value
    */
-  public get_where_contains(fieldname: fieldname, value: string): Array<TEntry> {
-    return this.get_all().filter((entry: TEntry) => entry[fieldname].includes(value));
+  public get_where_contains<T = TEntry>(fieldname: fieldname, value: string): Array<T> {
+    return this.get_all_no_parse().filter((entry: TEntry) => entry[fieldname].includes(value)).map((entry: TEntry) => this.parseFunction(entry));
   }
 
   /**
@@ -314,8 +323,8 @@ export class Table {
    * @param value The value to compare the given field with
    * @returns All entries where the field with the given name does not contain the given value
    */
-  public get_where_not_contains(fieldname: fieldname, value: string): Array<TEntry> {
-    return this.get_all().filter((entry: TEntry) => !entry[fieldname].includes(value));
+  public get_where_not_contains<T = TEntry>(fieldname: fieldname, value: string): Array<T> {
+    return this.get_all_no_parse().filter((entry: TEntry) => !entry[fieldname].includes(value)).map((entry: TEntry) => this.parseFunction(entry));
   }
 
   /**
@@ -325,8 +334,8 @@ export class Table {
    * @param value The value to compare the given field with
    * @returns All entries where the field with the given name starts with the given value
    */
-  public get_where_starts_with(fieldname: fieldname, value: string): Array<TEntry> {
-    return this.get_all().filter((entry: TEntry) => entry[fieldname].startsWith(value));
+  public get_where_starts_with<T = TEntry>(fieldname: fieldname, value: string): Array<T> {
+    return this.get_all_no_parse().filter((entry: TEntry) => entry[fieldname].startsWith(value)).map((entry: TEntry) => this.parseFunction(entry));
   }
 
   /**
@@ -336,8 +345,8 @@ export class Table {
    * @param value The value to compare the given field with
    * @returns All entries where the field with the given name ends with the given value
    */
-  public get_where_ends_with(fieldname: fieldname, value: string): Array<TEntry> {
-    return this.get_all().filter((entry: TEntry) => entry[fieldname].endsWith(value));
+  public get_where_ends_with<T = TEntry>(fieldname: fieldname, value: string): Array<T> {
+    return this.get_all_no_parse().filter((entry: TEntry) => entry[fieldname].endsWith(value)).map((entry: TEntry) => this.parseFunction(entry));
   }
 
   // *** FILTER-QUERY PATCH METHODS *** ///
@@ -697,9 +706,9 @@ export default class Database {
    * @throws Error if the table does not exist
    * @throws Error if the database is not connected
    */
-  public static get(tablename: string, id: entryid): TEntry | null {
+  public static get<T = TEntry>(tablename: string, id: entryid): T | null {
     const table = this.get_table(tablename);
-    return table.get(id);
+    return table.get<T>(id);
   }
 
   /**
@@ -747,10 +756,11 @@ export default class Database {
    * @returns All entries from the table with the given tablename
    * @throws Error if the table does not exist
    * @throws Error if the database is not connected
+   * @generic T The type of the entry - must be the same as what is returned by the parseFunction - defaults to TEntry
    */
-  public static get_all(tablename: string): Array<TEntry> {
+  public static get_all<T = TEntry>(tablename: string): Array<T> {
     const table = this.get_table(tablename);
-    return table.get_all();
+    return table.get_all<T>();
   }
 
   /**
@@ -760,10 +770,11 @@ export default class Database {
    * @returns The entries that pass the given filter
    * @throws Error if the table does not exist
    * @throws Error if the database is not connected
+   * @generic T The type of the entry - must be the same as what is returned by the parseFunction - defaults to TEntry
    */
-  public static get_with_filter(tablename: string, filter: TEntriesFilter): Array<TEntry> {
+  public static get_with_filter<T = TEntry>(tablename: string, filter: TEntriesFilter): Array<T> {
     const table = this.get_table(tablename);
-    return table.get_with_filter(filter);
+    return table.get_with_filter<T>(filter);
   }
 
   /**
@@ -774,10 +785,11 @@ export default class Database {
    * @returns All entries from the table with the given tablename where the field with the given name equals the given value
    * @throws Error if the table does not exist
    * @throws Error if the database is not connected
+   * @generic T The type of the entry - must be the same as what is returned by the parseFunction - defaults to TEntry
    */
-  public static get_where(tablename: string, fieldname: fieldname, value: string): Array<TEntry> {
+  public static get_where<T = TEntry>(tablename: string, fieldname: fieldname, value: string): Array<T> {
     const table = this.get_table(tablename);
-    return table.get_where(fieldname, value);
+    return table.get_where<T>(fieldname, value);
   }
   
   /**
@@ -788,10 +800,11 @@ export default class Database {
    * @returns All entries from the table with the given tablename where the field with the given name does not equal the given value
    * @throws Error if the table does not exist
    * @throws Error if the database is not connected
+   * @generic T The type of the entry - must be the same as what is returned by the parseFunction - defaults to TEntry
    */
-  public static get_where_not(tablename: string, fieldname: fieldname, value: string): Array<TEntry> {
+  public static get_where_not<T = TEntry>(tablename: string, fieldname: fieldname, value: string): Array<T> {
     const table = this.get_table(tablename);
-    return table.get_where_not(fieldname, value);
+    return table.get_where_not<T>(fieldname, value);
   }
 
   /**
@@ -802,10 +815,11 @@ export default class Database {
    * @returns All entries from the table with the given tablename where the field with the given name is greater than the given value
    * @throws Error if the table does not exist
    * @throws Error if the database is not connected
+   * @generic T The type of the entry - must be the same as what is returned by the parseFunction - defaults to TEntry
    */
-  public static get_where_gt(tablename: string, fieldname: fieldname, value: string): Array<TEntry> {
+  public static get_where_gt<T = TEntry>(tablename: string, fieldname: fieldname, value: number): Array<T> {
     const table = this.get_table(tablename);
-    return table.get_where_gt(fieldname, value);
+    return table.get_where_gt<T>(fieldname, value);
   }
 
   /**
@@ -816,10 +830,11 @@ export default class Database {
    * @returns All entries from the table with the given tablename where the field with the given name is less than the given value
    * @throws Error if the table does not exist
    * @throws Error if the database is not connected
+   * @generic T The type of the entry - must be the same as what is returned by the parseFunction - defaults to TEntry
    */
-  public static get_where_lt(tablename: string, fieldname: fieldname, value: string): Array<TEntry> {
+  public static get_where_lt<T = TEntry>(tablename: string, fieldname: fieldname, value: number): Array<T> {
     const table = this.get_table(tablename);
-    return table.get_where_lt(fieldname, value);
+    return table.get_where_lt<T>(fieldname, value);
   }
 
   /**
@@ -830,10 +845,11 @@ export default class Database {
    * @returns All entries from the table with the given tablename where the field with the given name is greater than or equal to the given value
    * @throws Error if the table does not exist
    * @throws Error if the database is not connected
+   * @generic T The type of the entry - must be the same as what is returned by the parseFunction - defaults to TEntry
    */
-  public static get_where_gte(tablename: string, fieldname: fieldname, value: string): Array<TEntry> {
+  public static get_where_gte<T = TEntry>(tablename: string, fieldname: fieldname, value: number): Array<T> {
     const table = this.get_table(tablename);
-    return table.get_where_gte(fieldname, value);
+    return table.get_where_gte<T>(fieldname, value);
   }
 
   /**
@@ -844,10 +860,11 @@ export default class Database {
    * @returns All entries from the table with the given tablename where the field with the given name is less than or equal to the given value
    * @throws Error if the table does not exist
    * @throws Error if the database is not connected
+   * @generic T The type of the entry - must be the same as what is returned by the parseFunction - defaults to TEntry
    */
-  public static get_where_lte(tablename: string, fieldname: fieldname, value: string): Array<TEntry> {
+  public static get_where_lte<T = TEntry>(tablename: string, fieldname: fieldname, value: number): Array<T> {
     const table = this.get_table(tablename);
-    return table.get_where_lte(fieldname, value);
+    return table.get_where_lte<T>(fieldname, value);
   }
 
   /**
@@ -858,10 +875,11 @@ export default class Database {
    * @returns All entries from the table with the given tablename where the field with the given name contains the given value
    * @throws Error if the table does not exist
    * @throws Error if the database is not connected
+   * @generic T The type of the entry - must be the same as what is returned by the parseFunction - defaults to TEntry
    */
-  public static get_where_contains(tablename: string, fieldname: fieldname, value: string): Array<TEntry> {
+  public static get_where_contains<T = TEntry>(tablename: string, fieldname: fieldname, value: string): Array<T> {
     const table = this.get_table(tablename);
-    return table.get_where_contains(fieldname, value);
+    return table.get_where_contains<T>(fieldname, value);
   }
 
   /**
@@ -872,10 +890,11 @@ export default class Database {
    * @returns All entries from the table with the given tablename where the field with the given name does not contain the given value
    * @throws Error if the table does not exist
    * @throws Error if the database is not connected
+   * @generic T The type of the entry - must be the same as what is returned by the parseFunction - defaults to TEntry
    */
-  public static get_where_not_contains(tablename: string, fieldname: fieldname, value: string): Array<TEntry> {
+  public static get_where_not_contains<T = TEntry>(tablename: string, fieldname: fieldname, value: string): Array<T> {
     const table = this.get_table(tablename);
-    return table.get_where_not_contains(fieldname, value);
+    return table.get_where_not_contains<T>(fieldname, value);
   }
 
   /**
@@ -886,10 +905,11 @@ export default class Database {
    * @returns All entries from the table with the given tablename where the field with the given name starts with the given value
    * @throws Error if the table does not exist
    * @throws Error if the database is not connected
+   * @generic T The type of the entry - must be the same as what is returned by the parseFunction - defaults to TEntry
    */
-  public static get_where_starts_with(tablename: string, fieldname: fieldname, value: string): Array<TEntry> {
+  public static get_where_starts_with<T = TEntry>(tablename: string, fieldname: fieldname, value: string): Array<T> {
     const table = this.get_table(tablename);
-    return table.get_where_starts_with(fieldname, value);
+    return table.get_where_starts_with<T>(fieldname, value);
   }
 
   /**
@@ -900,10 +920,11 @@ export default class Database {
    * @returns All entries from the table with the given tablename where the field with the given name ends with the given value
    * @throws Error if the table does not exist
    * @throws Error if the database is not connected
+   * @generic T The type of the entry - must be the same as what is returned by the parseFunction - defaults to TEntry
    */
-  public static get_where_ends_with(tablename: string, fieldname: fieldname, value: string): Array<TEntry> {
+  public static get_where_ends_with<T = TEntry>(tablename: string, fieldname: fieldname, value: string): Array<T> {
     const table = this.get_table(tablename);
-    return table.get_where_ends_with(fieldname, value);
+    return table.get_where_ends_with<T>(fieldname, value);
   }
 
   /// *** FILTER-QUERY PATCH METHODS *** ///
