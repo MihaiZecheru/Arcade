@@ -2,11 +2,25 @@ import express from "express";
 import express_ws from "express-ws";
 
 import Server from "./models/server";
-import User from "./models/user";
+import User, { IUser, UserID } from "./models/user";
 
-import Database from "../mdb_local/index";
-import Player from "./models/player";
+import IPlayer from "./models/player";
+import { rps_choice } from "./models/games/rps";
+import { RPSRoom } from "./models/rooms";
+import Database, { TEntry } from "../mdb_local/index";
 Database.connect();
+
+Database.set_table_parse_function("Users", (entry: TEntry): IUser => {
+  let user: IUser = {} as IUser;
+  user.user_id = entry.user_id as UserID;
+  user.username = entry.username;
+  user.password = entry.password;
+  user.balance = parseInt(entry.balance);
+  user.email = entry.email;
+  user.birthday = entry.birthday;
+  user.joined = entry.joined;
+  return user;
+});
 
 const app = express();
 const ws_app = express_ws(app).app;
@@ -25,9 +39,9 @@ app.get("/register", async (req: any, res: any) => {
     const { username, password, email, birthday } = req.body;
     const user_id = await User.generate_id();
     Database.post("Users", { user_id, username, password, balance: "250", email, birthday, joined: new Date().toLocaleDateString() });
-    res.status(200).send(user_id);
+    return res.status(200).send(user_id);
   } catch (err) {
-    res.status(400).send(err);
+    return res.status(400).send(err);
   }
 });
 
@@ -37,9 +51,9 @@ app.get("/login", async (req: any, res: any) => {
     const user = await Database.get_where("Users", "username", username);
     if (user.length === 0) throw "User not found";
     if (user[0].password !== password) throw "Incorrect password";
-    res.status(200).send(user[0].user_id);
+    return res.status(200).send(user[0].user_id);
   } catch (err) {
-    res.status(400).send(err);
+    return res.status(400).send(err);
   }
 });
 
@@ -56,7 +70,10 @@ app.get("/login", async (req: any, res: any) => {
  * @returns The ID of the room
  */
 app.post("/rps/create", async (req: any, res: any) => {
-  res.code(200).send(await Server.rps_create_room());
+  const wager: number = req.body.wager;
+  if (wager <= 0) res.code(400).send("Wager must be greater than 0");
+  if (Math.floor(wager) !== wager) res.code(400).send("Wager must be a whole number");
+  return res.code(200).send(await Server.rps_create_room(wager));
 });
 
 /**
@@ -109,13 +126,49 @@ ws_app.ws("/rps/:room_id", (ws: any, req: any) => {
   if (room_is_full) {
     Server.rps_start_game(room_id);
     // send message to all connected clients
-    Server.rps_get_room(room_id).players.forEach((player: Player) => {
+    Server.rps_get_room(room_id).players.forEach((player: IPlayer) => {
       player.ws.send("game started");
     });
   }
 
   ws.on("message", (msg: any) => {
+    /**
+     * Messages will be in the format:
+     * player  choice
+     * {1 | 2}{r | p | s}
+     * 1p, 2s, 1r, 2p, etc.
+     */
+
+    const room: RPSRoom = Server.rps_get_room(room_id);
+
+    const player_number: number = parseInt(msg[0]);
+    const choice: rps_choice = msg[1] === 'r' ? "rock" : msg[1] === 'p' ? "paper" : "scissors";
+    const player_user_id: UserID = room.get_player_by_number(player_number)?.user_id!;
     
+    const ready = Server.rps_player_choose(room_id, player_user_id, choice);
+    if (ready) {
+      // both players have chosen
+      const winner = Server.rps_decide_winner(room_id);
+      const players = room.players;
+      const wager = room.wager;
+
+      if (winner === null) {
+        players.forEach((player: IPlayer) => {
+          player.ws.send("tie");
+        });
+      } else {
+        players.forEach((player: IPlayer) => {
+          if (player.user_id === winner.user_id) {
+            player.ws.send("winner");
+            Server.increase_user_balance(player.user_id, wager);
+          }
+          else {
+            player.ws.send("loser");
+            Server.decrease_user_balance(player.user_id, wager);
+          }
+        });
+      }
+    }
   });
 });
 
