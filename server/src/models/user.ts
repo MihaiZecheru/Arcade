@@ -1,4 +1,4 @@
-import Database from "../../mdb_local/index";
+import Database, { TEntriesFilter, TEntry } from "../../mdb_local/index";
 import uuid, { ID } from "./ID";
 
 export type UserID = ID;
@@ -55,5 +55,11 @@ export default class User implements IUser {
       // check if ID is already in use
       if (await Database.get_where("Users", "user_id", user_id).length === 0) return user_id;
     }
+  }
+
+  public static async get_user(user_id: UserID): Promise<User> {
+    const user: Array<IUser> = await Database.get_where<IUser>("Users", "user_id", user_id);
+    if (user.length === 0) throw new Error(`User ${user_id} not found`);
+    return new User(user[0] as IUser);
   }
 }
