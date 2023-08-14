@@ -1,4 +1,4 @@
-import Database, { TEntriesFilter, TEntry } from "../../mdb_local/index";
+import Database from "../../mdb_local/index";
 import uuid, { ID } from "./ID";
 
 export type UserID = ID;
