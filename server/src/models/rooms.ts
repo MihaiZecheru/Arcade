@@ -10,11 +10,17 @@ class RoomBaseClass {
   public players: Array<Player> = [];
   public game_started: boolean = false;
   public room_id: RoomID;
+  public wager: number;
 
-  public constructor(room_id: RoomID) {
+  public constructor(room_id: RoomID, wager: number) {
     this.room_id = room_id;
+    this.wager = wager;
   }
 
+  /**
+   * Get the number of players in the room
+   * @returns The number of players in the room
+   */
   public get_player_count(): number {
     return this.players.length;
   }
