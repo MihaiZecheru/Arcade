@@ -5,6 +5,7 @@ import Server from "./models/server";
 import User from "./models/user";
 
 import Database from "../mdb_local/index";
+import Player from "./models/player";
 Database.connect();
 
 const app = express();
@@ -76,15 +77,51 @@ app.post("/hilo/create", async (req: any, res: any) => {
 
 /**
  * Websocket for the Rock Paper Scissors game
+ * @param room_id The ID of the room - url param
+ * @param user_id The ID of the user - query param
  */
 ws_app.ws("/rps/:room_id", (ws: any, req: any) => {
   const room_id = req.params.room_id;
-  
+  const user_id = req.query.user_id;
+
+  // check if user_id was provided
+  if (!user_id) {
+    ws.send("User ID not provided");
+    return ws.close();
+  }
+
+  // check if user exists
+  if (Database.get_where("Users", "user_id", user_id).length === 0) {
+    ws.send("User does not exist");
+    return ws.close();
+  }
+
+  // check if room exists
+  if (!Server.room_exists("rps", room_id)) {
+    ws.send("Room does not exist");
+    return ws.close();
+  }
+
+  const room_is_full: boolean = Server.rps_join_room(room_id, user_id, ws);
+  console.log(`User ${user_id} connected to rock-paper-scissors room ${room_id}`);
+  ws.send(`connected to room ${room_id}`);
+
+  if (room_is_full) {
+    Server.rps_start_game(room_id);
+    // send message to all connected clients
+    Server.rps_get_room(room_id).players.forEach((player: Player) => {
+      player.ws.send("game started");
+    });
+  }
+
   ws.on("message", (msg: any) => {
-    console.log(msg.toString());
+    
   });
 });
 
+/**
+ * Start server
+ */
 app.listen(3000, () => {
   console.log("Express server listening @ http://localhost:3000");
 });
