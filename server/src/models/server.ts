@@ -1,7 +1,7 @@
 import User, { IUser, UserID } from "./user";
 import uuid, { ID } from "./ID";
 import { rps_choice } from "./games/rps";
-import Player from "./player";
+import IPlayer from "./player";
 import { RPSRoom } from "./rooms";
 import Database from "../../mdb_local";
 
@@ -174,10 +174,14 @@ export default class Server {
     this.server.rps[room_id].game_started = true;
     
     const room = this.rps_get_room(room_id);
-    room.players.forEach((player: Player) => {
+    room.players.forEach((player: IPlayer) => {
+      // deduct wager from player's balance
       this.decrease_user_balance(player.user_id, room.wager);
+      
+      // send game_start notice to player client
+      player.ws.send("game_start");
     });
-  }
+  };
 
   /**
    * Add the choice a player made in a rock-paper-scissors game
@@ -206,12 +210,12 @@ export default class Server {
    * @param room_id The ID of the room to get the winner of
    * @returns The ID of the winner, or null if there is no winner
    */
-  public static rps_decide_winner(room_id: RoomID): Player | null {
+  public static rps_decide_winner(room_id: RoomID): IPlayer | null {
     const player1_choice: rps_choice = this.server.rps[room_id].player1_choice!;
     const player2_choice: rps_choice = this.server.rps[room_id].player2_choice!;
 
-    const player1: Player = this.server.rps[room_id].get_player_by_number(1)!;
-    const player2: Player = this.server.rps[room_id].get_player_by_number(2)!;
+    const player1: IPlayer = this.server.rps[room_id].get_player_by_number(1)!;
+    const player2: IPlayer = this.server.rps[room_id].get_player_by_number(2)!;
 
     // tie
     if (player1_choice === player2_choice) return null;
