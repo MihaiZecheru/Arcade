@@ -1,8 +1,9 @@
-import { UserID } from "./user";
+import User, { IUser, UserID } from "./user";
 import uuid, { ID } from "./ID";
 import { rps_choice } from "./games/rps";
 import Player from "./player";
 import { RPSRoom } from "./rooms";
+import Database from "../../mdb_local";
 
 /**
  * The ID of a room on the server
@@ -52,8 +53,59 @@ export default class Server {
     return this.server[game][room_id] !== undefined;
   }
 
+
+
+  /*** User Balance ***/
+
+
+
+  public static async get_user(user_id: UserID): Promise<User> {
+    return await User.get_user(user_id);
+  }
   
-  
+  /**
+   * Get a user's balance
+   * @param user_id The ID of the user to get the balance of
+   * @returns The user's balance
+   */
+  public static async get_user_balance(user_id: UserID): Promise<number> {
+    return parseInt(await Database.get_where("Users", "user_id", user_id)[0].balance);
+  }
+
+  /**
+   * Increase a user's balance by the given amount
+   * @param user_id The ID of the user to increase the balance of
+   * @param amount The amount to increase the balance by
+   * @returns The user's new balance
+   */
+  public static async increase_user_balance(user_id: UserID, amount: number): Promise<number> {
+    const balance = await this.get_user_balance(user_id);
+    
+    await Database.patch_where("Users", "user_id", user_id, {
+      balance: (balance + amount).toString()
+    });
+
+    return balance + amount;
+  }
+
+  /**
+   * Decrease a user's balance by the given amount
+   * @param user_id The ID of the user to decrease the balance of
+   * @param amount The amount to decrease the balance by
+   * @returns The user's new balance
+   */
+  public static async decrease_user_balance(user_id: UserID, amount: number): Promise<number> {
+    const balance = await this.get_user_balance(user_id);
+    
+    await Database.patch_where("Users", "user_id", user_id, {
+      balance: (balance - amount).toString()
+    });
+
+    return balance - amount;
+  }
+
+
+
   /*** Rock Paper Scissors ***/
 
 
@@ -62,11 +114,14 @@ export default class Server {
    * Create a room for rock-paper-scissors
    * @returns The ID of the room
    */
-  public static rps_create_room(): RoomID {
+  public static rps_create_room(wager: number): RoomID {
+    if (wager <= 0) throw new Error("Wager must be greater than 0");
+    if (Math.floor(wager) !== wager) throw new Error("Wager must be a whole number");
+    
     const id: RoomID = uuid() as RoomID;
     
     this.room_ids.push(id);
-    this.server.rps[id] = new RPSRoom(id);
+    this.server.rps[id] = new RPSRoom(id, wager);
 
     return id;
   }
