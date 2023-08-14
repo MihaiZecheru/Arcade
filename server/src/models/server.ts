@@ -223,6 +223,7 @@ export default class Server {
     if (player1_choice === "rock") {
       if (player2_choice === "paper") return player2;
       else return this.server.rps[room_id].get_player_by_number(1)!;
+// sourcery skip: merge-else-if
     } else if (player1_choice === "paper") {
       if (player2_choice === "scissors") return player2;
       else return player1;
