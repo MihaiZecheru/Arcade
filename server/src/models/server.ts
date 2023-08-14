@@ -1,6 +1,8 @@
 import { UserID } from "./user";
 import uuid, { ID } from "./ID";
 import { rps_choice } from "./games/rps";
+import Player from "./player";
+import { RPSRoom } from "./rooms";
 
 /**
  * The ID of a room on the server
@@ -17,14 +19,9 @@ type TGame = "rps" | "hilo";
  */
 type TServer = {
   "rps": {
-    [room_id: RoomID]: {
-      "player1": UserID | null,
-      "player2": UserID | null,
-      "player1_choice": rps_choice | null,
-      "player2_choice": rps_choice | null,
-      "game_started": boolean
-    }
-  }
+    [room_id: RoomID]: RPSRoom
+  },
+  "hilo": {} // TODO
 };
 
 /**
@@ -40,10 +37,26 @@ export default class Server {
    * The server's data
    */
   private static server: TServer = {
-    "rps": {}
+    "rps": {},
+    "hilo": {}
   };
 
+  /**
+   * Check if a room exists for a given game
+   * @param game The game to check for
+   * @param room_id The ID of the room to check
+   * @returns Whether or not the room exists
+   */
+  public static room_exists(game: TGame, room_id: RoomID): boolean {
+    // @ts-ignore
+    return this.server[game][room_id] !== undefined;
+  }
+
+  
+  
   /*** Rock Paper Scissors ***/
+
+
 
   /**
    * Create a room for rock-paper-scissors
@@ -53,59 +66,70 @@ export default class Server {
     const id: RoomID = uuid() as RoomID;
     
     this.room_ids.push(id);
-    this.server.rps[id] = {
-      "player1": null,
-      "player2": null,
-      "player1_choice": null,
-      "player2_choice": null,
-      "game_started": false
-    };
+    this.server.rps[id] = new RPSRoom(id);
 
     return id;
   }
 
   /**
+   * Get a rock-paper-scissors room by ID
+   * @param room_id The ID of the room to get
+   * @returns The room with the given ID
+   */
+  public static rps_get_room(room_id: RoomID): RPSRoom {
+    return this.server.rps[room_id];
+  }
+
+  /**
    * Add a player to a rock-paper-scissors room
    * @param room_id The ID of the room the player is joining
-   * @param player_id The ID of the player joining the room
+   * @param user_id The ID of the player joining the room
    * @returns Whether the room is full and the game can start
+   * @throws {Error} If the room is full
    */
-  public static rps_add_player(room_id: RoomID, player_id: UserID): boolean {
-    if (this.server.rps[room_id].player1 === null) {
-      this.server.rps[room_id].player1 = player_id;
-      return false;
-    } else {
-      this.server.rps[room_id].player2 = player_id;
-      return true;
+  public static rps_join_room(room_id: RoomID, user_id: UserID, ws: any): boolean {
+    if (this.server.rps[room_id].get_player_count() >= 2) {
+      throw new Error(`Room ${room_id} is full`);
     }
+    
+    this.server.rps[room_id].add_player({
+      "user_id": user_id,
+      "player_number": this.server.rps[room_id].players.length + 1,
+      "ws": ws
+    });
+    
+    return this.server.rps[room_id].get_player_count() === 2;
   }
 
   /**
    * Remove a player from a rock-paper-scissors room
    * @param room_id The ID of the room to remove the player from
-   * @param player_id The ID of the player to remove from the room
+   * @param user_id The ID of the player to remove from the room
+   * @throws {Error} If the given user is not in the room
    */
-  public static rps_remove_player(room_id: RoomID, player_id: UserID) {
-    if (this.server.rps[room_id].player1 === player_id) {
-      this.server.rps[room_id].player1 = null;
-    } else {
-      this.server.rps[room_id].player2 = null;
-    }
+  public static rps_leave_room(room_id: RoomID, user_id: UserID) {
+    this.server.rps[room_id].remove_player(user_id);
   }
 
+  /**
+   * Start a rock-paper-scissors game
+   * @param room_id The ID of the room that's starting
+   */
   public static rps_start_game(room_id: RoomID) {
     this.server.rps[room_id].game_started = true;
   }
 
   /**
    * Add the choice a player made in a rock-paper-scissors game
+   * @note Assumes the game is in progress and both players are connected
    * @param room_id The ID of the room the player is in
    * @param player_id The ID of the player choosing
    * @param choice The choice the player is making - rock, paper, or scissors
    * @returns True if both players have chosen, false otherwise
    */
   public static rps_player_choose(room_id: RoomID, player_id: UserID, choice: rps_choice): boolean {
-    if (player_id === this.server.rps[room_id].player1) {
+    ;
+    if (player_id === this.server.rps[room_id].get_player_by_number(1)?.user_id) {
       // player1
       this.server.rps[room_id].player1_choice = choice;
       return false;
@@ -122,19 +146,19 @@ export default class Server {
    * @param room_id The ID of the room to get the winner of
    * @returns The ID of the winner, or null if there is no winner
    */
-  public static rps_decide_winner(room_id: RoomID): UserID | null {
+  public static rps_decide_winner(room_id: RoomID): Player | null {
     const player1_choice: rps_choice = this.server.rps[room_id].player1_choice!;
     const player2_choice: rps_choice = this.server.rps[room_id].player2_choice!;
 
-    const player1: UserID = this.server.rps[room_id].player1!;
-    const player2: UserID = this.server.rps[room_id].player2!;
+    const player1: Player = this.server.rps[room_id].get_player_by_number(1)!;
+    const player2: Player = this.server.rps[room_id].get_player_by_number(2)!;
 
     // tie
     if (player1_choice === player2_choice) return null;
     
     if (player1_choice === "rock") {
       if (player2_choice === "paper") return player2;
-      else return this.server.rps[room_id].player1;
+      else return this.server.rps[room_id].get_player_by_number(1)!;
     } else if (player1_choice === "paper") {
       if (player2_choice === "scissors") return player2;
       else return player1;
