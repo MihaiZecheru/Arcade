@@ -125,10 +125,6 @@ ws_app.ws("/rps/:room_id", (ws: any, req: any) => {
 
   if (room_is_full) {
     Server.rps_start_game(room_id);
-    // send message to all connected clients
-    Server.rps_get_room(room_id).players.forEach((player: IPlayer) => {
-      player.ws.send("game started");
-    });
   }
 
   ws.on("message", (msg: any) => {
@@ -164,7 +160,6 @@ ws_app.ws("/rps/:room_id", (ws: any, req: any) => {
           }
           else {
             player.ws.send("loser");
-            Server.decrease_user_balance(player.user_id, wager);
           }
         });
       }

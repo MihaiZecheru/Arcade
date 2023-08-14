@@ -1,5 +1,5 @@
 import { rps_choice } from "./games/rps";
-import Player from "./player";
+import IPlayer from "./player";
 import { RoomID } from "./server";
 import { UserID } from "./user";
 
@@ -7,7 +7,7 @@ import { UserID } from "./user";
  * A base class for all rooms to inherit from
  */
 class RoomBaseClass {
-  public players: Array<Player> = [];
+  public players: Array<IPlayer> = [];
   public game_started: boolean = false;
   public room_id: RoomID;
   public wager: number;
@@ -29,7 +29,7 @@ class RoomBaseClass {
    * Add a player to the room
    * @param player The player to add to the room
    */
-  public add_player(player: Player) {
+  public add_player(player: IPlayer) {
     this.players.push(player);
   }
 
@@ -57,7 +57,7 @@ class RoomBaseClass {
    * @param player_number The number of the player to get
    * @returns 
    */
-  public get_player_by_number(player_number: number): Player | null {
+  public get_player_by_number(player_number: number): IPlayer | null {
     return this.players[player_number - 1] || null;
   }
 
@@ -66,7 +66,7 @@ class RoomBaseClass {
    * @param user_id The user ID of the player to get
    * @returns 
    */
-  public get_player_by_user_id(user_id: string): Player | null {
+  public get_player_by_user_id(user_id: string): IPlayer | null {
     return this.players.find(player => player.user_id === user_id) || null;
   }
 }

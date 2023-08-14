@@ -1,6 +1,6 @@
 import { UserID } from "./user";
 
-export default class Player {
+export default interface IPlayer {
   /**
    * The ID of the user in the database
    */
