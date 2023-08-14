@@ -32,14 +32,25 @@ export default class User implements IUser {
     this.joined = joined;
   }
 
+  /**
+   * Increase the user's balance by the given amount
+   * @param amount The amount to increase the balance by
+   */
   public increase_balance(amount: number) {
     this.balance += amount;
   }
 
+  /**
+   * Decrease the user's balance by the given amount
+   * @param amount The amount to decrease the balance by
+   */
   public decrease_balance(amount: number) {
     this.balance -= amount;
   }
 
+  /**
+   * Save any changes to the user in the database
+   */
   public save() {
     Database.patch_where("Users", "user_id", this.user_id, {
       username: this.username,
@@ -49,6 +60,10 @@ export default class User implements IUser {
     });
   }
   
+  /**
+   * Generate a unique user ID
+   * @returns A unique user ID
+   */
   public static async generate_id(): Promise<string> {
     while (true) {
       const user_id = uuid();
@@ -57,6 +72,11 @@ export default class User implements IUser {
     }
   }
 
+  /**
+   * Get a user from the database
+   * @param user_id The ID of the user to get
+   * @returns The user with the given ID
+   */
   public static async get_user(user_id: UserID): Promise<User> {
     const user: Array<IUser> = await Database.get_where<IUser>("Users", "user_id", user_id);
     if (user.length === 0) throw new Error(`User ${user_id} not found`);
