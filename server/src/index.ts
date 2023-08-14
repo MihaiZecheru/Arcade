@@ -157,8 +157,7 @@ ws_app.ws("/rps/:room_id", (ws: any, req: any) => {
           if (player.user_id === winner.user_id) {
             player.ws.send("winner");
             Server.increase_user_balance(player.user_id, wager);
-          }
-          else {
+          } else {
             player.ws.send("loser");
           }
         });
