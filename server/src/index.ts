@@ -29,7 +29,7 @@ app.use(express.json());
 
 
 /************************************/
-/*** Express - Login & Register ***/
+/*** Express - Login & Register *****/
 /************************************/
 
 
@@ -48,10 +48,10 @@ app.post("/register", async (req: any, res: any) => {
 app.post("/login", async (req: any, res: any) => {
   try {
     const { username, password } = req.body;
-    const user = await Database.get_where("Users", "username", username);
-    if (user.length === 0) throw "User not found";
-    if (user[0].password !== password) throw "Incorrect password";
-    return res.status(200).send(user[0].user_id);
+    const users = await Database.get_where("Users", "username", username);
+    if (users.length === 0) throw "User not found";
+    if (users[0].password !== password) throw "Incorrect password";
+    return res.status(200).send(users[0].user_id);
   } catch (err) {
     return res.status(400).send(err);
   }
