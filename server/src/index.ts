@@ -34,7 +34,7 @@ app.use(express.json());
 
 
 
-app.post("/register", async (req: any, res: any) => {
+app.post("/api/register", async (req: any, res: any) => {
   try {
     const { username, password, email, birthday } = req.body;
     const user_id = await User.generate_id();
@@ -45,7 +45,7 @@ app.post("/register", async (req: any, res: any) => {
   }
 });
 
-app.post("/login", async (req: any, res: any) => {
+app.post("/api/login", async (req: any, res: any) => {
   try {
     const { username, password } = req.body;
     const users = await Database.get_where("Users", "username", username);
@@ -69,7 +69,7 @@ app.post("/login", async (req: any, res: any) => {
  * Create a room for the Rock Paper Scissors game
  * @returns The ID of the room
  */
-app.post("/rps/create", async (req: any, res: any) => {
+app.post("/api/rps/create", async (req: any, res: any) => {
   const wager: number = req.body.wager;
   if (wager <= 0) res.code(400).send("Wager must be greater than 0");
   if (Math.floor(wager) !== wager) res.code(400).send("Wager must be a whole number");
@@ -80,7 +80,7 @@ app.post("/rps/create", async (req: any, res: any) => {
  * Create a room for the Hi-Lo game
  * @returns The ID of the room
  */
-app.post("/hilo/create", async (req: any, res: any) => {
+app.post("/api/hilo/create", async (req: any, res: any) => {
   // res.code(200).send(await Server.hilo_create_room());
 });
 
@@ -97,7 +97,7 @@ app.post("/hilo/create", async (req: any, res: any) => {
  * @param room_id The ID of the room - url param
  * @param user_id The ID of the user - query param
  */
-ws_app.ws("/rps/:room_id", (ws: any, req: any) => {
+ws_app.ws("/api/rps/:room_id", (ws: any, req: any) => {
   const room_id = req.params.room_id;
   const user_id = req.query.user_id;
 
@@ -142,6 +142,8 @@ ws_app.ws("/rps/:room_id", (ws: any, req: any) => {
     const player_user_id: UserID = room.get_player_by_number(player_number)?.user_id!;
     
     const ready = Server.rps_player_choose(room_id, player_user_id, choice);
+    
+    // Play the game
     if (ready) {
       // both players have chosen
       const winner = Server.rps_decide_winner(room_id);
