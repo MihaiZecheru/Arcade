@@ -34,7 +34,7 @@ app.use(express.json());
 
 
 
-app.get("/register", async (req: any, res: any) => {
+app.post("/register", async (req: any, res: any) => {
   try {
     const { username, password, email, birthday } = req.body;
     const user_id = await User.generate_id();
@@ -45,7 +45,7 @@ app.get("/register", async (req: any, res: any) => {
   }
 });
 
-app.get("/login", async (req: any, res: any) => {
+app.post("/login", async (req: any, res: any) => {
   try {
     const { username, password } = req.body;
     const user = await Database.get_where("Users", "username", username);
