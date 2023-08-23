@@ -2,15 +2,25 @@
 
 namespace RockPaperScissorsCLI;
 
-public class RockPaperScissors
+public static class RockPaperScissors
 {
+    /// <summary>
+    /// The user playing the game
+    /// </summary>
+    private static ArcadeUser User { get; set; }
+
+    /// <summary>
+    /// For CPU moves
+    /// </summary>
+    private static readonly Random random = new Random();
+
     public static void Main(string[] args)
     {
         ArcadeLib.UserID User_ID = ArcadeLib.Auth.LoginPrompt();
-        ArcadeUser user = ArcadeServerAPI.GetArcadeUserSync(User_ID);
+        User = ArcadeServerAPI.GetArcadeUserSync(User_ID);
 
-        Console.Clear();
-        Console.WriteLine(user);
-        Console.ReadKey();
+
+
+        ArcadeLib.Misc.WaitOnExit();
     }
 }
