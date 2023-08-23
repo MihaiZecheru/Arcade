@@ -10,7 +10,7 @@ public class UserID
     /// <br/><br/>
     /// Used to validate the UserID
     /// </summary>
-    private static readonly Regex validator = new Regex(@"^{8}-{4}-4{3}-y{3}-{12}$");
+    private static readonly Regex validator = new Regex(@"\A.{8}-.{4}-4.{3}-.{4}-.{12}\Z");
 
     /// <summary>
     /// UserID
