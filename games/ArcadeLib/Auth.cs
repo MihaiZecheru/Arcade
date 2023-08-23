@@ -5,23 +5,6 @@ using System.Runtime.CompilerServices;
 namespace ArcadeLib;
 
 /// <summary>
-/// Create a dotted line that spans the console horizontally
-/// </summary>
-public class DotLine
-{
-    /// <summary>
-    /// Create a dotted line that spans the console horizontally
-    /// </summary>
-    /// <param name="color">The color to make the line</param>
-    public DotLine(ConsoleColor color = ConsoleColor.White)
-    {
-        AnsiConsole.Write(
-            new Text(new string('-', Console.BufferWidth) + '\n', new Style(color))
-        );
-    }
-}
-
-/// <summary>
 /// User authentification - login screen
 /// </summary>
 public static class Auth
@@ -30,16 +13,6 @@ public static class Auth
     /// Header for the login screen
     /// </summary>
     private static readonly FigletText header = new FigletText("Login To Arcade").Centered().Color(ConsoleColor.Blue);
-
-    /// <summary>
-    /// The color blue
-    /// </summary>
-    private static readonly Style BLUE = new Style(ConsoleColor.Blue);
-
-    /// <summary>
-    /// The color gold
-    /// </summary>
-    private static readonly Style GOLD = new Style(Color.Gold1);
 
     /// <summary>
     /// Indicates whether or not the cursor is currently at the username prompt
