@@ -45,6 +45,7 @@ export default class User implements IUser {
    * @param amount The amount to decrease the balance by
    */
   public decrease_balance(amount: number) {
+    if (this.balance < amount) throw new Error("Insufficient token balance");
     this.balance -= amount;
   }
 
