@@ -172,5 +172,5 @@ ws_app.ws("/api/rps/:room_id", (ws: any, req: any) => {
  * Start server
  */
 app.listen(3000, () => {
-  console.log("Express server listening @ http://localhost:3000");
+  console.log("Arcade server listening @ http://localhost:3000");
 });
