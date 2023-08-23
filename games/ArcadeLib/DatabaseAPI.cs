@@ -15,7 +15,7 @@ public static class DatabaseAPI
     /// <param name="password">The user's password</param>
     /// <exception cref="Exception">Thrown when the login fails</exception>
     /// <returns>The user's ID</returns>
-    public static async Task<string> Login(string username, string password)
+    public static async Task<ArcadeLib.UserID> Login(string username, string password)
     {
         string url = $"{ArcadeURL}/api/login";
 
@@ -29,6 +29,40 @@ public static class DatabaseAPI
 
         if (response_content == "User not found" || response_content == "Incorrect password")
             throw new Exception(response_content);
-        return response_content;
+        return new ArcadeLib.UserID(response_content);
+    }
+
+    /// <summary>
+    /// Get the user with the given <paramref name="User_ID"/>'s data
+    /// </summary>
+    /// <param name="User_ID">The user's ID</param>
+    /// <returns><see cref="ArcadeUser"/> object</returns>
+    public static async Task<ArcadeUser> GetArcadeUser(ArcadeLib.UserID User_ID)
+    {
+        string url = $"{ArcadeURL}/api/user/{User_ID}";
+
+        try
+        {
+            var response = await client.GetAsync(url);
+
+            if (response.IsSuccessStatusCode)
+            {
+                // Read the response content as a string
+                string jsonResponse = await response.Content.ReadAsStringAsync();
+
+                // Deserialize the JSON response into an ArcadeUser object
+                ArcadeUser user = JsonConvert.DeserializeObject<ArcadeUser>(jsonResponse);
+
+                return user;
+            }
+            else
+            {
+                throw new Exception("Error retrieving user data");
+            }
+        }
+        catch
+        {
+            throw new Exception("Error retrieving user data");
+        }
     }
 }
