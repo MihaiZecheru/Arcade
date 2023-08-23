@@ -111,7 +111,7 @@ public static class Auth
                             string UserID = DatabaseAPI.Login(GetUsername().Trim(), GetPassword()).GetAwaiter().GetResult();
                             return UserID; // If the login was successful, return the UserID
                         }
-                        catch
+                        catch 
                         {
                             // If the login was invalid, reset the screen
                             ShowError("Invalid username or password");
