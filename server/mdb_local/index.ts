@@ -178,6 +178,8 @@ export class Table {
    * @returns The created entry
    */
   public post(data: TEntry): TEntry {
+    // Do not allow the user to set the id of the entry
+    if (data.id) throw new Error("Cannot set the id of the entry");
     const id = this.get_next_id();
     this.write_to_file(id, data);
     return this.parseFunction(data);
