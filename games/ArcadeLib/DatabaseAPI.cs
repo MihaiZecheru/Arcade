@@ -33,9 +33,22 @@ public static class DatabaseAPI
     }
 
     /// <summary>
+    /// Syncronous version of <see cref="Login(string, string)"/>
+    /// </summary>
+    /// <param name="username">The user's username</param>
+    /// <param name="password">The user's password</param>
+    /// <exception cref="Exception"Thrown when the login fails></exception>
+    /// <returns>The user's ID</returns>
+    public static ArcadeLib.UserID LoginSync(string username, string password)
+    {
+        return Login(username, password).GetAwaiter().GetResult();
+    }
+
+    /// <summary>
     /// Get the user with the given <paramref name="User_ID"/>'s data
     /// </summary>
     /// <param name="User_ID">The user's ID</param>
+    /// <exception cref="Exception">Error retrieving user data</exception>
     /// <returns><see cref="ArcadeUser"/> object</returns>
     public static async Task<ArcadeUser> GetArcadeUser(ArcadeLib.UserID User_ID)
     {
@@ -47,13 +60,8 @@ public static class DatabaseAPI
 
             if (response.IsSuccessStatusCode)
             {
-                // Read the response content as a string
                 string jsonResponse = await response.Content.ReadAsStringAsync();
-
-                // Deserialize the JSON response into an ArcadeUser object
-                ArcadeUser user = JsonConvert.DeserializeObject<ArcadeUser>(jsonResponse);
-
-                return user;
+                return (ArcadeUser)JsonConvert.DeserializeObject<ArcadeUser>(jsonResponse)!;
             }
             else
             {
@@ -64,5 +72,16 @@ public static class DatabaseAPI
         {
             throw new Exception("Error retrieving user data");
         }
+    }
+
+    /// <summary>
+    /// Syncronous version of <see cref="GetArcadeUser(ArcadeLib.UserID)"/>
+    /// </summary>
+    /// <param name="User_ID">The user's ID</param>
+    /// <exception cref="Exception">Error retrieving user data</exception>
+    /// <returns><see cref="ArcadeUser"/> object</returns>
+    public static ArcadeUser GetArcadeUserSync(ArcadeLib.UserID User_ID)
+    {
+        return GetArcadeUser(User_ID).GetAwaiter().GetResult();
     }
 }
