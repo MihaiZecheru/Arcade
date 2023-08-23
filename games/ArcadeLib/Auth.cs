@@ -162,7 +162,7 @@ public static class Auth
                     {
                         try
                         {
-                            ArcadeLib.UserID User_ID = DatabaseAPI.Login(GetUsername().Trim(), GetPassword()).GetAwaiter().GetResult();
+                            ArcadeLib.UserID User_ID = DatabaseAPI.LoginSync(GetUsername().Trim(), GetPassword());
                             return User_ID; // If the login was successful, return the User_ID
                         }
                         catch (Exception e)
