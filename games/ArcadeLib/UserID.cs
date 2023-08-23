@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 
 namespace ArcadeLib;
 
-internal class UserID
+public class UserID
 {
     /// <summary>
     /// Pattern: xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx
@@ -39,10 +39,20 @@ internal class UserID
         _value = value;
     }
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Implicitly treat as UserID
+    /// </summary>
     public static implicit operator UserID(string value)
     {
         return value == null ? null : new UserID(value);
+    }
+    
+    /// <summary>
+    /// Explicity treat as string
+    /// </summary>
+    public static explicit operator string(UserID UserID)
+    {
+        return UserID._value;
     }
 
     /// <inheritdoc/>
