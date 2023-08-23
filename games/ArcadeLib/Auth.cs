@@ -162,15 +162,16 @@ public static class Auth
                     {
                         try
                         {
-                            string UserID = DatabaseAPI.Login(GetUsername().Trim(), GetPassword()).GetAwaiter().GetResult();
-                            return UserID; // If the login was successful, return the UserID
+                            ArcadeLib.UserID User_ID = DatabaseAPI.Login(GetUsername().Trim(), GetPassword()).GetAwaiter().GetResult();
+                            return User_ID; // If the login was successful, return the User_ID
                         }
-                        catch 
+                        catch (Exception e)
                         {
                             // If the login was invalid, reset the screen
                             ShowError("Invalid username or password");
                             Username = new List<char>();
                             Password = new List<char>();
+                            SetCursorAtUsernamePrompt();
                             UpdateDisplay();
                         }
                     }
