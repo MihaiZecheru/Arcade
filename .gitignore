@@ -6,3 +6,6 @@ server/database/
 /games/.vs/Arcade/FileContentIndex
 /games/Rock Paper Scissors (CLI)/bin/Debug/net6.0
 /games/Rock Paper Scissors (CLI)/obj
+/games/.vs
+/games/ArcadeLib/bin/Debug/net6.0
+/games/ArcadeLib/obj
