@@ -15,7 +15,7 @@ public static class TextColor
     /// <summary>
     /// The color gold
     /// </summary>
-    public static readonly ConsoleColor GoldColor = Color.Gold1;
+    public static readonly Color GoldColor = Color.Gold1;
 
     /// <summary>
     /// The color blue as a <see cref="Spectre.Console.Style"/>
