@@ -3,8 +3,15 @@ using System.Diagnostics;
 
 namespace ArcadeLib;
 
+/// <summary>
+/// Create a dotted line that spans the console horizontally
+/// </summary>
 public class DotLine
 {
+    /// <summary>
+    /// Create a dotted line that spans the console horizontally
+    /// </summary>
+    /// <param name="color">The color to make the line</param>
     public DotLine(ConsoleColor color = ConsoleColor.White)
     {
         AnsiConsole.Write(
@@ -13,23 +20,57 @@ public class DotLine
     }
 }
 
+/// <summary>
+/// User authentification - login screen
+/// </summary>
 public static class Auth
 {
+    /// <summary>
+    /// Header for the login screen
+    /// </summary>
     private static readonly FigletText header = new FigletText("Login To Arcade").Centered().Color(ConsoleColor.Blue);
+
+    /// <summary>
+    /// The color blue
+    /// </summary>
     private static readonly Style BLUE = new Style(ConsoleColor.Blue);
+
+    /// <summary>
+    /// The color gold
+    /// </summary>
     private static readonly Style GOLD = new Style(Color.Gold1);
 
+    /// <summary>
+    /// Indicates whether or not the cursor is currently at the username prompt
+    /// </summary>
     private static bool CursorAtUsername = true;
+
+    /// <summary>
+    /// Used to keep track of the characters the user has entered in the username field
+    /// </summary>
     private static List<char> Username = new List<char>();
+
+    /// <summary>
+    /// Used to keep track of the characters the user has entered in the password field
+    /// </summary>
     private static List<char> Password = new List<char>();
 
-    public static string Login()
+    /// <summary>
+    /// Prompt the user for his login
+    /// </summary>
+    /// <returns>The user's ID</returns>
+    public static string LoginPrompt()
     {
         UpdateDisplay();
         SetCursorAtUsernamePrompt();
-        return MainLoop();
+        return MainLoop(); // Returns the user's ID
     }
 
+    /// <summary>
+    /// Update the screen -- will show the characters the user has entered. 
+    /// To be called each time the user makes a change to what he's entered
+    /// </summary>
+    /// <param name="cleft">What to set Console.CursorLeft to, will default to 10, which is at the beginning of the username/password prompt</param>
     private static void UpdateDisplay(int cleft = -1)
     {
         Console.Clear();
@@ -55,6 +96,10 @@ public static class Auth
         else SetCursorAtPasswordPrompt(cleft);
     }
 
+    /// <summary>
+    /// Set the cursor on the line with the username prompt
+    /// </summary>
+    /// <param name="cleft">What to set Console.CursorLeft to, will default to 10, which is at the beginning of the username/password prompt</param>
     private static void SetCursorAtUsernamePrompt(int cleft = -1)
     {
         if (cleft == -1) cleft = 10 + Username.Count;
@@ -62,6 +107,10 @@ public static class Auth
         Console.SetCursorPosition(cleft, 9);
     }
 
+    /// <summary>
+    /// Set the cursor on the line with the password prompt
+    /// </summary>
+    /// <param name="cleft">What to set Console.CursorLeft to, will default to 10, which is at the beginning of the username/password prompt</param>
     private static void SetCursorAtPasswordPrompt(int cleft = -1)
     {
         if (cleft == -1) cleft = 10 + Password.Count;
@@ -69,6 +118,10 @@ public static class Auth
         Console.SetCursorPosition(cleft, 11);
     }
 
+    /// <summary>
+    /// The MainLoop for the login screen -- will capture key events and update the screen accordingly
+    /// </summary>
+    /// <returns>The logged-in user's ID</returns>
     public static string MainLoop()
     {
         while (true)
@@ -263,6 +316,10 @@ public static class Auth
         }
     }
 
+    /// <summary>
+    /// Get the inputted username as a string from <see cref="Username"/> char array
+    /// </summary>
+    /// <returns>The inputted username as a string</returns>
     private static string GetUsername()
     {
         string u = "";
@@ -270,6 +327,10 @@ public static class Auth
         return u;
     }
 
+    /// <summary>
+    /// Get the inputted password as a string from <see cref="Password"/> char array
+    /// </summary>
+    /// <returns>The inputted password as a string</returns>
     private static string GetPassword()
     {
         string p = "";
@@ -277,11 +338,18 @@ public static class Auth
         return p;
     }
 
+    /// <summary>
+    /// Send the user to the registration page on the website. The user cannot register from the console.
+    /// </summary>
     private static void Register()
     {
         Process.Start("http://localhost:3000/register");
     }
 
+    /// <summary>
+    /// Display an error message -- usually used if the user's login was invalid
+    /// </summary>
+    /// <param name="errorMessage">The error message to display</param>
     private static void ShowError(string errorMessage)
     {
         Console.CursorVisible = false;
