@@ -28,12 +28,16 @@ app.use(express.json());
 
 
 
-/************************************/
-/*** Express - Login & Register *****/
-/************************************/
+/********************************************/
+/*** Express - Login, Register, & GetUser ***/
+/********************************************/
 
 
 
+/**
+ * Register a new user to Arcade
+ * @returns UserID
+ */
 app.post("/api/register", async (req: any, res: any) => {
   try {
     const { username, password, email, birthday } = req.body;
@@ -45,6 +49,10 @@ app.post("/api/register", async (req: any, res: any) => {
   }
 });
 
+/**
+ * Log a user into Aracade
+ * @returns UserID
+ */
 app.post("/api/login", async (req: any, res: any) => {
   try {
     const { username, password } = req.body;
@@ -52,6 +60,21 @@ app.post("/api/login", async (req: any, res: any) => {
     if (users.length === 0) throw "User not found";
     if (users[0].password !== password) throw "Incorrect password";
     return res.status(200).send(users[0].user_id);
+  } catch (err) {
+    return res.status(400).send(err);
+  }
+});
+
+/**
+ * Get a user by ID
+ * @returns User object
+ */
+app.get("/api/user/:user_id", async (req: any, res: any) => {
+  try {
+    const user_id = req.params.user_id;
+    const users = await Database.get_where("Users", "user_id", user_id);
+    if (users.length === 0) throw "User not found";
+    return res.status(200).send(users[0]);
   } catch (err) {
     return res.status(400).send(err);
   }
