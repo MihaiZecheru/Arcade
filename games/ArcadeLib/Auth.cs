@@ -1,5 +1,6 @@
 ﻿using Spectre.Console;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 namespace ArcadeLib;
 
@@ -59,7 +60,7 @@ public static class Auth
     /// Prompt the user for his login
     /// </summary>
     /// <returns>The user's ID</returns>
-    public static string LoginPrompt()
+    public static ArcadeLib.UserID LoginPrompt()
     {
         UpdateDisplay();
         SetCursorAtUsernamePrompt();
@@ -122,7 +123,7 @@ public static class Auth
     /// The MainLoop for the login screen -- will capture key events and update the screen accordingly
     /// </summary>
     /// <returns>The logged-in user's ID</returns>
-    public static string MainLoop()
+    public static ArcadeLib.UserID MainLoop()
     {
         while (true)
         {
@@ -322,9 +323,7 @@ public static class Auth
     /// <returns>The inputted username as a string</returns>
     private static string GetUsername()
     {
-        string u = "";
-        Username.ForEach(c => u += c);
-        return u;
+        return new string(Username.ToArray());
     }
 
     /// <summary>
@@ -333,9 +332,7 @@ public static class Auth
     /// <returns>The inputted password as a string</returns>
     private static string GetPassword()
     {
-        string p = "";
-        Password.ForEach(c => p += c);
-        return p;
+        return new string(Password.ToArray());
     }
 
     /// <summary>
