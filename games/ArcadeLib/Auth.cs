@@ -52,18 +52,18 @@ public static class Auth
         Console.Write('\n');
         new DotLine(ConsoleColor.Blue);
 
-        AnsiConsole.Write(new Text("\nUsername: ", BLUE));
-        AnsiConsole.Write(new Text(GetUsername() + '\n', GOLD));
-        AnsiConsole.Write(new Text("\nPassword: ", BLUE));
-        AnsiConsole.Write(new Text(new string('*', Password.Count) + "\n\n", GOLD));
+        AnsiConsole.Write(TextColor.Blue("\nUsername: "));
+        AnsiConsole.Write(TextColor.Gold(GetUsername() + '\n'));
+        AnsiConsole.Write(TextColor.Blue("\nPassword: "));
+        AnsiConsole.Write(TextColor.Gold(new string('*', Password.Count) + "\n\n"));
 
-        new DotLine(ConsoleColor.Blue);
+        new DotLine(TextColor.BlueColor);
         AnsiConsole.Write(
-            new Text(
-                "\n* Press Enter to login\n" +
+            TextColor.Gold("\n" +
+                "* Press Enter to login\n" +
                 "* Press Tab to switch between fields\n" +
-                "* Press Ctrl+R to register if you are new!",
-            GOLD)
+                "* Press Ctrl+R to register if you are new!"
+            )
         );
 
         if (CursorAtUsername) SetCursorAtUsernamePrompt(cleft);
