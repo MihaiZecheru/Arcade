@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using ArcadeLib;
+using Newtonsoft.Json;
 using Spectre.Console;
 using System.Diagnostics;
 using System.Text;
@@ -17,9 +18,6 @@ public class DotLine
 
 public static class Auth
 {
-    private static readonly string ArcadeURL = "http://localhost:3000";
-    private static readonly HttpClient client = new HttpClient();
-    
     private static readonly FigletText header = new FigletText("Login To Arcade").Centered().Color(ConsoleColor.Blue);
     private static readonly Style BLUE = new Style(ConsoleColor.Blue);
     private static readonly Style GOLD = new Style(Color.Gold1);
@@ -111,21 +109,18 @@ public static class Auth
 
                     if (login)
                     {
-                        string UserID = AttemptLogin(GetUsername().Trim(), GetPassword()).GetAwaiter().GetResult();
-                        
-                        // If invalid
-                        if (UserID == "User not found" || UserID == "Incorrect password")
+                        try
                         {
-                            // reset screen
+                            string UserID = DatabaseAPI.Login(GetUsername().Trim(), GetPassword()).GetAwaiter().GetResult();
+                            return UserID; // If the login was successful, return the UserID
+                        }
+                        catch
+                        {
+                            // If the login was invalid, reset the screen
                             ShowError("Invalid username or password");
                             Username = new List<char>();
                             Password = new List<char>();
                             UpdateDisplay();
-                        }
-                        else
-                        {
-                            // If valid
-                            return UserID;
                         }
                     }
                     
@@ -285,21 +280,9 @@ public static class Auth
         return p;
     }
 
-    private static async Task<string> AttemptLogin(string username, string password)
-    {
-        string url = $"{ArcadeURL}/api/login";
-
-        var values = new { username, password };
-        var json = JsonConvert.SerializeObject(values);
-        var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-        var response = await client.PostAsync(url, content);
-        return await response.Content.ReadAsStringAsync();
-    }
-
     private static void Register()
     {
-        Process.Start($"{ArcadeURL}/register");
+        Process.Start("http://localhost:3000/register");
     }
 
     private static void ShowError(string errorMessage)
