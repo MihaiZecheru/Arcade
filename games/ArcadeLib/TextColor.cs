@@ -10,12 +10,22 @@ public static class TextColor
     /// <summary>
     /// The color blue
     /// </summary>
-    public static readonly Style BLUE = new Style(ConsoleColor.Blue);
+    public static readonly ConsoleColor BlueColor = ConsoleColor.Blue;
 
     /// <summary>
     /// The color gold
     /// </summary>
-    public static readonly Style GOLD = new Style(Color.Gold1);
+    public static readonly ConsoleColor GoldColor = Color.Gold1;
+
+    /// <summary>
+    /// The color blue as a <see cref="Spectre.Console.Style"/>
+    /// </summary>
+    private static readonly Style BLUE = new Style(BlueColor);
+
+    /// <summary>
+    /// The color gold as a <see cref="Spectre.Console.Style"/>
+    /// </summary>
+    private static readonly Style GOLD = new Style(GoldColor);
 
     /// <summary>
     /// Color the given <paramref name="text"/> blue
