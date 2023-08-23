@@ -10,10 +10,7 @@ public class DotLine
     public DotLine(ConsoleColor color = ConsoleColor.White)
     {
         AnsiConsole.Write(
-            new Text(
-                new string('-', Console.BufferWidth) + '\n',
-                new Style(color)
-            )
+            new Text(new string('-', Console.BufferWidth) + '\n', new Style(color))
         );
     }
 }
