@@ -7,7 +7,7 @@ public class RockPaperScissors
     public static void Main(string[] args)
     {
         ArcadeLib.UserID UserID = ArcadeLib.Auth.LoginPrompt();
-        ArcadeUser user = DatabaseAPI.GetArcadeUserSync(UserID);
+        ArcadeUser user = ArcadeServerAPI.GetArcadeUserSync(UserID);
 
         Console.Clear();
         Console.WriteLine(user);

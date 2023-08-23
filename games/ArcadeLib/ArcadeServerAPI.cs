@@ -3,7 +3,7 @@ using System.Text;
 
 namespace ArcadeLib;
 
-public static class DatabaseAPI
+public static class ArcadeServerAPI
 {
     private static readonly string ArcadeURL = "http://localhost:3000";
     private static readonly HttpClient client = new HttpClient();
