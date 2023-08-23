@@ -10,12 +10,12 @@ public static class TextColor
     /// <summary>
     /// The color blue
     /// </summary>
-    private static readonly Style BLUE = new Style(ConsoleColor.Blue);
+    public static readonly Style BLUE = new Style(ConsoleColor.Blue);
 
     /// <summary>
     /// The color gold
     /// </summary>
-    private static readonly Style GOLD = new Style(Color.Gold1);
+    public static readonly Style GOLD = new Style(Color.Gold1);
 
     /// <summary>
     /// Color the given <paramref name="text"/> blue
