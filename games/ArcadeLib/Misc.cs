@@ -13,7 +13,7 @@ public static class Misc
     public static void WaitOnExit()
     {
         Console.Clear();
-        AnsiConsole.Write(TextColor.Gold("* Press ENTER to exit").Centered());
+        AnsiConsole.Write(TextColor.Gold("* Press ENTER to exit *").Centered());
 
         while (true)
         {
