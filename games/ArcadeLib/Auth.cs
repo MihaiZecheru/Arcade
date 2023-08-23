@@ -1,10 +1,7 @@
-﻿using ArcadeLib;
-using Newtonsoft.Json;
-using Spectre.Console;
+﻿using Spectre.Console;
 using System.Diagnostics;
-using System.Text;
 
-namespace Arcade;
+namespace ArcadeLib;
 
 public class DotLine
 {
