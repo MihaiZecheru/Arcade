@@ -144,6 +144,7 @@ export class Table {
     
     let stringified_data = "";
     for (const fieldname of this.fieldnames) {
+      if (fieldname === "user_id") continue;
       const value = data[fieldname];
       if (!value) throw new Error(`Field '${fieldname}' is missing in data`);
       stringified_data += `${value}\n`;
