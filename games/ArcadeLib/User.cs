@@ -1,6 +1,6 @@
 ﻿namespace ArcadeLib;
 
-public class User
+public class ArcadeUser
 {
     /// <summary>
     /// The user's ID
@@ -40,7 +40,7 @@ public class User
     /// <summary>
     /// Initialize an existing user
     /// </summary>
-    public User(ArcadeLib.UserID user_id, string username, string password, int balance, string email, string birthday, string joined)
+    public ArcadeUser(ArcadeLib.UserID user_id, string username, string password, int balance, string email, string birthday, string joined)
     {
         this.ID = user_id;
         this.Username = username;
@@ -88,6 +88,6 @@ public class User
     /// <inheritdoc/>
     public override string ToString()
     {
-        return $"ID: {ID}\nUsername: {Username}\nPassword: {Password}\nBalance: {Balance}\nEmail: {Email}\nBirthday: {Birthday}\nJoined: {Joined}";
+        return $"ID: {ID}\nUsername: {Username}\nPassword: {Password}\nBalance: {_balance}\nEmail: {Email}\nBirthday: {Birthday}\nJoined: {Joined}";
     }
 }
