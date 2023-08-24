@@ -22,7 +22,7 @@ public static class GameLoop
     /// Prompts the user for a wager >= 1
     /// </summary>
     /// <returns>The amount of tokens the user would like to bet, must be at least 1</returns>
-    public static int Bet()
+    public static int PlaceBet()
     {
         return 0; //TODO: Implement
     }

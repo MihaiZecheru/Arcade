@@ -28,7 +28,7 @@ public static class RockPaperScissors
         
         if (choice == ArcadeLib.MenuOption.PLAY_SOLO)
         {
-            int bet = ArcadeLib.GameLoop.Bet();
+            int bet = ArcadeLib.GameLoop.PlaceBet();
             PlayCPU(bet);
         }
         else if (choice == ArcadeLib.MenuOption.PLAY_MULTIPLAYER)
