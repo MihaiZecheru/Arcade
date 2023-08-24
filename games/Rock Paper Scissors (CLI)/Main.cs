@@ -7,7 +7,7 @@ public static class RockPaperScissors
     /// <summary>
     /// The user playing the game
     /// </summary>
-    private static ArcadeUser User { get; set; }
+    private static ArcadeUser User;
 
     /// <summary>
     /// For CPU moves
@@ -16,11 +16,7 @@ public static class RockPaperScissors
 
     public static void Main(string[] args)
     {
-        ArcadeLib.UserID User_ID = ArcadeLib.Auth.LoginPrompt();
-        User = ArcadeServerAPI.GetArcadeUserSync(User_ID);
-        ArcadeLib.Auth.LoginComplete(User.Username);
-
-
+        ArcadeLib.Auth.Login(out User);
         ArcadeLib.Misc.WaitOnExit();
     }
 }
