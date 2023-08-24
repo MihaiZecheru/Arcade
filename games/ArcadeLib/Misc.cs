@@ -8,6 +8,30 @@ namespace ArcadeLib;
 public static class Misc
 {
     /// <summary>
+    /// Hide the cursor in the console window
+    /// </summary>
+    public static void ShowCursor()
+    {
+        Console.CursorVisible = true;
+    }
+
+    /// <summary>
+    /// Hide the cursorin the console window
+    /// </summary>
+    public static void HideCursor()
+    {
+        Console.CursorVisible = false;
+    }
+
+    /// <summary>
+    /// Toggle cursor visibility in the console window
+    /// </summary>
+    public static void ToggleCursor()
+    {
+        Console.CursorVisible = !Console.CursorVisible;
+    }
+
+    /// <summary>
     /// Launch the exit sequence for an Arcade game -- clear the console and wait for the enter key to be pressed
     /// </summary>
     public static void WaitOnExit()
@@ -15,10 +39,12 @@ public static class Misc
         Console.Clear();
         AnsiConsole.Write(TextColor.Gold("* Press ENTER to exit *").Centered());
 
+        HideCursor();
         while (true)
         {
             ConsoleKeyInfo keyinfo = Console.ReadKey(true);
             if (keyinfo.Key == ConsoleKey.Enter) break;
         }
+        ShowCursor();
     }
 }

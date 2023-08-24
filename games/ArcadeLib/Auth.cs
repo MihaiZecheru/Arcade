@@ -1,6 +1,6 @@
-﻿using Spectre.Console;
+﻿using Microsoft.VisualBasic.FileIO;
+using Spectre.Console;
 using System.Diagnostics;
-using System.Runtime.CompilerServices;
 
 namespace ArcadeLib;
 
@@ -323,13 +323,31 @@ public static class Auth
     /// <param name="errorMessage">The error message to display</param>
     private static void ShowError(string errorMessage)
     {
-        Console.CursorVisible = false;
+        Misc.HideCursor();
         Console.Clear();
         new DotLine();
         AnsiConsole.Write(new Text(errorMessage, new Style(ConsoleColor.Red)).Centered());
         new DotLine();
 
         Console.ReadKey(true);
-        Console.CursorVisible = true;
+        Misc.ShowCursor();
+    }
+
+    /// <summary>
+    /// Welcome the user once the login is complete and clear the screen when finished to prepare for the game
+    /// </summary>
+    /// <param name="username">The name of the user that has logged in</param>
+    public static void LoginComplete(string username)
+    {
+        Console.Clear();
+        new DotLine(ArcadeLib.TextColor.BlueColor);
+        AnsiConsole.Write(ArcadeLib.TextColor.Gold($"Welcome, {username}").Centered());
+        new DotLine(ArcadeLib.TextColor.BlueColor);
+
+        // Wait for keypress to continue
+        Misc.HideCursor();
+        Console.ReadKey(true);
+        Console.Clear(); // The screen will be ready for the game to begin
+        Misc.ShowCursor();
     }
 }

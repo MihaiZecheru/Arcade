@@ -18,7 +18,7 @@ public static class RockPaperScissors
     {
         ArcadeLib.UserID User_ID = ArcadeLib.Auth.LoginPrompt();
         User = ArcadeServerAPI.GetArcadeUserSync(User_ID);
-
+        ArcadeLib.Auth.LoginComplete(User.Username);
 
 
         ArcadeLib.Misc.WaitOnExit();
