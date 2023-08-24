@@ -32,7 +32,7 @@ public static class Auth
     /// <summary>
     /// Handle the entire login process and return the logged-in <see cref="ArcadeLib.ArcadeUser"/>
     /// <br/><br/>
-    /// This is the preferred method because it calls all three login-related functions and cleans up after itself by clearing the console
+    /// This method calls all three login-related functions and cleans up after itself by clearing the console to end the login process
     /// </summary>
     public static ArcadeLib.ArcadeUser Login()
     {
@@ -45,7 +45,7 @@ public static class Auth
     /// <summary>
     /// Handle the entire login process and return the logged-in <see cref="ArcadeLib.ArcadeUser"/>
     /// <br/><br/>
-    /// This is the preferred method because it calls all three login-related functions and cleans up after itself by clearing the console
+    /// This method calls all three login-related functions and cleans up after itself by clearing the console to end the login process
     /// </summary>
     /// <param name="user">The variable to save the user to</param>
     public static void Login(out ArcadeLib.ArcadeUser user)
@@ -59,7 +59,7 @@ public static class Auth
     /// Prompt the user for his login
     /// </summary>
     /// <returns>The user's ID</returns>
-    public static ArcadeLib.UserID LoginPrompt()
+    private static ArcadeLib.UserID LoginPrompt()
     {
         UpdateDisplay();
         SetCursorAtUsernamePrompt();
@@ -122,7 +122,7 @@ public static class Auth
     /// The MainLoop for the login screen -- will capture key events and update the screen accordingly
     /// </summary>
     /// <returns>The logged-in user's ID</returns>
-    public static ArcadeLib.UserID MainLoop()
+    private static ArcadeLib.UserID MainLoop()
     {
         while (true)
         {
@@ -363,7 +363,7 @@ public static class Auth
     /// Welcome the user once the login is complete and clear the screen when finished to prepare for the game
     /// </summary>
     /// <param name="username">The name of the user that has logged in</param>
-    public static void LoginComplete(string username)
+    private static void LoginComplete(string username)
     {
         // Welcome the user
         Console.Clear();
