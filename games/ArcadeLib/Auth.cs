@@ -30,6 +30,32 @@ public static class Auth
     private static List<char> Password = new List<char>();
 
     /// <summary>
+    /// Handle the entire login process and return the logged-in <see cref="ArcadeLib.ArcadeUser"/>
+    /// <br/><br/>
+    /// This is the preferred method because it calls all three login-related functions and cleans up after itself by clearing the console
+    /// </summary>
+    public static ArcadeLib.ArcadeUser Login()
+    {
+        ArcadeLib.UserID User_ID = ArcadeLib.Auth.LoginPrompt();
+        ArcadeLib.ArcadeUser user = ArcadeServerAPI.GetArcadeUserSync(User_ID);
+        ArcadeLib.Auth.LoginComplete(user.Username);
+        return user;
+    }
+
+    /// <summary>
+    /// Handle the entire login process and return the logged-in <see cref="ArcadeLib.ArcadeUser"/>
+    /// <br/><br/>
+    /// This is the preferred method because it calls all three login-related functions and cleans up after itself by clearing the console
+    /// </summary>
+    /// <param name="user">The variable to save the user to</param>
+    public static void Login(out ArcadeLib.ArcadeUser user)
+    {
+        ArcadeLib.UserID User_ID = ArcadeLib.Auth.LoginPrompt();
+        user = ArcadeServerAPI.GetArcadeUserSync(User_ID);
+        ArcadeLib.Auth.LoginComplete(user.Username);
+    }
+
+    /// <summary>
     /// Prompt the user for his login
     /// </summary>
     /// <returns>The user's ID</returns>
@@ -339,15 +365,20 @@ public static class Auth
     /// <param name="username">The name of the user that has logged in</param>
     public static void LoginComplete(string username)
     {
+        // Welcome the user
         Console.Clear();
         new DotLine(ArcadeLib.TextColor.BlueColor);
         AnsiConsole.Write(ArcadeLib.TextColor.Gold($"Welcome, {username}").Centered());
         new DotLine(ArcadeLib.TextColor.BlueColor);
-
+        
+        // Clear the used variables so the user's login information is not stored
+        Password = null;
+        Username = null;
+        
         // Wait for keypress to continue
         Misc.HideCursor();
         Console.ReadKey(true);
-        Console.Clear(); // The screen will be ready for the game to begin
+        Console.Clear(); // Cleanup: the screen will be ready for the game to begin
         Misc.ShowCursor();
     }
 }
