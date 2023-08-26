@@ -4,7 +4,7 @@ import uuid, { ID } from "./ID";
 export type UserID = ID;
 
 export interface IUser {
-  user_id: string;
+  user_id: UserID;
   username: string;
   password: string;
   balance: number;
