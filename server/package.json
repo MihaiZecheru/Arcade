@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "test": "jest --verbose",
     "dev": "nodemon src/index.ts",
     "prod": "ts-node src/index.ts"
   },
@@ -22,6 +23,7 @@
     "@types/express": "^4.17.17",
     "@types/express-ws": "^3.0.1",
     "@types/node": "^20.4.9",
-    "@types/ws": "^8.5.5"
+    "@types/ws": "^8.5.5",
+    "jest": "^29.6.4"
   }
 }
