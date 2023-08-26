@@ -10,3 +10,9 @@ export default function uuid(): ID {
   if (/[0-9]/g.test(_uuid[0])) return uuid();
   else return _uuid;
 }
+
+export const uuid_regex = new RegExp(/[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f]{12}/g);
+
+export function is_uuid(uuid: string): boolean {
+  return uuid_regex.test(uuid);
+}
