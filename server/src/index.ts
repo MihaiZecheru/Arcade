@@ -45,17 +45,7 @@ app.post("/api/register", router.main.register);
  * Log a user into Aracade
  * @returns UserID
  */
-app.post("/api/login", async (req: any, res: any) => {
-  try {
-    const { username, password } = req.body;
-    const users = await Database.get_where("Users", "username", username);
-    if (users.length === 0) throw "User not found";
-    if (users[0].password !== password) throw "Incorrect password";
-    return res.status(200).send(users[0].user_id);
-  } catch (err) {
-    return res.status(400).send(err);
-  }
-});
+app.post("/api/login", router.main.login);
 
 /**
  * Get a user by ID
