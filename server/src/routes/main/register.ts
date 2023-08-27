@@ -1,7 +1,7 @@
 import Database from "../../../mdb_local";
 import User, { USER_STARTING_BALANCE } from "../../models/user";
 
-export async function register(req: any, res: any) {
+export async function register(req: any, res: any): Promise<void> {
   try {
     const { username, password, email, birthday } = req.body;
     console.log(req.body, Object.keys(req.body).length)
