@@ -37,7 +37,7 @@ describe('Test the register function -- register a user to the database', () => 
     Database.delete_where("Users", "user_id", res.text)
   });
 
-  test('register user and return uuid', async () => {
+  test('register user correctly, returning his uuid', async () => {
     await router.main.register(req, res);
     expect(res.statusCode).toBe(200);
     expect(res.text).toMatch(uuid_regex);
