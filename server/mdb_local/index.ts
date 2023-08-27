@@ -233,10 +233,12 @@ export class Table {
    * Get all entries that pass the given filter
    * @important The filter is applied after the parseFunction has been applied to each of the entries 
    * @param filter The filter to apply to each of the entries
+   * @param unique Whether or not there is only one entry matching this description. If true, the first entry is returned, otherwise all entries are returned. Defaults to false. Passing true prevents the method from returning an array.
    * @returns All entries that pass the given filter
    */
-  public get_with_filter<T = TEntry>(filter: TEntriesFilter): Array<T> {
-    return this.get_all_no_parse().filter(filter).map((entry: TEntry) => this.parseFunction(entry));
+  public get_with_filter<T = TEntry>(filter: TEntriesFilter, unique: boolean = false): Array<T> | T {
+    const entries = this.get_all_no_parse().filter(filter).map((entry: TEntry) => this.parseFunction(entry));
+    return unique ? entries[0] : entries;
   }
 
   /**
@@ -244,10 +246,12 @@ export class Table {
    * @important The filter is applied after the parseFunction has been applied to each of the entries 
    * @param fieldname The name of the field to compare the given value with
    * @param value The value to compare the given field with
+   * @param unique Whether or not there is only one entry matching this description. If true, the first entry is returned, otherwise all entries are returned. Defaults to false. Passing true prevents the method from returning an array.
    * @returns All entries where the field with the given name is equal to the given value
    */
-  public get_where<T = TEntry>(fieldname: fieldname, value: string): Array<T> {
-    return this.get_all_no_parse().filter((entry: TEntry) => entry[fieldname] === value).map((entry: TEntry) => this.parseFunction(entry));
+  public get_where<T = TEntry>(fieldname: fieldname, value: string, unique: boolean = false): Array<T> | T {
+    const entries = this.get_all_no_parse().filter((entry: TEntry) => entry[fieldname] === value).map((entry: TEntry) => this.parseFunction(entry));
+    return unique ? entries[0] : entries;
   }
 
   /**
@@ -255,10 +259,12 @@ export class Table {
    * @important The filter is applied after the parseFunction has been applied to each of the entries 
    * @param fieldname The name of the field to compare the given value with
    * @param value The value to compare the given field with
+   * @param unique Whether or not there is only one entry matching this description. If true, the first entry is returned, otherwise all entries are returned. Defaults to false. Passing true prevents the method from returning an array.
    * @returns All entries where the field with the given name is not equal to the given value
    */
-  public get_where_not<T = TEntry>(fieldname: fieldname, value: string): Array<T> {
-    return this.get_all_no_parse().filter((entry: TEntry) => entry[fieldname] !== value).map((entry: TEntry) => this.parseFunction(entry));
+  public get_where_not<T = TEntry>(fieldname: fieldname, value: string, unique: boolean = false): Array<T> | T {
+    const entries = this.get_all_no_parse().filter((entry: TEntry) => entry[fieldname] !== value).map((entry: TEntry) => this.parseFunction(entry));
+    return unique ? entries[0] : entries;
   }
 
   /**
@@ -266,10 +272,12 @@ export class Table {
    * @important The filter is applied after the parseFunction has been applied to each of the entries 
    * @param fieldname The name of the field to compare the given value with
    * @param value The value to compare the given field with
+   * @param unique Whether or not there is only one entry matching this description. If true, the first entry is returned, otherwise all entries are returned. Defaults to false. Passing true prevents the method from returning an array.
    * @returns All entries where the field with the given name is greater than the given value
    */
-  public get_where_gt<T = TEntry>(fieldname: fieldname, value: number): Array<T> {
-    return this.get_all_no_parse().filter((entry: TEntry) => parseFloat(entry[fieldname]) > value).map((entry: TEntry) => this.parseFunction(entry));
+  public get_where_gt<T = TEntry>(fieldname: fieldname, value: number, unique: boolean = false): Array<T> | T {
+    const entries = this.get_all_no_parse().filter((entry: TEntry) => parseFloat(entry[fieldname]) > value).map((entry: TEntry) => this.parseFunction(entry));
+    return unique ? entries[0] : entries;
   }
 
   /**
@@ -277,10 +285,12 @@ export class Table {
    * @important The filter is applied after the parseFunction has been applied to each of the entries 
    * @param fieldname The name of the field to compare the given value with
    * @param value The value to compare the given field with
+   * @param unique Whether or not there is only one entry matching this description. If true, the first entry is returned, otherwise all entries are returned. Defaults to false. Passing true prevents the method from returning an array.
    * @returns All entries where the field with the given name is less than the given value
    */
-  public get_where_lt<T = TEntry>(fieldname: fieldname, value: number): Array<T> {
-    return this.get_all_no_parse().filter((entry: TEntry) => parseFloat(entry[fieldname]) < value).map((entry: TEntry) => this.parseFunction(entry));
+  public get_where_lt<T = TEntry>(fieldname: fieldname, value: number, unique: boolean = false): Array<T> | T {
+    const entries = this.get_all_no_parse().filter((entry: TEntry) => parseFloat(entry[fieldname]) < value).map((entry: TEntry) => this.parseFunction(entry));
+    return unique ? entries[0] : entries;
   }
 
   /**
@@ -288,10 +298,12 @@ export class Table {
    * @important The filter is applied after the parseFunction has been applied to each of the entries 
    * @param fieldname The name of the field to compare the given value with
    * @param value The value to compare the given field with
+   * @param unique Whether or not there is only one entry matching this description. If true, the first entry is returned, otherwise all entries are returned. Defaults to false. Passing true prevents the method from returning an array.
    * @returns All entries where the field with the given name is greater than or equal to the given value
    */
-  public get_where_gte<T = TEntry>(fieldname: fieldname, value: number): Array<T> {
-    return this.get_all_no_parse().filter((entry: TEntry) => parseFloat(entry[fieldname]) >= value).map((entry: TEntry) => this.parseFunction(entry));
+  public get_where_gte<T = TEntry>(fieldname: fieldname, value: number, unique: boolean = false): Array<T> | T {
+    const entries = this.get_all_no_parse().filter((entry: TEntry) => parseFloat(entry[fieldname]) >= value).map((entry: TEntry) => this.parseFunction(entry));
+    return unique ? entries[0] : entries;
   }
 
   /**
@@ -299,10 +311,12 @@ export class Table {
    * @important The filter is applied after the parseFunction has been applied to each of the entries 
    * @param fieldname The name of the field to compare the given value with
    * @param value The value to compare the given field with
+   * @param unique Whether or not there is only one entry matching this description. If true, the first entry is returned, otherwise all entries are returned. Defaults to false. Passing true prevents the method from returning an array.
    * @returns All entries where the field with the given name is less than or equal to the given value
    */
-  public get_where_lte<T = TEntry>(fieldname: fieldname, value: number): Array<T> {
-    return this.get_all_no_parse().filter((entry: TEntry) => parseFloat(entry[fieldname]) <= value).map((entry: TEntry) => this.parseFunction(entry));
+  public get_where_lte<T = TEntry>(fieldname: fieldname, value: number, unique: boolean = false): Array<T> | T {
+    const entries = this.get_all_no_parse().filter((entry: TEntry) => parseFloat(entry[fieldname]) <= value).map((entry: TEntry) => this.parseFunction(entry));
+    return unique ? entries[0] : entries;
   }
 
   /**
@@ -310,10 +324,12 @@ export class Table {
    * @important The filter is applied after the parseFunction has been applied to each of the entries 
    * @param fieldname The name of the field to compare the given value with
    * @param value The value to compare the given field with
+   * @param unique Whether or not there is only one entry matching this description. If true, the first entry is returned, otherwise all entries are returned. Defaults to false. Passing true prevents the method from returning an array.
    * @returns All entries where the field with the given name contains the given value
    */
-  public get_where_contains<T = TEntry>(fieldname: fieldname, value: string): Array<T> {
-    return this.get_all_no_parse().filter((entry: TEntry) => entry[fieldname].includes(value)).map((entry: TEntry) => this.parseFunction(entry));
+  public get_where_contains<T = TEntry>(fieldname: fieldname, value: string, unique: boolean = false): Array<T> | T {
+    const entries = this.get_all_no_parse().filter((entry: TEntry) => entry[fieldname].includes(value)).map((entry: TEntry) => this.parseFunction(entry));
+    return unique ? entries[0] : entries;
   }
 
   /**
@@ -321,10 +337,12 @@ export class Table {
    * @important The filter is applied after the parseFunction has been applied to each of the entries 
    * @param fieldname The name of the field to compare the given value with
    * @param value The value to compare the given field with
+   * @param unique Whether or not there is only one entry matching this description. If true, the first entry is returned, otherwise all entries are returned. Defaults to false. Passing true prevents the method from returning an array.
    * @returns All entries where the field with the given name does not contain the given value
    */
-  public get_where_not_contains<T = TEntry>(fieldname: fieldname, value: string): Array<T> {
-    return this.get_all_no_parse().filter((entry: TEntry) => !entry[fieldname].includes(value)).map((entry: TEntry) => this.parseFunction(entry));
+  public get_where_not_contains<T = TEntry>(fieldname: fieldname, value: string, unique: boolean = false): Array<T> | T {
+    const entries = this.get_all_no_parse().filter((entry: TEntry) => !entry[fieldname].includes(value)).map((entry: TEntry) => this.parseFunction(entry));
+    return unique ? entries[0] : entries;
   }
 
   /**
@@ -332,10 +350,12 @@ export class Table {
    * @important The filter is applied after the parseFunction has been applied to each of the entries 
    * @param fieldname The name of the field to compare the given value with
    * @param value The value to compare the given field with
+   * @param unique Whether or not there is only one entry matching this description. If true, the first entry is returned, otherwise all entries are returned. Defaults to false. Passing true prevents the method from returning an array.
    * @returns All entries where the field with the given name starts with the given value
    */
-  public get_where_starts_with<T = TEntry>(fieldname: fieldname, value: string): Array<T> {
-    return this.get_all_no_parse().filter((entry: TEntry) => entry[fieldname].startsWith(value)).map((entry: TEntry) => this.parseFunction(entry));
+  public get_where_starts_with<T = TEntry>(fieldname: fieldname, value: string, unique: boolean = false): Array<T> | T {
+    const entries = this.get_all_no_parse().filter((entry: TEntry) => entry[fieldname].startsWith(value)).map((entry: TEntry) => this.parseFunction(entry));
+    return unique ? entries[0] : entries;
   }
 
   /**
@@ -343,10 +363,12 @@ export class Table {
    * @important The filter is applied after the parseFunction has been applied to each of the entries 
    * @param fieldname The name of the field to compare the given value with
    * @param value The value to compare the given field with
+   * @param unique Whether or not there is only one entry matching this description. If true, the first entry is returned, otherwise all entries are returned. Defaults to false. Passing true prevents the method from returning an array.
    * @returns All entries where the field with the given name ends with the given value
    */
-  public get_where_ends_with<T = TEntry>(fieldname: fieldname, value: string): Array<T> {
-    return this.get_all_no_parse().filter((entry: TEntry) => entry[fieldname].endsWith(value)).map((entry: TEntry) => this.parseFunction(entry));
+  public get_where_ends_with<T = TEntry>(fieldname: fieldname, value: string, unique: boolean = false): Array<T> | T {
+    const entries = this.get_all_no_parse().filter((entry: TEntry) => entry[fieldname].endsWith(value)).map((entry: TEntry) => this.parseFunction(entry));
+    return unique ? entries[0] : entries;
   }
 
   // *** FILTER-QUERY PATCH METHODS *** ///
@@ -777,14 +799,15 @@ export default class Database {
    * Get all entries from the table with the given tablename that pass the given filter
    * @param tablename The name of the table to get the entry from 
    * @param filter The filter to apply to the entries
+   * @param unique Whether or not there is only one entry matching this description. If true, the first entry is returned, otherwise all entries are returned. Defaults to false. Passing true prevents the method from returning an array.
    * @returns The entries that pass the given filter
    * @throws Error if the table does not exist
    * @throws Error if the database is not connected
    * @generic T The type of the entry - must be the same as what is returned by the parseFunction - defaults to TEntry
    */
-  public static get_with_filter<T = TEntry>(tablename: string, filter: TEntriesFilter): Array<T> {
+  public static get_with_filter<T = TEntry>(tablename: string, filter: TEntriesFilter, unique: boolean = false): Array<T> | T {
     const table = this.get_table(tablename);
-    return table.get_with_filter<T>(filter);
+    return table.get_with_filter<T>(filter, unique);
   }
 
   /**
@@ -792,14 +815,15 @@ export default class Database {
    * @param tablename The name of the table to get the entry from
    * @param fieldname The name of the field to compare the given value with
    * @param value The value to compare the given field with
+   * @param unique Whether or not there is only one entry matching this description. If true, the first entry is returned, otherwise all entries are returned. Defaults to false. Passing true prevents the method from returning an array.
    * @returns All entries from the table with the given tablename where the field with the given name equals the given value
    * @throws Error if the table does not exist
    * @throws Error if the database is not connected
    * @generic T The type of the entry - must be the same as what is returned by the parseFunction - defaults to TEntry
    */
-  public static get_where<T = TEntry>(tablename: string, fieldname: fieldname, value: string): Array<T> {
+  public static get_where<T = TEntry>(tablename: string, fieldname: fieldname, value: string, unique: boolean = false): Array<T> | T {
     const table = this.get_table(tablename);
-    return table.get_where<T>(fieldname, value);
+    return table.get_where<T>(fieldname, value, unique);
   }
   
   /**
@@ -807,14 +831,15 @@ export default class Database {
    * @param tablename The name of the table to get the entry from
    * @param fieldname The name of the field to compare the given value with
    * @param value The value to compare the given field with
+   * @param unique Whether or not there is only one entry matching this description. If true, the first entry is returned, otherwise all entries are returned. Defaults to false. Passing true prevents the method from returning an array.
    * @returns All entries from the table with the given tablename where the field with the given name does not equal the given value
    * @throws Error if the table does not exist
    * @throws Error if the database is not connected
    * @generic T The type of the entry - must be the same as what is returned by the parseFunction - defaults to TEntry
    */
-  public static get_where_not<T = TEntry>(tablename: string, fieldname: fieldname, value: string): Array<T> {
+  public static get_where_not<T = TEntry>(tablename: string, fieldname: fieldname, value: string, unique: boolean = false): Array<T> | T {
     const table = this.get_table(tablename);
-    return table.get_where_not<T>(fieldname, value);
+    return table.get_where_not<T>(fieldname, value, unique);
   }
 
   /**
@@ -822,14 +847,15 @@ export default class Database {
    * @param tablename The name of the table to get the entry from
    * @param fieldname The name of the field to compare the given value with
    * @param value The value to compare the given field with
+   * @param unique Whether or not there is only one entry matching this description. If true, the first entry is returned, otherwise all entries are returned. Defaults to false. Passing true prevents the method from returning an array.
    * @returns All entries from the table with the given tablename where the field with the given name is greater than the given value
    * @throws Error if the table does not exist
    * @throws Error if the database is not connected
    * @generic T The type of the entry - must be the same as what is returned by the parseFunction - defaults to TEntry
    */
-  public static get_where_gt<T = TEntry>(tablename: string, fieldname: fieldname, value: number): Array<T> {
+  public static get_where_gt<T = TEntry>(tablename: string, fieldname: fieldname, value: number, unique: boolean = false): Array<T> | T {
     const table = this.get_table(tablename);
-    return table.get_where_gt<T>(fieldname, value);
+    return table.get_where_gt<T>(fieldname, value, unique);
   }
 
   /**
@@ -837,14 +863,15 @@ export default class Database {
    * @param tablename The name of the table to get the entry from
    * @param fieldname The name of the field to compare the given value with
    * @param value The value to compare the given field with
+   * @param unique Whether or not there is only one entry matching this description. If true, the first entry is returned, otherwise all entries are returned. Defaults to false. Passing true prevents the method from returning an array.
    * @returns All entries from the table with the given tablename where the field with the given name is less than the given value
    * @throws Error if the table does not exist
    * @throws Error if the database is not connected
    * @generic T The type of the entry - must be the same as what is returned by the parseFunction - defaults to TEntry
    */
-  public static get_where_lt<T = TEntry>(tablename: string, fieldname: fieldname, value: number): Array<T> {
+  public static get_where_lt<T = TEntry>(tablename: string, fieldname: fieldname, value: number, unique: boolean = false): Array<T> | T {
     const table = this.get_table(tablename);
-    return table.get_where_lt<T>(fieldname, value);
+    return table.get_where_lt<T>(fieldname, value, unique);
   }
 
   /**
@@ -852,14 +879,15 @@ export default class Database {
    * @param tablename The name of the table to get the entry from
    * @param fieldname The name of the field to compare the given value with
    * @param value The value to compare the given field with
+   * @param unique Whether or not there is only one entry matching this description. If true, the first entry is returned, otherwise all entries are returned. Defaults to false. Passing true prevents the method from returning an array.
    * @returns All entries from the table with the given tablename where the field with the given name is greater than or equal to the given value
    * @throws Error if the table does not exist
    * @throws Error if the database is not connected
    * @generic T The type of the entry - must be the same as what is returned by the parseFunction - defaults to TEntry
    */
-  public static get_where_gte<T = TEntry>(tablename: string, fieldname: fieldname, value: number): Array<T> {
+  public static get_where_gte<T = TEntry>(tablename: string, fieldname: fieldname, value: number, unique: boolean = false): Array<T> | T {
     const table = this.get_table(tablename);
-    return table.get_where_gte<T>(fieldname, value);
+    return table.get_where_gte<T>(fieldname, value, unique);
   }
 
   /**
@@ -867,14 +895,15 @@ export default class Database {
    * @param tablename The name of the table to get the entry from
    * @param fieldname The name of the field to compare the given value with
    * @param value The value to compare the given field with
+   * @param unique Whether or not there is only one entry matching this description. If true, the first entry is returned, otherwise all entries are returned. Defaults to false. Passing true prevents the method from returning an array.
    * @returns All entries from the table with the given tablename where the field with the given name is less than or equal to the given value
    * @throws Error if the table does not exist
    * @throws Error if the database is not connected
    * @generic T The type of the entry - must be the same as what is returned by the parseFunction - defaults to TEntry
    */
-  public static get_where_lte<T = TEntry>(tablename: string, fieldname: fieldname, value: number): Array<T> {
+  public static get_where_lte<T = TEntry>(tablename: string, fieldname: fieldname, value: number, unique: boolean = false): Array<T> | T {
     const table = this.get_table(tablename);
-    return table.get_where_lte<T>(fieldname, value);
+    return table.get_where_lte<T>(fieldname, value, unique);
   }
 
   /**
@@ -882,14 +911,15 @@ export default class Database {
    * @param tablename The name of the table to get the entry from
    * @param fieldname The name of the field to compare the given value with
    * @param value The value to compare the given field with
+   * @param unique Whether or not there is only one entry matching this description. If true, the first entry is returned, otherwise all entries are returned. Defaults to false. Passing true prevents the method from returning an array.
    * @returns All entries from the table with the given tablename where the field with the given name contains the given value
    * @throws Error if the table does not exist
    * @throws Error if the database is not connected
    * @generic T The type of the entry - must be the same as what is returned by the parseFunction - defaults to TEntry
    */
-  public static get_where_contains<T = TEntry>(tablename: string, fieldname: fieldname, value: string): Array<T> {
+  public static get_where_contains<T = TEntry>(tablename: string, fieldname: fieldname, value: string, unique: boolean = false): Array<T> | T {
     const table = this.get_table(tablename);
-    return table.get_where_contains<T>(fieldname, value);
+    return table.get_where_contains<T>(fieldname, value, unique);
   }
 
   /**
@@ -897,14 +927,15 @@ export default class Database {
    * @param tablename The name of the table to get the entry from
    * @param fieldname The name of the field to compare the given value with
    * @param value The value to compare the given field with
+   * @param unique Whether or not there is only one entry matching this description. If true, the first entry is returned, otherwise all entries are returned. Defaults to false. Passing true prevents the method from returning an array.
    * @returns All entries from the table with the given tablename where the field with the given name does not contain the given value
    * @throws Error if the table does not exist
    * @throws Error if the database is not connected
    * @generic T The type of the entry - must be the same as what is returned by the parseFunction - defaults to TEntry
    */
-  public static get_where_not_contains<T = TEntry>(tablename: string, fieldname: fieldname, value: string): Array<T> {
+  public static get_where_not_contains<T = TEntry>(tablename: string, fieldname: fieldname, value: string, unique: boolean = false): Array<T> | T {
     const table = this.get_table(tablename);
-    return table.get_where_not_contains<T>(fieldname, value);
+    return table.get_where_not_contains<T>(fieldname, value, unique);
   }
 
   /**
@@ -912,14 +943,15 @@ export default class Database {
    * @param tablename The name of the table to get the entry from
    * @param fieldname The name of the field to compare the given value with
    * @param value The value to compare the given field with
+   * @param unique Whether or not there is only one entry matching this description. If true, the first entry is returned, otherwise all entries are returned. Defaults to false. Passing true prevents the method from returning an array.
    * @returns All entries from the table with the given tablename where the field with the given name starts with the given value
    * @throws Error if the table does not exist
    * @throws Error if the database is not connected
    * @generic T The type of the entry - must be the same as what is returned by the parseFunction - defaults to TEntry
    */
-  public static get_where_starts_with<T = TEntry>(tablename: string, fieldname: fieldname, value: string): Array<T> {
+  public static get_where_starts_with<T = TEntry>(tablename: string, fieldname: fieldname, value: string, unique: boolean = false): Array<T> | T {
     const table = this.get_table(tablename);
-    return table.get_where_starts_with<T>(fieldname, value);
+    return table.get_where_starts_with<T>(fieldname, value, unique);
   }
 
   /**
@@ -927,14 +959,15 @@ export default class Database {
    * @param tablename The name of the table to get the entry from
    * @param fieldname The name of the field to compare the given value with
    * @param value The value to compare the given field with
+   * @param unique Whether or not there is only one entry matching this description. If true, the first entry is returned, otherwise all entries are returned. Defaults to false. Passing true prevents the method from returning an array.
    * @returns All entries from the table with the given tablename where the field with the given name ends with the given value
    * @throws Error if the table does not exist
    * @throws Error if the database is not connected
    * @generic T The type of the entry - must be the same as what is returned by the parseFunction - defaults to TEntry
    */
-  public static get_where_ends_with<T = TEntry>(tablename: string, fieldname: fieldname, value: string): Array<T> {
+  public static get_where_ends_with<T = TEntry>(tablename: string, fieldname: fieldname, value: string, unique: boolean = false): Array<T> | T {
     const table = this.get_table(tablename);
-    return table.get_where_ends_with<T>(fieldname, value);
+    return table.get_where_ends_with<T>(fieldname, value, unique);
   }
 
   /// *** FILTER-QUERY PATCH METHODS *** ///
