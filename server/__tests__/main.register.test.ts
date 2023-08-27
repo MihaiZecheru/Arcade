@@ -42,7 +42,7 @@ describe('Test the register function -- register a user to the database', () => 
     expect(res.statusCode).toBe(200);
     expect(res.text).toMatch(uuid_regex);
 
-    const user = Database.get_where("Users", "user_id", res.text)[0];
+    const user: IUser = Database.get_where("Users", "user_id", res.text, true) as IUser;
 
     expect(user.user_id).toMatch(res.text);
     expect(user.username).toBe(req.body.username);

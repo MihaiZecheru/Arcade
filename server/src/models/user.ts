@@ -70,7 +70,7 @@ export default class User implements IUser {
     while (true) {
       const user_id = uuid();
       // check if ID is already in use
-      if (await Database.get_where("Users", "user_id", user_id).length === 0) return user_id;
+      if (Database.get_where("Users", "user_id", user_id).length === 0) return user_id;
     }
   }
 
@@ -80,7 +80,7 @@ export default class User implements IUser {
    * @returns The user with the given ID
    */
   public static async get_user(user_id: UserID): Promise<User> {
-    const user: Array<IUser> = await Database.get_where<IUser>("Users", "user_id", user_id);
+    const user: Array<IUser> = Database.get_where<IUser>("Users", "user_id", user_id) as Array<IUser>;
     if (user.length === 0) throw new Error(`User ${user_id} not found`);
     return new User(user[0] as IUser);
   }

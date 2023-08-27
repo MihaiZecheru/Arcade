@@ -54,7 +54,7 @@ app.post("/api/login", router.main.login);
 app.get("/api/user/:user_id", async (req: any, res: any) => {
   try {
     const user_id = req.params.user_id;
-    const users = await Database.get_where("Users", "user_id", user_id);
+    const users: Array<IUser> = Database.get_where("Users", "user_id", user_id) as Array<IUser>;
     if (users.length === 0) throw "User not found";
     return res.status(200).send(users[0]);
   } catch (err) {

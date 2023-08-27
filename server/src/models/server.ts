@@ -69,7 +69,7 @@ export default class Server {
    * @returns The user's balance
    */
   public static async get_user_balance(user_id: UserID): Promise<number> {
-    return parseInt(await Database.get_where("Users", "user_id", user_id)[0].balance);
+    return (Database.get_where("Users", "user_id", user_id, true) as IUser).balance;
   }
 
   /**
@@ -81,7 +81,7 @@ export default class Server {
   public static async increase_user_balance(user_id: UserID, amount: number): Promise<number> {
     const balance = await this.get_user_balance(user_id);
     
-    await Database.patch_where("Users", "user_id", user_id, {
+    Database.patch_where("Users", "user_id", user_id, {
       balance: (balance + amount).toString()
     });
 
@@ -97,7 +97,7 @@ export default class Server {
   public static async decrease_user_balance(user_id: UserID, amount: number): Promise<number> {
     const balance = await this.get_user_balance(user_id);
     
-    await Database.patch_where("Users", "user_id", user_id, {
+    Database.patch_where("Users", "user_id", user_id, {
       balance: (balance - amount).toString()
     });
 
