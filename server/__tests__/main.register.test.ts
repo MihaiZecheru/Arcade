@@ -2,25 +2,35 @@ import { uuid_regex } from '../src/models/ID';
 import router from '../src/routes/router';
 import Database, { TEntry } from '../mdb_local/index';
 import { USER_STARTING_BALANCE } from '../src/models/user';
-import { describe, afterEach, test, expect } from '@jest/globals';
+import { describe, test, expect, beforeEach, afterEach } from '@jest/globals';
 import { IUser, UserID } from '../src/models/user';
 
-Database.connect();
-Database.set_table_parse_function("Users", (entry: TEntry): IUser => {
-  let user: IUser = {} as IUser;
-  user.user_id = entry.user_id as UserID;
-  user.username = entry.username;
-  user.password = entry.password;
-  user.balance = parseInt(entry.balance);
-  user.email = entry.email;
-  user.birthday = entry.birthday;
-  user.joined = entry.joined;
-  return user;
+beforeEach(() => {
+  Database.connect();
+  Database.set_table_parse_function("Users", (entry: TEntry): IUser => {
+    let user: IUser = {} as IUser;
+    user.user_id = entry.user_id as UserID;
+    user.username = entry.username;
+    user.password = entry.password;
+    user.balance = parseInt(entry.balance);
+    user.email = entry.email;
+    user.birthday = entry.birthday;
+    user.joined = entry.joined;
+    return user;
+  });
+});
+
+afterEach(() => {
+  Database.disconnect();
 });
 
 describe('Test the register function -- register a user to the database', () => {
   const req = { body: { username: 'tester', password: 'test', email: 'test@gmail.com', birthday: '01/01/1980'} };
   const res = { text: '', send: (x: any) => { res.text = x }, statusCode: null, status: (x: any) => { res.statusCode = x; return res; } };
+
+  beforeEach(() => {
+    res.text = '';
+  });
 
   afterEach(() => {
     // Delete the user that was made for the test
