@@ -1,8 +1,10 @@
-import { register } from './main/register';
+import register from './main/register';
+import login from './main/login';
 
 const router = {
   main: {
-    register
+    register,
+    login,
   }
 };
 
