@@ -1,3 +1,4 @@
+import router from "./routes/router";
 import express from "express";
 import express_ws from "express-ws";
 
@@ -38,16 +39,7 @@ app.use(express.json());
  * Register a new user to Arcade
  * @returns UserID
  */
-app.post("/api/register", async (req: any, res: any) => {
-  try {
-    const { username, password, email, birthday } = req.body;
-    const user_id = await User.generate_id();
-    Database.post("Users", { user_id, username, password, balance: "250", email, birthday, joined: new Date().toLocaleDateString() });
-    return res.status(200).send(user_id);
-  } catch (err) {
-    return res.status(400).send(err);
-  }
-});
+app.post("/api/register", router.main.register);
 
 /**
  * Log a user into Aracade
