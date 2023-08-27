@@ -31,10 +31,6 @@ describe('Test the login function -- log the user into the database', () => {
     res.text = '';
   });
 
-  afterEach(() => {
-    // Cleanup any changes made during the test
-  });
-
   test('login with correct credentials', async () => {
     await router.main.login(req, res);
     expect(res.statusCode).toBe(200);
