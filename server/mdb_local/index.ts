@@ -671,6 +671,16 @@ export default class Database {
   }
 
   /**
+   * Disconnect from the database
+   * @throws Error if the database was not previously connected
+   */
+  public static disconnect(): void {
+    if (!this.connected) throw new Error("Database not connected");
+    this.tables = [];
+    this.connected = false;
+  }
+
+  /**
    * Get an existing table from the database
    * @param tablename The name of the table to get
    * @returns The table with the given tablename
