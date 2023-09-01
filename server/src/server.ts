@@ -1,9 +1,9 @@
-import User, { IUser, UserID } from "./user";
-import uuid, { ID } from "./ID";
-import { rps_choice } from "./games/rps";
-import IPlayer from "./player";
-import { RPSRoom } from "./rooms";
-import Database from "../../mdb_local";
+import User, { IUser, UserID } from "./models/user";
+import uuid, { ID } from "./models/ID";
+import { rps_choice } from "./models/games/rps";
+import IPlayer from "./models/player";
+import { RPSRoom } from "./models/rooms";
+import Database from "../mdb_local";
 
 /**
  * The ID of a room on the server

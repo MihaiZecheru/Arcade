@@ -2,7 +2,7 @@ import Database from "../../../mdb_local";
 import { rps_choice } from "../../models/games/rps";
 import IPlayer from "../../models/player";
 import { RPSRoom } from "../../models/rooms";
-import Server, { RoomID } from "../../models/server";
+import Server, { RoomID } from "../../server";
 import { UserID } from "../../models/user";
 
 /**

@@ -1,6 +1,6 @@
 import { rps_choice } from "./games/rps";
 import IPlayer from "./player";
-import { RoomID } from "./server";
+import { RoomID } from "../server";
 import { UserID } from "./user";
 
 /**

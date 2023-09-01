@@ -1,4 +1,4 @@
-import Server from "../../models/server";
+import Server from "../../server";
 
 export default async function create_room(req: any, res: any): Promise<void> {
   try {
