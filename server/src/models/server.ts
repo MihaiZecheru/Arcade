@@ -111,7 +111,7 @@ export default class Server {
 
 
   /**
-   * Create a room for rock-paper-scissors. Note: this does not take any money from the players as rooms are created before players join
+   * Create a room for the rock-paper-scissors game. Note: this does not take any money from the players as rooms are created before players join
    * @returns The ID of the room
    */
   public static rps_create_room(wager: number): RoomID {
@@ -124,6 +124,15 @@ export default class Server {
     this.server.rps[id] = new RPSRoom(id, wager);
 
     return id;
+  }
+
+  /**
+   * Delete a rock-paper-scissors room
+   * @param room_id The ID of the room to delete
+   */
+  public static rps_delete_room(room_id: RoomID): void {
+    this.room_ids.splice(this.room_ids.indexOf(room_id), 1);
+    delete this.server.rps[room_id];
   }
 
   /**
