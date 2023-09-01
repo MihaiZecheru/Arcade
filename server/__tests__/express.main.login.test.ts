@@ -3,19 +3,17 @@ import Database, { TEntry } from '../mdb_local/index';
 import { describe, test, expect, beforeEach, afterEach } from '@jest/globals';
 import { IUser, UserID } from '../src/models/user';
 
-beforeEach(() => {
-  Database.connect();
-  Database.set_table_parse_function("Users", (entry: TEntry): IUser => {
-    let user: IUser = {} as IUser;
-    user.user_id = entry.user_id as UserID;
-    user.username = entry.username;
-    user.password = entry.password;
-    user.balance = parseInt(entry.balance);
-    user.email = entry.email;
-    user.birthday = entry.birthday;
-    user.joined = entry.joined;
-    return user;
-  });
+Database.connect();
+Database.set_table_parse_function("Users", (entry: TEntry): IUser => {
+  let user: IUser = {} as IUser;
+  user.user_id = entry.user_id as UserID;
+  user.username = entry.username;
+  user.password = entry.password;
+  user.balance = parseInt(entry.balance);
+  user.email = entry.email;
+  user.birthday = entry.birthday;
+  user.joined = entry.joined;
+  return user;
 });
 
 afterEach(() => {
