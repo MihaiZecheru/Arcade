@@ -65,12 +65,7 @@ app.get("/api/user/:user_id", router.main.get_user_by_id);
  * Create a room for the Rock Paper Scissors game
  * @returns The ID of the room
  */
-app.post("/api/rps/create", async (req: any, res: any) => {
-  const wager: number = req.body.wager;
-  if (wager <= 0) res.code(400).send("Wager must be greater than 0");
-  if (Math.floor(wager) !== wager) res.code(400).send("Wager must be a whole number");
-  return res.code(200).send(await Server.rps_create_room(wager));
-});
+app.post("/api/rps/create", router.rps.create_room);
 
 /**
  * Create a room for the Hi-Lo game
