@@ -9,7 +9,7 @@ export default async function register(req: any, res: any): Promise<void> {
     Database.post("Users", { user_id, username, password, balance: USER_STARTING_BALANCE.toString(), email, birthday, joined: new Date().toLocaleDateString() });
     return res.status(200).send(user_id);
   } catch (err) {
-    if (err.message === "Too many fields in data")
+    if (err.message === "Too many fields in data" || "Field 'password' is missing in data")
       return res.status(400).send(err.message);
     return res.status(500).send("Internal server error");
   }
