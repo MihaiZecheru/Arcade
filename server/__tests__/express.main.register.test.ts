@@ -51,7 +51,7 @@ describe('Test the main.register function -- register a user to the database', (
   });
 
   test('register user with missing field - should throw error', async () => {
-    await router.main.register({ body: { username: 'tester', password: null, email: 'test@gmail.com', birthday: '01/01/1980'} }, res);
+    await router.main.register({ body: { username: 'tester', password: null, email: 'test@gmail.com', birthday: '01/01/1980' } }, res);
     expect(res.statusCode).toBe(400);
     expect(res.text).toBe("Field 'password' is missing in data");
   });
