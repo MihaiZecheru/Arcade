@@ -87,3 +87,4 @@ function win(players: Array<IPlayer>, winner: IPlayer, wager: number): void {
     }
   });
 }
+// TODO: add unit testing
