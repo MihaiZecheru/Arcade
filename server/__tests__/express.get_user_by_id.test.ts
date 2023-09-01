@@ -37,10 +37,6 @@ describe('Test the main.get_user_by_id function', () => {
   const req = { params: { user_id } };
   const res = { data: null, send: (x: any) => { res.data = x }, statusCode: null, status: (x: any) => { res.statusCode = x; return res; } };
 
-  beforeEach(() => {
-    res.data = null;
-  });
-
   test('retrieve user by ID successfully', async () => {
     await router.main.get_user_by_id(req, res);
     expect(res.statusCode).toBe(200);

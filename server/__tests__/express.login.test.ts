@@ -27,10 +27,6 @@ describe('Test the main.login function -- log the user into the database', () =>
   const res = { text: '', send: (x: any) => { res.text = x }, statusCode: null, status: (x: any) => { res.statusCode = x; return res; } };
   const user_id: UserID = "aa4d7f07-b82a-4b3b-bbf3-382d431b907b";
 
-  beforeEach(() => {
-    res.text = '';
-  });
-
   test('login successfully with correct credentials', async () => {
     await router.main.login(req, res);
     expect(res.statusCode).toBe(200);

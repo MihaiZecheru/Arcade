@@ -28,10 +28,6 @@ describe('Test the main.register function -- register a user to the database', (
   const req = { body: { username: 'tester', password: 'test', email: 'test@gmail.com', birthday: '01/01/1980'} };
   const res = { text: '', send: (x: any) => { res.text = x }, statusCode: null, status: (x: any) => { res.statusCode = x; return res; } };
 
-  beforeEach(() => {
-    res.text = '';
-  });
-
   afterEach(() => {
     // Delete the user that was made for the test
     Database.delete_where("Users", "user_id", res.text)

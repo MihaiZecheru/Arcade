@@ -29,10 +29,6 @@ describe('Test the rps.create_room function -- create a new room in the database
   const req = { body: { wager: 10 } };
   const res = { text: '', send: (x: any) => { res.text = x }, statusCode: null, status: (x: any) => { res.statusCode = x; return res; } };
 
-  beforeEach(() => {
-    res.text = '';
-  });
-
   test('create a room with a wager of 10 successfully', async () => {
     await router.rps.create_room(req, res);
     expect(res.statusCode).toBe(200);
