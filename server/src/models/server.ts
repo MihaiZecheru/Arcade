@@ -111,7 +111,7 @@ export default class Server {
 
 
   /**
-   * Create a room for rock-paper-scissors
+   * Create a room for rock-paper-scissors. Note: this does not take any money from the players as rooms are created before players join
    * @returns The ID of the room
    */
   public static rps_create_room(wager: number): RoomID {
