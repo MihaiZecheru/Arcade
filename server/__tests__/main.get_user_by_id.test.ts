@@ -41,14 +41,14 @@ describe('Test the main.get_user_by_id function', () => {
     res.data = null;
   });
 
-  test('retrieve user by ID', async () => {
+  test('retrieve user by ID successfully', async () => {
     await router.main.get_user_by_id(req, res);
     expect(res.statusCode).toBe(200);
     expect(res.data).toBeDefined();
     expect(res.data).toEqual(expected_user);
   });
 
-  test('retrieve non-existing user', async () => {
+  test('retrieve non-existing user - should throw error', async () => {
     await router.main.get_user_by_id({ params: { user_id: "fake user id" } }, res);
     expect(res.statusCode).toBe(400);
     expect(res.data).toBe('User not found');

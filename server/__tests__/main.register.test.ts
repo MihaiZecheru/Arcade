@@ -37,14 +37,15 @@ describe('Test the main.register function -- register a user to the database', (
     Database.delete_where("Users", "user_id", res.text)
   });
 
-  test('register user correctly, returning his uuid', async () => {
+  test('register user successfully', async () => {
     await router.main.register(req, res);
     expect(res.statusCode).toBe(200);
-    expect(res.text).toMatch(uuid_regex);
+    const user_id = res.text;
+    expect(user_id).toMatch(uuid_regex);
 
     const user: IUser = Database.get_where("Users", "user_id", res.text, true) as IUser;
 
-    expect(user.user_id).toMatch(res.text);
+    expect(user.user_id).toMatch(user_id);
     expect(user.username).toBe(req.body.username);
     expect(user.password).toBe(req.body.password);
     expect(user.balance).toBe(USER_STARTING_BALANCE);
