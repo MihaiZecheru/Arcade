@@ -10,6 +10,8 @@ export default function login(req: any, res: any): Promise<void> {
     if (user.password !== password) throw new Error("Incorrect password");
     return res.status(200).send(user.user_id);
   } catch (err) {
-    return res.status(400).send(err.message);
+    if (err.message === "Too many fields in data" || err.message === "User not found" || err.message === "Incorrect password")
+      return res.status(400).send(err.message);
+    return res.status(500).send("Internal server error");
   }
 }
