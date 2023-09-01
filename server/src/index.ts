@@ -2,12 +2,7 @@ import router from "./routes/router";
 import express from "express";
 import express_ws from "express-ws";
 
-import Server from "./models/server";
 import User, { IUser, UserID } from "./models/user";
-
-import IPlayer from "./models/player";
-import { rps_choice } from "./models/games/rps";
-import { RPSRoom } from "./models/rooms";
 import Database, { TEntry } from "../mdb_local/index";
 Database.connect();
 
@@ -36,13 +31,13 @@ app.use(express.json());
 
 
 /**
- * Register a new user to Arcade
+ * Register to Arcade
  * @returns UserID
  */
 app.post("/api/register", router.main.register);
 
 /**
- * Log a user into Aracade
+ * Login to Aracade
  * @returns UserID
  */
 app.post("/api/login", router.main.login);
@@ -85,7 +80,7 @@ app.post("/api/hilo/create", async (req: any, res: any) => {
 
 
 /**
- * Websocket for the Rock Paper Scissors game
+ * Websocket for the Rock Paper Scissors game - handles joining, playing, and finishing
  * @param room_id The ID of the room - url param
  * @param user_id The ID of the user - query param
  */
