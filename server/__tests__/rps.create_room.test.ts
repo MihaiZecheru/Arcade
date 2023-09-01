@@ -3,7 +3,7 @@ import Database, { TEntry } from '../mdb_local/index';
 import { describe, test, expect, beforeEach, afterEach } from '@jest/globals';
 import { IUser, UserID } from '../src/models/user';
 import { uuid_regex } from '../src/models/ID';
-import Server, { RoomID } from '../src/models/server';
+import Server, { RoomID } from '../src/server';
 import { RPSRoom } from '../src/models/rooms';
 
 beforeEach(() => {
