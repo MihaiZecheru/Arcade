@@ -22,7 +22,7 @@ afterEach(() => {
   Database.disconnect();
 });
 
-describe('Test the get_user_by_id function', () => {
+describe('Test the main.get_user_by_id function', () => {
   const user_id: UserID = 'aa4d7f07-b82a-4b3b-bbf3-382d431b907b';
   const expected_user: IUser = {
     user_id,

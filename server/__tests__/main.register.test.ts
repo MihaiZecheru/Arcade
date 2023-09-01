@@ -24,7 +24,7 @@ afterEach(() => {
   Database.disconnect();
 });
 
-describe('Test the register function -- register a user to the database', () => {
+describe('Test the main.register function -- register a user to the database', () => {
   const req = { body: { username: 'tester', password: 'test', email: 'test@gmail.com', birthday: '01/01/1980'} };
   const res = { text: '', send: (x: any) => { res.text = x }, statusCode: null, status: (x: any) => { res.statusCode = x; return res; } };
 
