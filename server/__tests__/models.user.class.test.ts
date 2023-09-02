@@ -64,8 +64,7 @@ describe('Test the User class methods', () => {
   });
 
   test('get_user method with non-existing user', () => {
-    // @ts-ignore
-    const user = User.get_user('fake user-id');
-    expect(user).toThrow("User 'fake user-id' not found");
+    // @ts-ignore - error with 'fake user-id' string not matching UserID type
+    expect(() => User.get_user('fake user-id')).toThrow("User 'fake user-id' not found");
   });
 });
