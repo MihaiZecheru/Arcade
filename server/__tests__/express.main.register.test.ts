@@ -25,7 +25,7 @@ afterEach(() => {
 });
 
 describe('Test the main.register function -- register a user to the database', () => {
-  const req = { body: { username: 'tester', password: 'test', email: 'test@gmail.com', birthday: '01/01/1980'} };
+  const req = { body: { username: 'tester', password: 'test', email: 'test@example.com', birthday: '01/01/1980'} };
   const res = { text: '', send: (x: any) => { res.text = x }, statusCode: null, status: (x: any) => { res.statusCode = x; return res; } };
 
   afterEach(() => {
@@ -51,13 +51,13 @@ describe('Test the main.register function -- register a user to the database', (
   });
 
   test('register user with missing field - should throw error', async () => {
-    await router.main.register({ body: { username: 'tester', password: null, email: 'test@gmail.com', birthday: '01/01/1980' } }, res);
+    await router.main.register({ body: { username: 'tester', password: null, email: 'test@example.com', birthday: '01/01/1980' } }, res);
     expect(res.statusCode).toBe(400);
     expect(res.text).toBe("Field 'password' is missing in data");
   });
 
   test('register user with too many fields - should throw error', async () => {
-    await router.main.register({ body: { username: 'tester', password: 'test', email: 'test@gmail.com', birthday: '01/01/1980', extra: 'field' } }, res);
+    await router.main.register({ body: { username: 'tester', password: 'test', email: 'test@example.com', birthday: '01/01/1980', extra: 'field' } }, res);
     expect(res.statusCode).toBe(400);
     expect(res.text).toBe("Too many fields in data");
   });

@@ -29,7 +29,7 @@ describe('Test the main.get_user_by_id function', () => {
     username: "tester",
     password: "test",
     balance: 250,
-    email: "test@gmail.com",
+    email: "test@example.com",
     birthday: "01/01/1980",
     joined: "01/01/1980"
   };
