@@ -682,7 +682,9 @@ export default class Database {
     if (this.connected) throw new Error("Database already connected");
     
     if (!fs.existsSync(this.database_folder)) {
-      fs.mkdir(this.database_folder);
+      fs.mkdir(this.database_folder, (err: any) => {
+        if (err) throw err;
+      });
     }
 
     if (fs.existsSync(this.tables_info_file)) {
