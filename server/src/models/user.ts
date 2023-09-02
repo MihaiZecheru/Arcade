@@ -66,7 +66,7 @@ export default class User implements IUser {
    * Generate a unique user ID
    * @returns A unique user ID
    */
-  public static async generate_id(): Promise<string> {
+  public static generate_id(): string {
     while (true) {
       const user_id = uuid();
       // check if ID is already in use
@@ -79,9 +79,11 @@ export default class User implements IUser {
    * @param user_id The ID of the user to get
    * @returns The user with the given ID
    */
-  public static async get_user(user_id: UserID): Promise<User> {
+  public static get_user(user_id: UserID): User {
+    console.log("user_id", user_id)
     const user: Array<IUser> = Database.get_where<IUser>("Users", "user_id", user_id) as Array<IUser>;
-    if (user.length === 0) throw new Error(`User ${user_id} not found`);
+    console.log("user", user)
+    if (user.length === 0) throw new Error(`User '${user_id}' not found`);
     return new User(user[0] as IUser);
   }
 }
