@@ -148,21 +148,12 @@ export default class Server {
    * Add a player to a rock-paper-scissors room
    * @param room_id The ID of the room the player is joining
    * @param user_id The ID of the player joining the room
-   * @returns Whether the room is full and the game can start
+   * @returns Whether the room is full (if the room is ready)
    * @throws {Error} If the room is full
    */
-  public static rps_join_room(room_id: RoomID, user_id: UserID, ws: any): boolean {
-    if (this.server.rps[room_id].get_player_count() >= 2) {
-      throw new Error(`Room ${room_id} is full`);
-    }
-    
-    this.server.rps[room_id].add_player({
-      "user_id": user_id,
-      "player_number": this.server.rps[room_id].players.length + 1,
-      "ws": ws
-    });
-    
-    return this.server.rps[room_id].get_player_count() === 2;
+  public static rps_join_room(room_id: RoomID, user_id: UserID, ws: any): boolean {  
+    this.server.rps[room_id].add_player(user_id, ws);
+    return this.server.rps[room_id].room_full();
   }
 
   /**
@@ -201,16 +192,8 @@ export default class Server {
    * @returns True if both players have chosen, false otherwise
    */
   public static rps_player_choose(room_id: RoomID, player_id: UserID, choice: rps_choice): boolean {
-    ;
-    if (player_id === this.server.rps[room_id].get_player_by_number(1)?.user_id) {
-      // player1
-      this.server.rps[room_id].player1_choice = choice;
-      return false;
-    } else {
-      // player2
-      this.server.rps[room_id].player2_choice = choice;
-      return true;
-    }
+    this.server.rps[room_id].set_player_choice(player_id, choice);
+    return this.server.rps[room_id].room_full();
   }
 
   /**
@@ -220,25 +203,29 @@ export default class Server {
    * @returns The ID of the winner, or null if there is no winner
    */
   public static rps_decide_winner(room_id: RoomID): IPlayer | null {
-    const player1_choice: rps_choice = this.server.rps[room_id].player1_choice!;
-    const player2_choice: rps_choice = this.server.rps[room_id].player2_choice!;
-
     const player1: IPlayer = this.server.rps[room_id].get_player_by_number(1)!;
     const player2: IPlayer = this.server.rps[room_id].get_player_by_number(2)!;
+
+    const player1_choice: rps_choice = this.server.rps[room_id].get_player_choice(player1.user_id);
+    const player2_choice: rps_choice = this.server.rps[room_id].get_player_choice(player2.user_id);
 
     // tie
     if (player1_choice === player2_choice) return null;
     
+    // rock vs paper
     if (player1_choice === "rock") {
       if (player2_choice === "paper") return player2;
-      else return this.server.rps[room_id].get_player_by_number(1)!;
-// sourcery skip: merge-else-if
-    } else if (player1_choice === "paper") {
-      if (player2_choice === "scissors") return player2;
-      else return player1;
-    } else {
-      if (player2_choice === "rock") return player2;
       else return player1;
     }
+    
+    // paper vs scissors
+    if (player1_choice === "paper") {
+      if (player2_choice === "scissors") return player2;
+      else return player1;
+    }
+
+    // scissors vs rock
+    if (player2_choice === "rock") return player2;
+    else return player1;
   }
 }

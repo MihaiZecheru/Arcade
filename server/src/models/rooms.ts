@@ -4,12 +4,39 @@ import { RoomID } from "../server";
 import { UserID } from "./user";
 
 /**
+ * Contains the maximum amount of players any sub-class of RoomBaseClass can have, ie RPSRoom
+ */
+const ROOM_CAPS: { [room_name: string]: number } = {
+  "RoomBaseClass": -1, // should not be used
+  "RPSRoom": 2
+};
+
+function GET_MAX_ROOM_CAPACITY(classname: string): number {
+  return ROOM_CAPS[classname];
+}
+
+/**
  * A base class for all rooms to inherit from
  */
 class RoomBaseClass {
+  /**
+   * The players currently in the room
+   */
   public players: Array<IPlayer> = [];
+
+  /**
+   * Has the game started?
+   */
   public game_started: boolean = false;
+
+  /**
+   * The ID of the room
+   */
   public room_id: RoomID;
+
+  /**
+   * The bet being placed on the game
+   */
   public wager: number;
 
   public constructor(room_id: RoomID, wager: number) {
@@ -21,15 +48,25 @@ class RoomBaseClass {
    * Get the number of players in the room
    * @returns The number of players in the room
    */
-  public get_player_count(): number {
+  public player_count(): number {
     return this.players.length;
   }
 
   /**
    * Add a player to the room
-   * @param player The player to add to the room
+   * @param user_id The ID of the player to add to the room
+   * @param ws The WebSocket connection the player has
    */
-  public add_player(player: IPlayer) {
+  public add_player(user_id: UserID, ws: any) {
+    if (this.player_count() === GET_MAX_ROOM_CAPACITY(this.constructor.name)) {
+      throw new Error(`Room '${this.room_id}' is full`);
+    }
+
+    const player: IPlayer = {
+      user_id, ws,
+      player_number: this.player_count() + 1
+    }
+
     this.players.push(player);
   }
 
@@ -46,7 +83,7 @@ class RoomBaseClass {
     });
 
     if (!exists) {
-      throw new Error(`User ${user_id} is not in room ${this.room_id}`);
+      throw new Error(`User '${user_id}' is not in room '${this.room_id}'`);
     }
 
     this.players = this.players.filter(player => player.user_id !== user_id);
@@ -55,10 +92,15 @@ class RoomBaseClass {
   /**
    * Get a player from the room by their number (player 1, player 2, etc.)
    * @param player_number The number of the player to get
-   * @returns 
+   * @returns The player's ID
+   * @throws {Error} If the player number is invalid
    */
-  public get_player_by_number(player_number: number): IPlayer | null {
-    return this.players[player_number - 1] || null;
+  public get_player_by_number(player_number: number): IPlayer {
+    if (player_number < 1 || player_number > this.player_count()) {
+      throw new Error(`There is currently no player number '${player_number}' in room '${this.room_id}`);
+    }
+
+    return this.players[player_number - 1];
   }
 
   /**
@@ -66,8 +108,10 @@ class RoomBaseClass {
    * @param user_id The user ID of the player to get
    * @returns 
    */
-  public get_player_by_user_id(user_id: string): IPlayer | null {
-    return this.players.find(player => player.user_id === user_id) || null;
+  public get_player_by_user_id(user_id: string): IPlayer {
+    const player = this.players.find(player => player.user_id === user_id);
+    if (!player) throw new Error(`Player '${user_id}' is not in room '${this.room_id}'`);
+    return player;
   }
 }
 
@@ -75,6 +119,59 @@ class RoomBaseClass {
  * Rock Paper Scissors room
  */
 export class RPSRoom extends RoomBaseClass {
-  public player1_choice: rps_choice | null = null;
-  public player2_choice: rps_choice | null = null;
+  private player1_choice: rps_choice | null = null;
+  private player2_choice: rps_choice | null = null;
+
+  /**
+   * Get a player's choice
+   * @param user_id The ID of the player
+   * @returns The player's choice (rock, paper, or scissors)
+   */
+  public get_player_choice(user_id: UserID): rps_choice;
+  public get_player_choice(player_number: number): rps_choice;
+  public get_player_choice(player: UserID | number): rps_choice {
+    let _player: IPlayer;
+    if (typeof player === "number") {
+      try {
+        _player = this.get_player_by_number(player);
+      } catch (err) {
+        throw new Error(`There is currently no player number '${player}' in room '${this.room_id}`);
+      }
+    }
+    else {
+      try {
+        _player = this.get_player_by_user_id(player);
+      } catch {
+        throw new Error(`There is currently no player with user ID '${player}' in room '${this.room_id}`);
+      }
+    }
+
+    let choice: rps_choice | null = (_player.player_number === 1) ? this.player1_choice : this.player2_choice;
+    if (!choice) throw new Error(`Player '${_player.user_id}' has not made a choice yet`);
+    return choice!;
+  }
+
+  /**
+   * Set a player's choice
+   * @param user_id The ID of the player
+   * @param choice The player's choice (rock, paper, or scissors)
+   */
+  public set_player_choice(user_id: UserID, choice: rps_choice): void {
+    const player = this.get_player_by_user_id(user_id);
+    if (!player) throw new Error(`Player '${user_id}' is not in room '${this.room_id}`);
+
+    if (player.player_number === 1) {
+      this.player1_choice = choice;
+    } else {
+      this.player2_choice = choice;
+    }
+  }
+
+  /**
+   * Check if the room is full
+   * @returns If the room is full
+   */
+  public room_full(): boolean {
+    return this.player1_choice !== null && this.player2_choice !== null;
+  }
 }
