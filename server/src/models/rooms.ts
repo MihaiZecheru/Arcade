@@ -18,7 +18,7 @@ function GET_MAX_ROOM_CAPACITY(classname: string): number {
 /**
  * A base class for all rooms to inherit from
  */
-class RoomBaseClass {
+export class RoomBaseClass {
   /**
    * The players currently in the room
    */
