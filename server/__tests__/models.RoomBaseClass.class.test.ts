@@ -1,4 +1,4 @@
-import { RPSRoom } from '../src/models/rooms';
+import { RoomBaseClass } from '../src/models/rooms';
 import { describe, test, expect, beforeEach } from '@jest/globals';
 import uuid from '../src/models/ID';
 import { UserID } from '../src/models/user';
@@ -8,10 +8,10 @@ describe('Test the RoomBaseClass', () => {
   const player2_id: UserID = 'c1eab2fe-797b-4a9f-ba48-ea155205044b';
   
   const room_id = uuid();
-  let room: RPSRoom = new RPSRoom(room_id, 100);
+  let room: RoomBaseClass = new RoomBaseClass(room_id, 100);
 
   beforeEach(() => {
-    room = new RPSRoom(room_id, 100);
+    room = new RoomBaseClass(room_id, 100);
   });
 
   test('add_player method', () => {
