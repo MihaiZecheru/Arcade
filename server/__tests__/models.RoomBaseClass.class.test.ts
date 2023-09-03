@@ -4,7 +4,6 @@ import uuid from '../src/models/ID';
 import { UserID } from '../src/models/user';
 
 describe('Test the RoomBaseClass', () => {
-  // Create sample players and an RPSRoom instance for testing
   const player1_id: UserID = 'aa4d7f07-b82a-4b3b-bbf3-382d431b907b';
   const player2_id: UserID = 'c1eab2fe-797b-4a9f-ba48-ea155205044b';
   
