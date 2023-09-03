@@ -67,6 +67,11 @@ export class RoomBaseClass {
       player_number: this.player_count() + 1
     }
 
+    // check if player already in room
+    if (this.players.map((player: IPlayer) => player.user_id).includes(user_id)) {
+      throw new Error(`User '${user_id}' is already in room '${this.room_id}'`);
+    }
+
     this.players.push(player);
   }
 
@@ -106,9 +111,9 @@ export class RoomBaseClass {
   /**
    * Get a player from the room by their user ID
    * @param user_id The user ID of the player to get
-   * @returns 
+   * @returns THe player with the given user ID
    */
-  public get_player_by_user_id(user_id: string): IPlayer {
+  public get_player_by_user_id(user_id: UserID): IPlayer {
     const player = this.players.find(player => player.user_id === user_id);
     if (!player) throw new Error(`Player '${user_id}' is not in room '${this.room_id}'`);
     return player;
