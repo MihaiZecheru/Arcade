@@ -50,14 +50,14 @@ describe('Test the main.register function -- register a user to the database', (
     expect(user.joined).toBeDefined();
   });
 
-  test('register user with missing field - should throw error', async () => {
-    await router.main.register({ body: { username: 'tester', password: null, email: 'test@example.com', birthday: '01/01/1980' } }, res);
+  test('register user with missing field - should throw error', () => {
+    router.main.register({ body: { username: 'tester', password: null, email: 'test@example.com', birthday: '01/01/1980' } }, res);
     expect(res.statusCode).toBe(400);
     expect(res.text).toBe("Field 'password' is missing in data");
   });
 
-  test('register user with too many fields - should throw error', async () => {
-    await router.main.register({ body: { username: 'tester', password: 'test', email: 'test@example.com', birthday: '01/01/1980', extra: 'field' } }, res);
+  test('register user with too many fields - should throw error', () => {
+    router.main.register({ body: { username: 'tester', password: 'test', email: 'test@example.com', birthday: '01/01/1980', extra: 'field' } }, res);
     expect(res.statusCode).toBe(400);
     expect(res.text).toBe("Too many fields in data");
   });
