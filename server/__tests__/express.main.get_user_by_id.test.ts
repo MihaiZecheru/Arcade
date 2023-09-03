@@ -37,15 +37,15 @@ describe('Test the main.get_user_by_id function', () => {
   const req = { params: { user_id } };
   const res = { data: null, send: (x: any) => { res.data = x }, statusCode: null, status: (x: any) => { res.statusCode = x; return res; } };
 
-  test('retrieve user by ID successfully', async () => {
-    await router.main.get_user_by_id(req, res);
+  test('retrieve user by ID successfully', () => {
+    router.main.get_user_by_id(req, res);
     expect(res.statusCode).toBe(200);
     expect(res.data).toBeDefined();
     expect(res.data).toEqual(expected_user);
   });
 
-  test('retrieve non-existing user - should throw error', async () => {
-    await router.main.get_user_by_id({ params: { user_id: "fake user id" } }, res);
+  test('retrieve non-existing user - should throw error', () => {
+    router.main.get_user_by_id({ params: { user_id: "fake user id" } }, res);
     expect(res.statusCode).toBe(400);
     expect(res.data).toBe('User not found');
   });
