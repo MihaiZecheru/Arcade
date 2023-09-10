@@ -5,7 +5,7 @@ export default function login(req: any, res: any): Promise<void> {
   try {
     const { username, password } = req.body;
     if (Object.keys(req.body).length > 2) throw new Error("Too many fields in data");
-    const user: IUser = Database.get_where("Users", "username", username, true) as IUser;
+    const user: IUser = Database.get_unique_where<IUser>("Users", "username", username);
     if (!user) throw new Error("User not found");
     if (user.password !== password) throw new Error("Incorrect password");
     return res.status(200).send(user.user_id);

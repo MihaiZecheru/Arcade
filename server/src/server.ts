@@ -69,7 +69,7 @@ export default class Server {
    * @returns The user's balance
    */
   public static async get_user_balance(user_id: UserID): Promise<number> {
-    return (Database.get_where("Users", "user_id", user_id, true) as IUser).balance;
+    return Database.get_unique_where<IUser>("Users", "user_id", user_id).balance;
   }
 
   /**

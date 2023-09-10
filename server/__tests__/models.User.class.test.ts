@@ -17,7 +17,7 @@ describe('Test the User class methods', () => {
 });
 
   const user_id = 'aa4d7f07-b82a-4b3b-bbf3-382d431b907b';
-  const test_user: IUser = Database.get_where<IUser>('Users', 'user_id', user_id, true) as IUser;
+  const test_user: IUser = Database.get_unique_where<IUser>('Users', 'user_id', user_id);
   let user = new User(test_user);
 
   beforeEach(() => {
@@ -49,7 +49,7 @@ describe('Test the User class methods', () => {
     const user = new User(test_user);
     user.username = "different username";
     user.save();
-    const updated_user = Database.get_where<IUser>('Users', 'user_id', user_id, true) as IUser;
+    const updated_user = Database.get_unique_where<IUser>('Users', 'user_id', user_id);
     expect(updated_user.username).toBe("different username");
   });
 
