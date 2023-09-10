@@ -1,5 +1,8 @@
 ﻿namespace ArcadeLib;
 
+using Spectre.Console;
+using Spectre.Console.Advanced;
+
 public static class GameLoop
 {
     /// <summary>
@@ -9,8 +12,19 @@ public static class GameLoop
     /// <returns>The user's choice from the menu</returns>
     public static ArcadeLib.MenuOption MainMenu(string gamename)
     {
-        return ArcadeLib.MenuOption.PLAY_SOLO; //TODO: Implement
-        return ArcadeLib.MenuOption.PLAY_MULTIPLAYER;
+        // TODO: make prettier
+        var mode = AnsiConsole.Prompt(new SelectionPrompt<string>()
+            .Title("Choose mode")
+            .AddChoices(new[] {
+                "Multiplayer",
+                "Single player (vs CPU)"
+            }
+        ));
+
+        if (mode == "Multiplayer")
+            return ArcadeLib.MenuOption.PLAY_MULTIPLAYER;
+        else
+            return ArcadeLib.MenuOption.PLAY_SOLO;
     }
 
     public static ArcadeLib.Rooms.RockPaperScissorsRoom RoomMenuGetRoom()
@@ -19,7 +33,7 @@ public static class GameLoop
     }
 
     /// <summary>
-    /// Prompts the user for a wager >= 1
+    /// Prompts the user for a wager
     /// </summary>
     /// <returns>The amount of tokens the user would like to bet, must be at least 1</returns>
     public static int PlaceBet()
