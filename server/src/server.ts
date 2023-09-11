@@ -145,6 +145,14 @@ export default class Server {
   }
 
   /**
+   * Get all rock-paper-scissors rooms
+   * @returns All rock-paper-scissors rooms
+   */
+  public static rps_get_all_rooms(): Array<RPSRoom> {
+    return Object.values(this.server.rps);
+  }
+
+  /**
    * Add a player to a rock-paper-scissors room
    * @param room_id The ID of the room the player is joining
    * @param user_id The ID of the player joining the room
