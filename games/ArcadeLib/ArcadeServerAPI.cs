@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using ArcadeLib.Rooms;
+using Newtonsoft.Json;
 using System.Text;
 
 namespace ArcadeLib;
@@ -45,14 +46,14 @@ public static class ArcadeServerAPI
     }
 
     /// <summary>
-    /// Get the user with the given <paramref name="User_ID"/>'s data
+    /// Get the user with the given <paramref name="UserID"/>'s data
     /// </summary>
-    /// <param name="User_ID">The user's ID</param>
+    /// <param name="UserID">The user's ID</param>
     /// <exception cref="Exception">Error retrieving user data</exception>
     /// <returns><see cref="ArcadeUser"/> object</returns>
-    public static async Task<ArcadeUser> GetArcadeUser(ArcadeLib.UUID User_ID)
+    public static async Task<ArcadeUser> GetArcadeUser(ArcadeLib.UUID UserID)
     {
-        string url = $"{ArcadeURL}/api/user/{User_ID}";
+        string url = $"{ArcadeURL}/api/user/{UserID}";
 
         try
         {
@@ -77,11 +78,11 @@ public static class ArcadeServerAPI
     /// <summary>
     /// Syncronous version of <see cref="GetArcadeUser(ArcadeLib.UUID)"/>
     /// </summary>
-    /// <param name="User_ID">The user's ID</param>
+    /// <param name="UserID">The user's ID</param>
     /// <exception cref="Exception">Error retrieving user data</exception>
     /// <returns><see cref="ArcadeUser"/> object</returns>
-    public static ArcadeUser GetArcadeUserSync(ArcadeLib.UUID User_ID)
+    public static ArcadeUser GetArcadeUserSync(ArcadeLib.UUID UserID)
     {
-        return GetArcadeUser(User_ID).GetAwaiter().GetResult();
+        return GetArcadeUser(UserID).GetAwaiter().GetResult();
     }
 }

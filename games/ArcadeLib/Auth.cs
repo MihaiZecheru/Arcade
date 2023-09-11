@@ -36,8 +36,8 @@ public static class Auth
     /// </summary>
     public static ArcadeLib.ArcadeUser Login()
     {
-        ArcadeLib.UUID User_ID = ArcadeLib.Auth.LoginPrompt();
-        ArcadeLib.ArcadeUser user = ArcadeServerAPI.GetArcadeUserSync(User_ID);
+        ArcadeLib.UUID UserID = ArcadeLib.Auth.LoginPrompt();
+        ArcadeLib.ArcadeUser user = ArcadeServerAPI.GetArcadeUserSync(UserID);
         ArcadeLib.Auth.LoginComplete(user.Username);
         return user;
     }
@@ -50,8 +50,8 @@ public static class Auth
     /// <param name="user">The variable to save the user to</param>
     public static void Login(out ArcadeLib.ArcadeUser user)
     {
-        ArcadeLib.UUID User_ID = ArcadeLib.Auth.LoginPrompt();
-        user = ArcadeServerAPI.GetArcadeUserSync(User_ID);
+        ArcadeLib.UUID UserID = ArcadeLib.Auth.LoginPrompt();
+        user = ArcadeServerAPI.GetArcadeUserSync(UserID);
         ArcadeLib.Auth.LoginComplete(user.Username);
     }
 
@@ -161,8 +161,8 @@ public static class Auth
                     {
                         try
                         {
-                            ArcadeLib.UUID User_ID = ArcadeServerAPI.LoginSync(GetUsername().Trim(), GetPassword());
-                            return User_ID; // If the login was successful, return the User_ID
+                            ArcadeLib.UUID UserID = ArcadeServerAPI.LoginSync(GetUsername().Trim(), GetPassword());
+                            return UserID; // If the login was successful, return the UserID
                         }
                         catch (Exception e)
                         {

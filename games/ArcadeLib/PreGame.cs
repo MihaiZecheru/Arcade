@@ -27,9 +27,24 @@ public static class PreGame
             return ArcadeLib.MenuOption.PLAY_SOLO;
     }
 
-    public static ArcadeLib.Rooms.RockPaperScissorsRoom RoomMenuGetRoom()
+    /// <summary>
+    /// Prompt the user to choose a room to join, return the selected room
+    /// </summary>
+    /// <param name="room_type">The type of room/the name of the game, ex: RPS, HiLo, etc.</param>
+    /// <returns>The ID of the room the user wants to join</returns>
+    public static async Task<ArcadeLib.UUID> RoomMenu(string room_type)
     {
-        
+        List<ArcadeLib.Rooms.IRoom> rooms;
+        switch (room_type)
+        {
+            case "RPS":
+                rooms = await ArcadeLib.Rooms.RockPaperScissorsRoom.GetRooms();
+                break;
+
+            default:
+                throw new Exception($"No game exists with the name '{room_type}'. What game are you trying to get rooms for?")
+        }
+
         return null; //TODO: Implement
     }
 
