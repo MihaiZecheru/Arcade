@@ -35,7 +35,7 @@ describe('Test the rps.create_room function -- create a new room in the database
     const room_id = res.text;
     expect(room_id).toMatch(uuid_regex);
     const room = Server.rps_get_room(room_id as RoomID);
-    expect(room_id).toBe(room.room_id);
+    expect(room_id).toBe(room.id);
     expect(room).toEqual(new RPSRoom(room_id as RoomID, 10));
 
     // cleanup

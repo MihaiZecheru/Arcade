@@ -9,7 +9,7 @@ import { UserID } from "../../models/user";
  * Handles joining the room, playing the game, and finishing the game
  */
 export default function websocket(ws: any, req: any): void {
-  const room_id = req.params.room_id;
+  const room_id = req.params.id;
   const user_id = req.query.user_id;
 
   // check if user_id was provided
