@@ -24,17 +24,17 @@ public static class RockPaperScissors
 
     public static void GameLoop()
     {
-        ArcadeLib.MenuOption choice = ArcadeLib.GameLoop.MainMenu("Rock Paper Scissors");
+        ArcadeLib.MenuOption choice = ArcadeLib.PreGame.MainMenu("Rock Paper Scissors");
         
         if (choice == ArcadeLib.MenuOption.PLAY_SOLO)
         {
-            int bet = ArcadeLib.GameLoop.PlaceBet();
+            int bet = ArcadeLib.PreGame.PlaceBet();
             PlayCPU(bet);
         }
         else if (choice == ArcadeLib.MenuOption.PLAY_MULTIPLAYER)
         {
             // No need to ask for bet because the room comes with a bet already set
-            ArcadeLib.Rooms.RockPaperScissorsRoom room = ArcadeLib.GameLoop.RoomMenuGetRoom();
+            ArcadeLib.Rooms.RockPaperScissorsRoom room = ArcadeLib.PreGame.RoomMenuGetRoom();
             PlayMultiplayer(room);
         }
     }

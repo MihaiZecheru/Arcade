@@ -3,7 +3,7 @@
 using Spectre.Console;
 using Spectre.Console.Advanced;
 
-public static class GameLoop
+public static class PreGame
 {
     /// <summary>
     /// Present the user with the Main Menu and return his choice. Uses the <paramref name="gamename"/> as a header
