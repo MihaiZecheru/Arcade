@@ -2,7 +2,7 @@ import router from "./routes/router";
 import express from "express";
 import express_ws from "express-ws";
 
-import User, { IUser, UserID } from "./models/user";
+import { IUser, UserID } from "./models/user";
 import Database, { TEntry } from "../mdb_local/index";
 Database.connect();
 
