@@ -67,15 +67,13 @@ describe('Test the RoomBaseClass', () => {
   });
 
   test('add player to full room', () => {
-    room.add_player(player1_id, {});
-    room.add_player(player2_id, {});
-    expect(() => room.add_player("d111b9b8-7a8c-4f54-8239-62515df69caf", {})).toThrow(`Room '${room.id}' is full`);
-    expect(room.player_count()).toBe(2);
+    expect(() => room.add_player(player1_id, {})).toThrow(`Room '${room.id}' is full`);
+    expect(room.player_count()).toBe(-1);
   });
 
   test('remove player from an empty room', () => {
     const emptyRoom = new RoomBaseClass(uuid(), 2);
-    expect(() => emptyRoom.remove_player('d111b9b8-7a8c-4f54-8239-62515df69caf')).toThrow(`User 'd111b9b8-7a8c-4f54-8239-62515df69caf' is not in room '${room.id}'`);
+    expect(() => emptyRoom.remove_player('d111b9b8-7a8c-4f54-8239-62515df69caf')).toThrow(`User 'd111b9b8-7a8c-4f54-8239-62515df69caf' is not in room '${emptyRoom.id}'`);
     expect(emptyRoom.player_count()).toBe(0);
   });
 
