@@ -73,6 +73,24 @@ app.post("/api/hilo/create", async (req: any, res: any) => {
 
 
 
+/******************************/
+/*** Express - Get Rooms ***/
+/******************************/
+
+
+
+/**
+ * Get all Rock Paper Scissors rooms
+ */
+app.get("/api/rps/all", router.rps.get_all_rooms);
+
+/**
+ * Get Rock Paper Scissors room by ID
+ */
+app.get("/api/rps/:room_id", router.rps.get_room_by_id);
+
+
+
 /***********************************/
 /*** Websocket - Join/Play Games ***/
 /***********************************/
