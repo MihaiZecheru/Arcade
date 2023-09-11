@@ -374,10 +374,10 @@ public static class Auth
         // Clear the used variables so the user's login information is not stored
         Password = null;
         Username = null;
-        
-        // Wait for keypress to continue
+
+        // Display the welcome message for 1.5 seconds before clearing
         Misc.HideCursor();
-        Console.ReadKey(true);
+        Thread.Sleep(1500);
         Console.Clear(); // Cleanup: the screen will be ready for the game to begin
         Misc.ShowCursor();
     }
