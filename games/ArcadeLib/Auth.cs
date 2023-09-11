@@ -377,7 +377,7 @@ public static class Auth
 
         // Display the welcome message for 1.5 seconds before clearing
         Misc.HideCursor();
-        Thread.Sleep(1500);
+        Thread.Sleep(1250);
         Console.Clear(); // Cleanup: the screen will be ready for the game to begin
         Misc.ShowCursor();
     }
