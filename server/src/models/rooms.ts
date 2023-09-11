@@ -32,7 +32,7 @@ export class RoomBaseClass {
   /**
    * The ID of the room
    */
-  public room_id: RoomID;
+  public id: RoomID;
 
   /**
    * The bet being placed on the game
@@ -40,7 +40,7 @@ export class RoomBaseClass {
   public wager: number;
 
   public constructor(room_id: RoomID, wager: number) {
-    this.room_id = room_id;
+    this.id = room_id;
     this.wager = wager;
   }
 
@@ -59,7 +59,7 @@ export class RoomBaseClass {
    */
   public add_player(user_id: UserID, ws: any) {
     if (this.player_count() === GET_MAX_ROOM_CAPACITY(this.constructor.name)) {
-      throw new Error(`Room '${this.room_id}' is full`);
+      throw new Error(`Room '${this.id}' is full`);
     }
 
     const player: IPlayer = {
@@ -69,7 +69,7 @@ export class RoomBaseClass {
 
     // check if player already in room
     if (this.players.map((player: IPlayer) => player.user_id).includes(user_id)) {
-      throw new Error(`User '${user_id}' is already in room '${this.room_id}'`);
+      throw new Error(`User '${user_id}' is already in room '${this.id}'`);
     }
 
     this.players.push(player);
@@ -88,7 +88,7 @@ export class RoomBaseClass {
     });
 
     if (!exists) {
-      throw new Error(`User '${user_id}' is not in room '${this.room_id}'`);
+      throw new Error(`User '${user_id}' is not in room '${this.id}'`);
     }
 
     this.players = this.players.filter(player => player.user_id !== user_id);
@@ -102,7 +102,7 @@ export class RoomBaseClass {
    */
   public get_player_by_number(player_number: number): IPlayer {
     if (player_number < 1 || player_number > this.player_count()) {
-      throw new Error(`There is currently no player number '${player_number}' in room '${this.room_id}`);
+      throw new Error(`There is currently no player number '${player_number}' in room '${this.id}`);
     }
 
     return this.players[player_number - 1];
@@ -115,7 +115,7 @@ export class RoomBaseClass {
    */
   public get_player_by_user_id(user_id: UserID): IPlayer {
     const player = this.players.find(player => player.user_id === user_id);
-    if (!player) throw new Error(`Player '${user_id}' is not in room '${this.room_id}'`);
+    if (!player) throw new Error(`Player '${user_id}' is not in room '${this.id}'`);
     return player;
   }
 }
@@ -140,14 +140,14 @@ export class RPSRoom extends RoomBaseClass {
       try {
         _player = this.get_player_by_number(player);
       } catch (err) {
-        throw new Error(`There is currently no player number '${player}' in room '${this.room_id}`);
+        throw new Error(`There is currently no player number '${player}' in room '${this.id}`);
       }
     }
     else {
       try {
         _player = this.get_player_by_user_id(player);
       } catch {
-        throw new Error(`There is currently no player with user ID '${player}' in room '${this.room_id}`);
+        throw new Error(`There is currently no player with user ID '${player}' in room '${this.id}`);
       }
     }
 
@@ -163,7 +163,7 @@ export class RPSRoom extends RoomBaseClass {
    */
   public set_player_choice(user_id: UserID, choice: rps_choice): void {
     const player = this.get_player_by_user_id(user_id);
-    if (!player) throw new Error(`Player '${user_id}' is not in room '${this.room_id}`);
+    if (!player) throw new Error(`Player '${user_id}' is not in room '${this.id}`);
 
     if (player.player_number === 1) {
       this.player1_choice = choice;

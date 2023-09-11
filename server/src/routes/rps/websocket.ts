@@ -62,7 +62,7 @@ function on_message(msg: any, room_id: RoomID): void {
 
 function finish_game(room: RPSRoom): void {
   // both players have chosen
-  const room_id = room.room_id;
+  const room_id = room.id;
   const winner = Server.rps_decide_winner(room_id);
   const players = room.players;
   const wager = room.wager;
