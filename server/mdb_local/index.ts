@@ -159,6 +159,16 @@ export class Table {
    * @returns The entry with the given id if it exists, otherwise null
    */
   public get<T = TEntry>(id: entryid): T | null {
+    const record = this.get_unparsed(id);
+    return record ? this.parseFunction(record) : null;
+  }
+
+  /**
+   * Get an entry without parsing it using the table's parseFunction
+   * @param id The id of the entry to get
+   * @returns The entry with the given id if it exists, otherwise null
+   */
+  public get_unparsed(id: entryid): TEntry | null {
     if (!fs.existsSync(this.entry_path(id))) return null;
 
     const raw_entry = fs.readFileSync(this.entry_path(id), { encoding: 'utf8', flag: 'r' });
@@ -169,7 +179,7 @@ export class Table {
       record[this.fieldnames[i]] = entries[i];
     }
 
-    return record ? this.parseFunction(record) : null;
+    return record;
   }
 
   /**
@@ -230,7 +240,7 @@ export class Table {
    * @throws Error if the database is not connected
    */
   private get_all_no_parse(): Array<TEntry> {
-    return fs.readdirSync(this.folder).map((id: string) => this.get(parseInt(id))!);
+    return fs.readdirSync(this.folder).map((id: string) => this.get_unparsed(parseInt(id))!);
   }
 
   /**
