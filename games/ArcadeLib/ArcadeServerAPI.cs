@@ -1,5 +1,4 @@
-﻿using ArcadeLib.Rooms;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System.Text;
 
 namespace ArcadeLib;
@@ -84,5 +83,67 @@ public static class ArcadeServerAPI
     public static ArcadeUser GetArcadeUserSync(ArcadeLib.UUID UserID)
     {
         return GetArcadeUser(UserID).GetAwaiter().GetResult();
+    }
+
+    public static async Task<List<ArcadeLib.Rooms.RockPaperScissorsRoom>> GetRoomsRPS()
+    {
+        // TODO: test this
+        string url = $"{ArcadeURL}/api/rps/all";
+
+        try
+        {
+            var response = await client.GetAsync(url);
+
+            if (response.IsSuccessStatusCode)
+            {
+                string jsonResponse = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<List<ArcadeLib.Rooms.RockPaperScissorsRoom>>(jsonResponse)!;
+            }
+            else
+            {
+                throw new Exception("Error retrieving active rooms");
+            }
+        }
+        catch
+        {
+            throw new Exception("Error retrieving active rooms");
+        }
+    }
+
+    /// <summary>
+    /// Create a new room
+    /// </summary>
+    /// <param name="room_type">The type of the room/the name of the game. Ex: 'rps', 'hilo', etc.</param>
+    /// <param name="wager">The bet being placed on the room</param>
+    /// <returns>The ID of the room</returns>
+    /// <exception cref="Exception">Throws error if <paramref name="room_type"/> is invalid or if there is an internal server error while creating the room</exception>
+    public static async Task<ArcadeLib.UUID> CreateRoom(string room_type, int wager)
+    {
+        // TODO: finish this, test this
+        // TODO: keep adding new games as they're made here
+        if (room_type != "rps" && room_type != "hilo")
+            throw new Exception("Invalid room type");
+
+        string url = $"{ArcadeURL}/api/${room_type}/create";
+        var values = new { wager };
+
+        try
+        {
+            var response = await client.PostAsync(url, new StringContent(JsonConvert.SerializeObject(values), Encoding.UTF8, "application/json"));
+
+            if (response.IsSuccessStatusCode)
+            {
+                string jsonResponse = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<ArcadeLib.Rooms.IRoom>(jsonResponse)!.id;
+            }
+            else
+            {
+                throw new Exception("Error creating room");
+            }
+        }
+        catch
+        {
+            throw new Exception("Error creating room");
+        }
     }
 }
