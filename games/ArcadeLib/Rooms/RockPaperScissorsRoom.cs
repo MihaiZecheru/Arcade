@@ -1,11 +1,42 @@
-﻿using Newtonsoft.Json;
+﻿namespace ArcadeLib.Rooms;
 
-namespace ArcadeLib.Rooms;
-
-public class RockPaperScissorsRoom : IRoom
+public class RockPaperScissorsRoom : ArcadeLib.Rooms.IRoom
 {
-    public static async Task<List<IRoom>> GetRooms()
+    /// <summary>
+    /// The players in the room
+    /// </summary>
+    public List<ArcadeLib.ArcadeUser> users { get; set; }
+
+    /// <summary>
+    /// Has the game started?
+    /// </summary>
+    public bool game_started { get; set; }
+
+    /// <summary>
+    /// The room's ID
+    /// </summary>
+    public ArcadeLib.UUID id { get; set; }
+
+    /// <summary>
+    /// The room's wager - the bet that must be placed to join the room
+    /// </summary>
+    public int wager { get; set; }
+
+    /// <summary>
+    /// Get the amount of players in the room
+    /// </summary>
+    /// <returns></returns>
+    public int user_count()
     {
-        return await ArcadeServerAPI.GetRoomRPS();
+        return users.Count;
+    }
+
+    /// <summary>
+    /// Get all active joinable Rock Paper Scissors rooms
+    /// </summary>
+    /// <returns>All active joinable Rock Paper Scissors rooms</returns>
+    public static async Task<List<ArcadeLib.Rooms.RockPaperScissorsRoom>> GetRooms()
+    {
+        return await ArcadeLib.ArcadeServerAPI.GetRoomsRPS();
     }
 }
