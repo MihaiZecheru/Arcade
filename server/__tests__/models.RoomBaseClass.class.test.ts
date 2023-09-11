@@ -67,8 +67,10 @@ describe('Test the RoomBaseClass', () => {
   });
 
   test('add player to full room', () => {
-    expect(() => room.add_player(player1_id, {})).toThrow(`Room '${room.id}' is full`);
-    expect(room.player_count()).toBe(-1);
+    room.add_player(player1_id, {});
+    room.add_player(player2_id, {});
+    expect(() => room.add_player("cfc60647-6d4c-4c76-a961-7f5028d5e973", {})).toThrow(`Room '${room.id}' is full`);
+    expect(room.player_count()).toBe(2);
   });
 
   test('remove player from an empty room', () => {

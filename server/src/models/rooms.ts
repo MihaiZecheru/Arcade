@@ -7,7 +7,7 @@ import { UserID } from "./user";
  * Contains the maximum amount of players any sub-class of RoomBaseClass can have, ie RPSRoom
  */
 const ROOM_CAPS: { [room_name: string]: number } = {
-  "RoomBaseClass": -1, // should not be used
+  "RoomBaseClass": 2, // should not be used. only here for testing
   "RPSRoom": 2
 };
 
