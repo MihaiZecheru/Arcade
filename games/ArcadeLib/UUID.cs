@@ -3,10 +3,10 @@ using System.Text.RegularExpressions;
 
 namespace ArcadeLib;
 
-public class UserID
+public class UUID
 {
     /// <summary>
-    /// Pattern: xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx
+    /// Pattern: xxxxxxxx-xxxx-4xxx-xxxx-xxxxxxxxxxxx
     /// <br/><br/>
     /// Used to validate the UserID
     /// </summary>
@@ -32,7 +32,7 @@ public class UserID
     /// </summary>
     /// <param name="value">The ID</param>
     /// <exception cref="ArgumentException">Invalid ID</exception>
-    public UserID(string value)
+    public UUID(string value)
     {
         if (!IsValidUserID(value))
             throw new ArgumentException("Invalid UserID", nameof(value));
@@ -42,15 +42,15 @@ public class UserID
     /// <summary>
     /// Implicitly treat as UserID
     /// </summary>
-    public static implicit operator UserID(string value)
+    public static implicit operator UUID(string value)
     {
-        return value == null ? null : new UserID(value);
+        return value == null ? null : new UUID(value);
     }
     
     /// <summary>
     /// Explicity treat as string
     /// </summary>
-    public static explicit operator string(UserID UserID)
+    public static explicit operator string(UUID UserID)
     {
         return UserID._value;
     }

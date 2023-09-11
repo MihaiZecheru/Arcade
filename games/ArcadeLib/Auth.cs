@@ -36,7 +36,7 @@ public static class Auth
     /// </summary>
     public static ArcadeLib.ArcadeUser Login()
     {
-        ArcadeLib.UserID User_ID = ArcadeLib.Auth.LoginPrompt();
+        ArcadeLib.UUID User_ID = ArcadeLib.Auth.LoginPrompt();
         ArcadeLib.ArcadeUser user = ArcadeServerAPI.GetArcadeUserSync(User_ID);
         ArcadeLib.Auth.LoginComplete(user.Username);
         return user;
@@ -50,7 +50,7 @@ public static class Auth
     /// <param name="user">The variable to save the user to</param>
     public static void Login(out ArcadeLib.ArcadeUser user)
     {
-        ArcadeLib.UserID User_ID = ArcadeLib.Auth.LoginPrompt();
+        ArcadeLib.UUID User_ID = ArcadeLib.Auth.LoginPrompt();
         user = ArcadeServerAPI.GetArcadeUserSync(User_ID);
         ArcadeLib.Auth.LoginComplete(user.Username);
     }
@@ -59,7 +59,7 @@ public static class Auth
     /// Prompt the user for his login
     /// </summary>
     /// <returns>The user's ID</returns>
-    private static ArcadeLib.UserID LoginPrompt()
+    private static ArcadeLib.UUID LoginPrompt()
     {
         UpdateDisplay();
         SetCursorAtUsernamePrompt();
@@ -122,7 +122,7 @@ public static class Auth
     /// The MainLoop for the login screen -- will capture key events and update the screen accordingly
     /// </summary>
     /// <returns>The logged-in user's ID</returns>
-    private static ArcadeLib.UserID MainLoop()
+    private static ArcadeLib.UUID MainLoop()
     {
         while (true)
         {
@@ -161,7 +161,7 @@ public static class Auth
                     {
                         try
                         {
-                            ArcadeLib.UserID User_ID = ArcadeServerAPI.LoginSync(GetUsername().Trim(), GetPassword());
+                            ArcadeLib.UUID User_ID = ArcadeServerAPI.LoginSync(GetUsername().Trim(), GetPassword());
                             return User_ID; // If the login was successful, return the User_ID
                         }
                         catch (Exception e)

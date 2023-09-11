@@ -5,7 +5,7 @@ public class ArcadeUser
     /// <summary>
     /// The user's ID
     /// </summary>
-    public ArcadeLib.UserID ID { get; }
+    public ArcadeLib.UUID ID { get; }
 
     /// <summary>
     /// The user's username
@@ -40,7 +40,7 @@ public class ArcadeUser
     /// <summary>
     /// Initialize an existing user
     /// </summary>
-    public ArcadeUser(ArcadeLib.UserID user_id, string username, string password, int balance, string email, string birthday, string joined)
+    public ArcadeUser(ArcadeLib.UUID user_id, string username, string password, int balance, string email, string birthday, string joined)
     {
         this.ID = user_id;
         this.Username = username;
