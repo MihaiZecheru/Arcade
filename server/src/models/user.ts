@@ -5,7 +5,7 @@ export type UserID = ID;
 export const USER_STARTING_BALANCE = 250;
 
 export interface IUser {
-  user_id: UserID;
+  id: UserID;
   username: string;
   password: string;
   balance: number;
@@ -15,7 +15,7 @@ export interface IUser {
 }
 
 export default class User implements IUser {
-  public user_id: UserID;
+  public id: UserID;
   public username: string;
   public password: string;
   public balance: number;
@@ -23,8 +23,8 @@ export default class User implements IUser {
   public birthday: string;
   public joined: string;
 
-  constructor({ user_id, username, password, balance, email, birthday, joined }: IUser) {
-    this.user_id = user_id as UserID;
+  constructor({ id: user_id, username, password, balance, email, birthday, joined }: IUser) {
+    this.id = user_id as UserID;
     this.username = username;
     this.password = password;
     this.balance = balance;
@@ -54,7 +54,7 @@ export default class User implements IUser {
    * Save any changes to the user in the database
    */
   public save() {
-    Database.patch_where("Users", "user_id", this.user_id, {
+    Database.patch_where("Users", "user_id", this.id, {
       username: this.username,
       password: this.password,
       balance: this.balance.toString(),

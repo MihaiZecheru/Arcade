@@ -6,7 +6,7 @@ describe('Test the User class methods', () => {
   Database.connect();
   Database.set_table_parse_function("Users", (entry: TEntry): IUser => {
     return {
-      user_id: entry.user_id as UserID,
+      id: entry.user_id as UserID,
       username: entry.username,
       password: entry.password,
       balance: parseInt(entry.balance),

@@ -7,7 +7,7 @@ beforeEach(() => {
   Database.connect();
   Database.set_table_parse_function("Users", (entry: TEntry): IUser => {
     let user: IUser = {} as IUser;
-    user.user_id = entry.user_id as UserID;
+    user.id = entry.user_id as UserID;
     user.username = entry.username;
     user.password = entry.password;
     user.balance = parseInt(entry.balance);
@@ -25,7 +25,7 @@ afterEach(() => {
 describe('Test the main.get_user_by_id function', () => {
   const user_id: UserID = 'aa4d7f07-b82a-4b3b-bbf3-382d431b907b';
   const expected_user: IUser = {
-    user_id,
+    id: user_id,
     username: "tester",
     password: "test",
     balance: 250,

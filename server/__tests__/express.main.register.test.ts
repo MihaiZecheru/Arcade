@@ -9,7 +9,7 @@ beforeEach(() => {
   Database.connect();
   Database.set_table_parse_function("Users", (entry: TEntry): IUser => {
     let user: IUser = {} as IUser;
-    user.user_id = entry.user_id as UserID;
+    user.id = entry.user_id as UserID;
     user.username = entry.username;
     user.password = entry.password;
     user.balance = parseInt(entry.balance);
@@ -41,7 +41,7 @@ describe('Test the main.register function -- register a user to the database', (
 
     const user: IUser = Database.get_unique_where("Users", "user_id", res.text);
 
-    expect(user.user_id).toMatch(user_id);
+    expect(user.id).toMatch(user_id);
     expect(user.username).toBe(req.body.username);
     expect(user.password).toBe(req.body.password);
     expect(user.balance).toBe(USER_STARTING_BALANCE);

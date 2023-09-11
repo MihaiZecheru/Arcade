@@ -10,7 +10,7 @@ beforeEach(() => {
   Database.connect();
   Database.set_table_parse_function("Users", (entry: TEntry): IUser => {
     let user: IUser = {} as IUser;
-    user.user_id = entry.user_id as UserID;
+    user.id = entry.user_id as UserID;
     user.username = entry.username;
     user.password = entry.password;
     user.balance = parseInt(entry.balance);
