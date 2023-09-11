@@ -58,7 +58,7 @@ export class RoomBaseClass {
    * @param ws The WebSocket connection the player has
    */
   public add_player(user_id: UserID, ws: any) {
-    if (this.player_count() === GET_MAX_ROOM_CAPACITY(this.constructor.name)) {
+    if (this.player_count() >= GET_MAX_ROOM_CAPACITY(this.constructor.name)) {
       throw new Error(`Room '${this.id}' is full`);
     }
 
