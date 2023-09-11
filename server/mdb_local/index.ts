@@ -201,7 +201,7 @@ export class Table {
    * @throws Error if the entry does not exist
    */
   public patch(id: entryid, updated_fields: TEntry): TEntry {
-    const current_data = this.get(id);
+    const current_data = this.get_unparsed(id);
     const updated_data = { ...current_data, ...updated_fields };
     if (!fs.existsSync(this.entry_path(id))) throw new Error(`Entry with id '${id}' does not exist`);
     this.write_to_file(id, updated_data);
@@ -239,7 +239,7 @@ export class Table {
    * @returns Every entry in the table without parsing the entry
    * @throws Error if the database is not connected
    */
-  private get_all_no_parse(): Array<TEntry> {
+  private get_all_unparsed(): Array<TEntry> {
     return fs.readdirSync(this.folder).map((id: string) => this.get_unparsed(parseInt(id))!);
   }
 
@@ -251,7 +251,7 @@ export class Table {
    * @throws Error if the database is not connected
    */
   public get_with_filter<T = TEntry>(filter: TEntriesFilter): Array<T> {
-    return this.get_all_no_parse().filter(filter).map((entry: TEntry) => this.parseFunction(entry));
+    return this.get_all_unparsed().filter(filter).map((entry: TEntry) => this.parseFunction(entry));
   }
 
   /**
@@ -263,7 +263,7 @@ export class Table {
    * @throws Error if there is not exactly one entry that passes the given filter
    */
   public get_unique_with_filter<T = TEntry>(filter: TEntriesFilter): T {
-    return this.get_all_no_parse().filter(filter).map((entry: TEntry) => this.parseFunction(entry))[0];
+    return this.get_all_unparsed().filter(filter).map((entry: TEntry) => this.parseFunction(entry))[0];
   }
 
   /**
@@ -275,7 +275,7 @@ export class Table {
    * @throws Error if the database is not connected
    */
   public get_where<T = TEntry>(fieldname: fieldname, value: string): Array<T> {
-    return this.get_all_no_parse().filter((entry: TEntry) => entry[fieldname] === value).map((entry: TEntry) => this.parseFunction(entry));
+    return this.get_all_unparsed().filter((entry: TEntry) => entry[fieldname] === value).map((entry: TEntry) => this.parseFunction(entry));
   }
 
   /**
@@ -288,7 +288,7 @@ export class Table {
    * @throws Error if there is not exactly one entry that passes the given filter
    */
   public get_unique_where<T = TEntry>(fieldname: fieldname, value: string): T {
-    const result = this.get_all_no_parse().filter((entry: TEntry) => entry[fieldname] === value).map((entry: TEntry) => this.parseFunction(entry));
+    const result = this.get_all_unparsed().filter((entry: TEntry) => entry[fieldname] === value).map((entry: TEntry) => this.parseFunction(entry));
     if (result.length !== 1) throw new Error(`Expected 1 entry, got ${result.length}. This function should only be used when it's known that only one entry will be returned.`);
     return result[0];
   }
@@ -302,7 +302,7 @@ export class Table {
    * @throws Error if the database is not connected
    */
   public get_where_not<T = TEntry>(fieldname: fieldname, value: string): Array<T> {
-    return this.get_all_no_parse().filter((entry: TEntry) => entry[fieldname] !== value).map((entry: TEntry) => this.parseFunction(entry));
+    return this.get_all_unparsed().filter((entry: TEntry) => entry[fieldname] !== value).map((entry: TEntry) => this.parseFunction(entry));
   }
 
   /**
@@ -315,7 +315,7 @@ export class Table {
    * @throws Error if there is not exactly one entry that passes the given filter
    */
   public get_unique_where_not<T = TEntry>(fieldname: fieldname, value: string): T {
-    const result = this.get_all_no_parse().filter((entry: TEntry) => entry[fieldname] !== value).map((entry: TEntry) => this.parseFunction(entry));
+    const result = this.get_all_unparsed().filter((entry: TEntry) => entry[fieldname] !== value).map((entry: TEntry) => this.parseFunction(entry));
     if (result.length !== 1) throw new Error(`Expected 1 entry, got ${result.length}. This function should only be used when it's known that only one entry will be returned.`);
     return result[0];
   }
@@ -329,7 +329,7 @@ export class Table {
    * @throws Error if the database is not connected
    */
   public get_where_gt<T = TEntry>(fieldname: fieldname, value: number): Array<T> {
-    return this.get_all_no_parse().filter((entry: TEntry) => parseFloat(entry[fieldname]) > value).map((entry: TEntry) => this.parseFunction(entry));
+    return this.get_all_unparsed().filter((entry: TEntry) => parseFloat(entry[fieldname]) > value).map((entry: TEntry) => this.parseFunction(entry));
   }
 
   /**
@@ -342,7 +342,7 @@ export class Table {
    * @throws Error if there is not exactly one entry that passes the given filter
    */
   public get_unique_where_gt<T = TEntry>(fieldname: fieldname, value: number): T {
-    const result = this.get_all_no_parse().filter((entry: TEntry) => parseFloat(entry[fieldname]) > value).map((entry: TEntry) => this.parseFunction(entry));
+    const result = this.get_all_unparsed().filter((entry: TEntry) => parseFloat(entry[fieldname]) > value).map((entry: TEntry) => this.parseFunction(entry));
     if (result.length !== 1) throw new Error(`Expected 1 entry, got ${result.length}. This function should only be used when it's known that only one entry will be returned.`);
     return result[0];
   }
@@ -356,7 +356,7 @@ export class Table {
    * @throws Error if the database is not connected
    */
   public get_where_lt<T = TEntry>(fieldname: fieldname, value: number): Array<T> {
-    return this.get_all_no_parse().filter((entry: TEntry) => parseFloat(entry[fieldname]) < value).map((entry: TEntry) => this.parseFunction(entry));
+    return this.get_all_unparsed().filter((entry: TEntry) => parseFloat(entry[fieldname]) < value).map((entry: TEntry) => this.parseFunction(entry));
   }
 
   /**
@@ -369,7 +369,7 @@ export class Table {
    * @throws Error if there is not exactly one entry that passes the given filter
    */
   public get_unique_where_lt<T = TEntry>(fieldname: fieldname, value: number): T {
-    const result = this.get_all_no_parse().filter((entry: TEntry) => parseFloat(entry[fieldname]) < value).map((entry: TEntry) => this.parseFunction(entry));
+    const result = this.get_all_unparsed().filter((entry: TEntry) => parseFloat(entry[fieldname]) < value).map((entry: TEntry) => this.parseFunction(entry));
     if (result.length !== 1) throw new Error(`Expected 1 entry, got ${result.length}. This function should only be used when it's known that only one entry will be returned.`);
     return result[0];
   }
@@ -383,7 +383,7 @@ export class Table {
    * @throws Error if the database is not connected
    */
   public get_where_gte<T = TEntry>(fieldname: fieldname, value: number): Array<T> {
-    return this.get_all_no_parse().filter((entry: TEntry) => parseFloat(entry[fieldname]) >= value).map((entry: TEntry) => this.parseFunction(entry));
+    return this.get_all_unparsed().filter((entry: TEntry) => parseFloat(entry[fieldname]) >= value).map((entry: TEntry) => this.parseFunction(entry));
   }
 
   /**
@@ -396,7 +396,7 @@ export class Table {
    * @throws Error if there is not exactly one entry that passes the given filter
    */
   public get_unique_where_gte<T = TEntry>(fieldname: fieldname, value: number): T {
-    const result = this.get_all_no_parse().filter((entry: TEntry) => parseFloat(entry[fieldname]) >= value).map((entry: TEntry) => this.parseFunction(entry));
+    const result = this.get_all_unparsed().filter((entry: TEntry) => parseFloat(entry[fieldname]) >= value).map((entry: TEntry) => this.parseFunction(entry));
     if (result.length !== 1) throw new Error(`Expected 1 entry, got ${result.length}. This function should only be used when it's known that only one entry will be returned.`);
     return result[0];
   }
@@ -410,7 +410,7 @@ export class Table {
    * @throws Error if the database is not connected
    */
   public get_where_lte<T = TEntry>(fieldname: fieldname, value: number): Array<T> {
-    return this.get_all_no_parse().filter((entry: TEntry) => parseFloat(entry[fieldname]) <= value).map((entry: TEntry) => this.parseFunction(entry));
+    return this.get_all_unparsed().filter((entry: TEntry) => parseFloat(entry[fieldname]) <= value).map((entry: TEntry) => this.parseFunction(entry));
   }
 
   /**
@@ -423,7 +423,7 @@ export class Table {
    * @throws Error if there is not exactly one entry that passes the given filter
    */
   public get_unique_where_lte<T = TEntry>(fieldname: fieldname, value: number): T {
-    const result = this.get_all_no_parse().filter((entry: TEntry) => parseFloat(entry[fieldname]) <= value).map((entry: TEntry) => this.parseFunction(entry));
+    const result = this.get_all_unparsed().filter((entry: TEntry) => parseFloat(entry[fieldname]) <= value).map((entry: TEntry) => this.parseFunction(entry));
     if (result.length !== 1) throw new Error(`Expected 1 entry, got ${result.length}. This function should only be used when it's known that only one entry will be returned.`);
     return result[0];
   }
@@ -437,7 +437,7 @@ export class Table {
    * @throws Error if the database is not connected
    */
   public get_where_contains<T = TEntry>(fieldname: fieldname, value: string): Array<T> {
-    return this.get_all_no_parse().filter((entry: TEntry) => entry[fieldname].includes(value)).map((entry: TEntry) => this.parseFunction(entry));
+    return this.get_all_unparsed().filter((entry: TEntry) => entry[fieldname].includes(value)).map((entry: TEntry) => this.parseFunction(entry));
   }
   
   /**
@@ -450,7 +450,7 @@ export class Table {
    * @throws Error if there is not exactly one entry that passes the given filter
    */
   public get_unique_where_contains<T = TEntry>(fieldname: fieldname, value: string): T {
-    const result = this.get_all_no_parse().filter((entry: TEntry) => entry[fieldname].includes(value)).map((entry: TEntry) => this.parseFunction(entry));
+    const result = this.get_all_unparsed().filter((entry: TEntry) => entry[fieldname].includes(value)).map((entry: TEntry) => this.parseFunction(entry));
     if (result.length !== 1) throw new Error(`Expected 1 entry, got ${result.length}. This function should only be used when it's known that only one entry will be returned.`);
     return result[0];
   }
@@ -464,7 +464,7 @@ export class Table {
    * @throws Error if the database is not connected
    */
   public get_where_not_contains<T = TEntry>(fieldname: fieldname, value: string): Array<T> {
-    return this.get_all_no_parse().filter((entry: TEntry) => !entry[fieldname].includes(value)).map((entry: TEntry) => this.parseFunction(entry));
+    return this.get_all_unparsed().filter((entry: TEntry) => !entry[fieldname].includes(value)).map((entry: TEntry) => this.parseFunction(entry));
   }
 
   /**
@@ -477,7 +477,7 @@ export class Table {
    * @throws Error if there is not exactly one entry that passes the given filter
    */
   public get_unique_where_not_contains<T = TEntry>(fieldname: fieldname, value: string): T {
-    const result = this.get_all_no_parse().filter((entry: TEntry) => !entry[fieldname].includes(value)).map((entry: TEntry) => this.parseFunction(entry));
+    const result = this.get_all_unparsed().filter((entry: TEntry) => !entry[fieldname].includes(value)).map((entry: TEntry) => this.parseFunction(entry));
     if (result.length !== 1) throw new Error(`Expected 1 entry, got ${result.length}. This function should only be used when it's known that only one entry will be returned.`);
     return result[0];
   }
@@ -491,7 +491,7 @@ export class Table {
    * @throws Error if the database is not connected
    */
   public get_where_starts_with<T = TEntry>(fieldname: fieldname, value: string): Array<T> {
-    return this.get_all_no_parse().filter((entry: TEntry) => entry[fieldname].startsWith(value)).map((entry: TEntry) => this.parseFunction(entry));
+    return this.get_all_unparsed().filter((entry: TEntry) => entry[fieldname].startsWith(value)).map((entry: TEntry) => this.parseFunction(entry));
   }
 
   /**
@@ -504,7 +504,7 @@ export class Table {
    * @throws Error if there is not exactly one entry that passes the given filter
    */
   public get_unique_where_starts_with<T = TEntry>(fieldname: fieldname, value: string): T {
-    const result = this.get_all_no_parse().filter((entry: TEntry) => entry[fieldname].startsWith(value)).map((entry: TEntry) => this.parseFunction(entry));
+    const result = this.get_all_unparsed().filter((entry: TEntry) => entry[fieldname].startsWith(value)).map((entry: TEntry) => this.parseFunction(entry));
     if (result.length !== 1) throw new Error(`Expected 1 entry, got ${result.length}. This function should only be used when it's known that only one entry will be returned.`);
     return result[0];
   }
@@ -518,7 +518,7 @@ export class Table {
    * @throws Error if the database is not connected
    */
   public get_where_ends_with<T = TEntry>(fieldname: fieldname, value: string): Array<T> {
-    return this.get_all_no_parse().filter((entry: TEntry) => entry[fieldname].endsWith(value)).map((entry: TEntry) => this.parseFunction(entry));
+    return this.get_all_unparsed().filter((entry: TEntry) => entry[fieldname].endsWith(value)).map((entry: TEntry) => this.parseFunction(entry));
   }
 
   /**
@@ -531,7 +531,7 @@ export class Table {
    * @throws Error if there is not exactly one entry that passes the given filter
    */
   public get_unique_where_ends_with<T = TEntry>(fieldname: fieldname, value: string): T {
-    const result = this.get_all_no_parse().filter((entry: TEntry) => entry[fieldname].endsWith(value)).map((entry: TEntry) => this.parseFunction(entry));
+    const result = this.get_all_unparsed().filter((entry: TEntry) => entry[fieldname].endsWith(value)).map((entry: TEntry) => this.parseFunction(entry));
     if (result.length !== 1) throw new Error(`Expected 1 entry, got ${result.length}. This function should only be used when it's known that only one entry will be returned.`);
     return result[0];
   }
@@ -544,7 +544,7 @@ export class Table {
    * @warning be careful using this method
    */
   public patch_all(updated_fields: TEntry): void {
-    this.get_all_ids().map((id: entryid) => this.patch(id, updated_fields));
+    this.get_all_ids().forEach((id: entryid) => this.patch(id, updated_fields));
   }
 
   /**
@@ -552,11 +552,9 @@ export class Table {
    * @param filter The filter to apply to each of the entries
    */
   public patch_with_filter(filter: TEntriesFilter, updated_fields: TEntry): void {
-    const entries_with_ids: Array<TEntry> = this.get_all().map((entry: TEntry, index: number) => {
-      entry['id'] = index.toString();
-      return entry;
+    this.get_all_ids().forEach((id: entryid) => {
+      if (filter(this.get_unparsed(id)!)) this.patch(id, updated_fields);
     });
-    entries_with_ids.filter(filter).map((entry: TEntry) => this.patch(parseInt(entry.id), updated_fields));
   }
 
   /**
@@ -567,7 +565,7 @@ export class Table {
    */
   public patch_where(fieldname: fieldname, value: string, updated_fields: TEntry): void {
     this.get_all_ids().forEach((id: entryid) => {
-      if (this.get(id)![fieldname] === value) this.patch(id, updated_fields);
+      if (this.get_unparsed(id)![fieldname] === value) this.patch(id, updated_fields);
     });
   }
 
@@ -579,7 +577,7 @@ export class Table {
    */
   public patch_where_not(fieldname: fieldname, value: string, updated_fields: TEntry): void {
     this.get_all_ids().forEach((id: entryid) => {
-      if (this.get(id)![fieldname] !== value) this.patch(id, updated_fields);
+      if (this.get_unparsed(id)![fieldname] !== value) this.patch(id, updated_fields);
     });
   }
 
@@ -591,7 +589,7 @@ export class Table {
    */
   public patch_where_gt(fieldname: fieldname, value: string, updated_fields: TEntry): void {
     this.get_all_ids().forEach((id: entryid) => {
-      if (this.get(id)![fieldname] > value) this.patch(id, updated_fields);
+      if (this.get_unparsed(id)![fieldname] > value) this.patch(id, updated_fields);
     });
   }
 
@@ -603,7 +601,7 @@ export class Table {
    */
   public patch_where_lt(fieldname: fieldname, value: string, updated_fields: TEntry): void {
     this.get_all_ids().forEach((id: entryid) => {
-      if (this.get(id)![fieldname] < value) this.patch(id, updated_fields);
+      if (this.get_unparsed(id)![fieldname] < value) this.patch(id, updated_fields);
     });
   }
 
@@ -615,7 +613,7 @@ export class Table {
    */
   public patch_where_gte(fieldname: fieldname, value: string, updated_fields: TEntry): void {
     this.get_all_ids().forEach((id: entryid) => {
-      if (this.get(id)![fieldname] >= value) this.patch(id, updated_fields);
+      if (this.get_unparsed(id)![fieldname] >= value) this.patch(id, updated_fields);
     });
   }
 
@@ -627,7 +625,7 @@ export class Table {
    */
   public patch_where_lte(fieldname: fieldname, value: string, updated_fields: TEntry): void {
     this.get_all_ids().forEach((id: entryid) => {
-      if (this.get(id)![fieldname] <= value) this.patch(id, updated_fields);
+      if (this.get_unparsed(id)![fieldname] <= value) this.patch(id, updated_fields);
     });
   }
 
@@ -639,7 +637,7 @@ export class Table {
    */
   public patch_where_contains(fieldname: fieldname, value: string, updated_fields: TEntry): void {
     this.get_all_ids().forEach((id: entryid) => {
-      if (this.get(id)![fieldname].includes(value)) this.patch(id, updated_fields);
+      if (this.get_unparsed(id)![fieldname].includes(value)) this.patch(id, updated_fields);
     }); 
   }
 
@@ -651,7 +649,7 @@ export class Table {
    */
   public patch_where_not_contains(fieldname: fieldname, value: string, updated_fields: TEntry): void {
     this.get_all_ids().forEach((id: entryid) => {
-      if (!this.get(id)![fieldname].includes(value)) this.patch(id, updated_fields);
+      if (!this.get_unparsed(id)![fieldname].includes(value)) this.patch(id, updated_fields);
     });
   }
 
@@ -663,7 +661,7 @@ export class Table {
    */
   public patch_where_starts_with(fieldname: fieldname, value: string, updated_fields: TEntry): void {
     this.get_all_ids().forEach((id: entryid) => {
-      if (this.get(id)![fieldname].startsWith(value)) this.patch(id, updated_fields);
+      if (this.get_unparsed(id)![fieldname].startsWith(value)) this.patch(id, updated_fields);
     });
   }
 
@@ -675,7 +673,7 @@ export class Table {
    */
   public patch_where_ends_with(fieldname: fieldname, value: string, updated_fields: TEntry): void {
     this.get_all_ids().forEach((id: entryid) => {
-      if (this.get(id)![fieldname].endsWith(value)) this.patch(id, updated_fields);
+      if (this.get_unparsed(id)![fieldname].endsWith(value)) this.patch(id, updated_fields);
     });
   }
 
@@ -694,7 +692,7 @@ export class Table {
    * @param filter The filter to apply to each of the entries
    */
   public delete_with_filter(filter: TEntriesFilter): void {
-    const entries_with_ids: Array<TEntry> = this.get_all().map((entry: TEntry, index: number) => {
+    const entries_with_ids: Array<TEntry> = this.get_all_unparsed().map((entry: TEntry, index: number) => {
       entry['id'] = index.toString();
       return entry;
     });
@@ -708,7 +706,7 @@ export class Table {
    */
   public delete_where(fieldname: fieldname, value: string): void {
     this.get_all_ids().forEach((id: entryid) => {
-      if (this.get(id)![fieldname] === value) this.delete(id);
+      if (this.get_unparsed(id)![fieldname] === value) this.delete(id);
     }); 
   }
 
@@ -719,7 +717,7 @@ export class Table {
    */
   public delete_where_not(fieldname: fieldname, value: string): void {
     this.get_all_ids().forEach((id: entryid) => {
-      if (this.get(id)![fieldname] !== value) this.delete(id);
+      if (this.get_unparsed(id)![fieldname] !== value) this.delete(id);
     });
   }
 
@@ -730,7 +728,7 @@ export class Table {
    */
   public delete_where_gt(fieldname: fieldname, value: string): void {
     this.get_all_ids().forEach((id: entryid) => {
-      if (this.get(id)![fieldname] > value) this.delete(id);
+      if (this.get_unparsed(id)![fieldname] > value) this.delete(id);
     });
   }
 
@@ -741,7 +739,7 @@ export class Table {
    */
   public delete_where_lt(fieldname: fieldname, value: string): void {
     this.get_all_ids().forEach((id: entryid) => {
-      if (this.get(id)![fieldname] < value) this.delete(id);
+      if (this.get_unparsed(id)![fieldname] < value) this.delete(id);
     });
   }
 
@@ -752,7 +750,7 @@ export class Table {
    */
   public delete_where_gte(fieldname: fieldname, value: string): void {
     this.get_all_ids().forEach((id: entryid) => {
-      if (this.get(id)![fieldname] >= value) this.delete(id);
+      if (this.get_unparsed(id)![fieldname] >= value) this.delete(id);
     });
   }
 
@@ -763,7 +761,7 @@ export class Table {
    */
   public delete_where_lte(fieldname: fieldname, value: string): void {
     this.get_all_ids().forEach((id: entryid) => {
-      if (this.get(id)![fieldname] <= value) this.delete(id);
+      if (this.get_unparsed(id)![fieldname] <= value) this.delete(id);
     });
   }
 
@@ -774,7 +772,7 @@ export class Table {
    */
   public delete_where_contains(fieldname: fieldname, value: string): void {
     this.get_all_ids().forEach((id: entryid) => {
-      if (this.get(id)![fieldname].includes(value)) this.delete(id);
+      if (this.get_unparsed(id)![fieldname].includes(value)) this.delete(id);
     });
   }
 
@@ -785,7 +783,7 @@ export class Table {
    */
   public delete_where_not_contains(fieldname: fieldname, value: string): void {
     this.get_all_ids().forEach((id: entryid) => {
-      if (!this.get(id)![fieldname].includes(value)) this.delete(id);
+      if (!this.get_unparsed(id)![fieldname].includes(value)) this.delete(id);
     });
   }
 
@@ -796,7 +794,7 @@ export class Table {
    */
   public delete_where_starts_with(fieldname: fieldname, value: string): void {
     this.get_all_ids().forEach((id: entryid) => {
-      if (this.get(id)![fieldname].startsWith(value)) this.delete(id);
+      if (this.get_unparsed(id)![fieldname].startsWith(value)) this.delete(id);
     });
   }
 
@@ -807,7 +805,7 @@ export class Table {
    */
   public delete_where_ends_with(fieldname: fieldname, value: string): void {
     this.get_all_ids().forEach((id: entryid) => {
-      if (this.get(id)![fieldname].endsWith(value)) this.delete(id);
+      if (this.get_unparsed(id)![fieldname].endsWith(value)) this.delete(id);
     });
   }
 }
