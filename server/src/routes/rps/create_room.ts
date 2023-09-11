@@ -1,6 +1,6 @@
 import Server from "../../server";
 
-export default async function create_room(req: any, res: any): Promise<void> {
+export default function create_room(req: any, res: any): void {
   try {
     const wager: number = req.body.wager;
     if (wager <= 0) throw new Error("Wager must be greater than 0");

@@ -1,7 +1,7 @@
 import Database from "../../../mdb_local";
 import { IUser } from "../../models/user";
 
-export default function login(req: any, res: any): Promise<void> {
+export default function login(req: any, res: any): void {
   try {
     const { username, password } = req.body;
     if (Object.keys(req.body).length > 2) throw new Error("Too many fields in data");

@@ -1,7 +1,7 @@
 import Database from "../../../mdb_local";
 import User, { USER_STARTING_BALANCE } from "../../models/user";
 
-export default function register(req: any, res: any): Promise<void> {
+export default function register(req: any, res: any): void {
   try {
     const { username, password, email, birthday } = req.body;
     if (Object.keys(req.body).length > 4) throw new Error("Too many fields in data");

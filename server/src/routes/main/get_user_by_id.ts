@@ -1,7 +1,7 @@
 import Database from "../../../mdb_local";
 import { IUser } from "../../models/user";
 
-export default async function get_user_by_id(req: any, res: any): Promise<void> {
+export default function get_user_by_id(req: any, res: any): void {
   try {
     const user_id = req.params.user_id;
     const users: Array<IUser> = Database.get_where<IUser>("Users", "user_id", user_id);
