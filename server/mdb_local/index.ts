@@ -255,15 +255,18 @@ export class Table {
   }
 
   /**
-   * Assuming there is only one entry that matches the search, get the entry that passes the given filter
+   * Assuming there is only one entry could/does th matches the search, get the entry that passes the given filter
    * @param filter The filter to apply to each of the entries
    * @generic <T> the type of the entry - must be the same as what is returned by the parseFunction - defaults to TEntry
    * @returns All entries that pass the given filter
    * @throws Error if the database is not connected
    * @throws Error if there is not exactly one entry that passes the given filter
    */
-  public get_unique_with_filter<T = TEntry>(filter: TEntriesFilter): T {
-    return this.get_all_unparsed().filter(filter).map((entry: TEntry) => this.parseFunction(entry))[0];
+  public get_unique_with_filter<T = TEntry>(filter: TEntriesFilter): T | null {
+    const result = this.get_all_unparsed().filter(filter);
+    if (result.length === 0) return null;
+    if (result.length >= 1) throw new Error(`Expected 1 entry or none, got ${result.length}. This function should only be used when it's known that only one entry will be returned.`);
+    return this.parseFunction(result[0]);
   }
 
   /**
@@ -279,7 +282,7 @@ export class Table {
   }
 
   /**
-   * Assuming there is only one entry that matches the search, get the entry where the given field is equal to the given value
+   * Assuming there is only one entry that could/does match the search, get the entry where the given field is equal to the given value
    * @param fieldname The name of the field to compare the given value with
    * @param value The value to compare the given field with
    * @generic <T> the type of the entry - must be the same as what is returned by the parseFunction - defaults to TEntry
@@ -287,10 +290,11 @@ export class Table {
    * @throws Error if the database is not connected
    * @throws Error if there is not exactly one entry that passes the given filter
    */
-  public get_unique_where<T = TEntry>(fieldname: fieldname, value: string): T {
-    const result = this.get_all_unparsed().filter((entry: TEntry) => entry[fieldname] === value).map((entry: TEntry) => this.parseFunction(entry));
-    if (result.length !== 1) throw new Error(`Expected 1 entry, got ${result.length}. This function should only be used when it's known that only one entry will be returned.`);
-    return result[0];
+  public get_unique_where<T = TEntry>(fieldname: fieldname, value: string): T | null {
+    const result = this.get_all_unparsed().filter((entry: TEntry) => entry[fieldname] === value);
+    if (result.length === 0) return null;
+    if (result.length >= 1) throw new Error(`Expected 1 entry or none, got ${result.length}. This function should only be used when it's known that only one entry will be returned.`);
+    return this.parseFunction(result[0]);
   }
 
   /**
@@ -306,7 +310,7 @@ export class Table {
   }
 
   /**
-   * Assuming there is only one entry that matches the search, get the entry where the given field is not equal to the given value
+   * Assuming there is only one entry that could/does match the search, get the entry where the given field is not equal to the given value
    * @param fieldname The name of the field to compare the given value with
    * @param value The value to compare the given field with
    * @generic <T> the type of the entry - must be the same as what is returned by the parseFunction - defaults to TEntry
@@ -314,10 +318,11 @@ export class Table {
    * @throws Error if the database is not connected
    * @throws Error if there is not exactly one entry that passes the given filter
    */
-  public get_unique_where_not<T = TEntry>(fieldname: fieldname, value: string): T {
-    const result = this.get_all_unparsed().filter((entry: TEntry) => entry[fieldname] !== value).map((entry: TEntry) => this.parseFunction(entry));
-    if (result.length !== 1) throw new Error(`Expected 1 entry, got ${result.length}. This function should only be used when it's known that only one entry will be returned.`);
-    return result[0];
+  public get_unique_where_not<T = TEntry>(fieldname: fieldname, value: string): T | null {
+    const result = this.get_all_unparsed().filter((entry: TEntry) => entry[fieldname] !== value);
+    if (result.length === 0) return null;
+    if (result.length >= 1) throw new Error(`Expected 1 entry or none, got ${result.length}. This function should only be used when it's known that only one entry will be returned.`);
+    return this.parseFunction(result[0]);
   }
 
   /**
@@ -333,7 +338,7 @@ export class Table {
   }
 
   /**
-   * Assuming there is only one entry that matches the search, get the entry where the given field is greater than the given value
+   * Assuming there is only one entry that could/does match the search, get the entry where the given field is greater than the given value
    * @param fieldname The name of the field to compare the given value with
    * @param value The value to compare the given field with
    * @generic <T> the type of the entry - must be the same as what is returned by the parseFunction - defaults to TEntry
@@ -341,10 +346,11 @@ export class Table {
    * @throws Error if the database is not connected
    * @throws Error if there is not exactly one entry that passes the given filter
    */
-  public get_unique_where_gt<T = TEntry>(fieldname: fieldname, value: number): T {
-    const result = this.get_all_unparsed().filter((entry: TEntry) => parseFloat(entry[fieldname]) > value).map((entry: TEntry) => this.parseFunction(entry));
-    if (result.length !== 1) throw new Error(`Expected 1 entry, got ${result.length}. This function should only be used when it's known that only one entry will be returned.`);
-    return result[0];
+  public get_unique_where_gt<T = TEntry>(fieldname: fieldname, value: number): T | null {
+    const result = this.get_all_unparsed().filter((entry: TEntry) => parseFloat(entry[fieldname]) > value);
+    if (result.length === 0) return null;
+    if (result.length >= 1) throw new Error(`Expected 1 entry or none, got ${result.length}. This function should only be used when it's known that only one entry will be returned.`);
+    return this.parseFunction(result[0]);
   }
 
   /**
@@ -360,7 +366,7 @@ export class Table {
   }
 
   /**
-   * Assuming there is only one entry that matches the search, get the entry where the given field is less than the given value
+   * Assuming there is only one entry that could/does match the search, get the entry where the given field is less than the given value
    * @param fieldname The name of the field to compare the given value with
    * @param value The value to compare the given field with
    * @generic <T> the type of the entry - must be the same as what is returned by the parseFunction - defaults to TEntry
@@ -368,10 +374,11 @@ export class Table {
    * @throws Error if the database is not connected
    * @throws Error if there is not exactly one entry that passes the given filter
    */
-  public get_unique_where_lt<T = TEntry>(fieldname: fieldname, value: number): T {
-    const result = this.get_all_unparsed().filter((entry: TEntry) => parseFloat(entry[fieldname]) < value).map((entry: TEntry) => this.parseFunction(entry));
-    if (result.length !== 1) throw new Error(`Expected 1 entry, got ${result.length}. This function should only be used when it's known that only one entry will be returned.`);
-    return result[0];
+  public get_unique_where_lt<T = TEntry>(fieldname: fieldname, value: number): T | null {
+    const result = this.get_all_unparsed().filter((entry: TEntry) => parseFloat(entry[fieldname]) < value);
+    if (result.length === 0) return null;
+    if (result.length >= 1) throw new Error(`Expected 1 entry or none, got ${result.length}. This function should only be used when it's known that only one entry will be returned.`);
+    return this.parseFunction(result[0]);
   }
 
   /**
@@ -387,7 +394,7 @@ export class Table {
   }
 
   /**
-   * Assuming there is only one entry that matches the search, get the entry where the given field is greater than or equal to the given value
+   * Assuming there is only one entry that could/does match the search, get the entry where the given field is greater than or equal to the given value
    * @param fieldname The name of the field to compare the given value with
    * @param value The value to compare the given field with
    * @generic <T> the type of the entry - must be the same as what is returned by the parseFunction - defaults to TEntry
@@ -395,10 +402,11 @@ export class Table {
    * @throws Error if the database is not connected
    * @throws Error if there is not exactly one entry that passes the given filter
    */
-  public get_unique_where_gte<T = TEntry>(fieldname: fieldname, value: number): T {
-    const result = this.get_all_unparsed().filter((entry: TEntry) => parseFloat(entry[fieldname]) >= value).map((entry: TEntry) => this.parseFunction(entry));
-    if (result.length !== 1) throw new Error(`Expected 1 entry, got ${result.length}. This function should only be used when it's known that only one entry will be returned.`);
-    return result[0];
+  public get_unique_where_gte<T = TEntry>(fieldname: fieldname, value: number): T | null {
+    const result = this.get_all_unparsed().filter((entry: TEntry) => parseFloat(entry[fieldname]) >= value);
+    if (result.length === 0) return null;
+    if (result.length >= 1) throw new Error(`Expected 1 entry or none, got ${result.length}. This function should only be used when it's known that only one entry will be returned.`);
+    return this.parseFunction(result[0]);
   }
 
   /**
@@ -414,7 +422,7 @@ export class Table {
   }
 
   /**
-   * Assuming there is only one entry that matches the search, get the entry where the given field is less than or equal to the given value
+   * Assuming there is only one entry that could/does match the search, get the entry where the given field is less than or equal to the given value
    * @param fieldname The name of the field to compare the given value with
    * @param value The value to compare the given field with
    * @generic <T> the type of the entry - must be the same as what is returned by the parseFunction - defaults to TEntry
@@ -422,10 +430,11 @@ export class Table {
    * @throws Error if the database is not connected
    * @throws Error if there is not exactly one entry that passes the given filter
    */
-  public get_unique_where_lte<T = TEntry>(fieldname: fieldname, value: number): T {
-    const result = this.get_all_unparsed().filter((entry: TEntry) => parseFloat(entry[fieldname]) <= value).map((entry: TEntry) => this.parseFunction(entry));
-    if (result.length !== 1) throw new Error(`Expected 1 entry, got ${result.length}. This function should only be used when it's known that only one entry will be returned.`);
-    return result[0];
+  public get_unique_where_lte<T = TEntry>(fieldname: fieldname, value: number): T | null {
+    const result = this.get_all_unparsed().filter((entry: TEntry) => parseFloat(entry[fieldname]) <= value);
+    if (result.length === 0) return null;
+    if (result.length >= 1) throw new Error(`Expected 1 entry or none, got ${result.length}. This function should only be used when it's known that only one entry will be returned.`);
+    return this.parseFunction(result[0]);
   }
 
   /**
@@ -441,7 +450,7 @@ export class Table {
   }
   
   /**
-   * Assuming there is only one entry that matches the search, get the entry where the given field contains the given value
+   * Assuming there is only one entry that could/does match the search, get the entry where the given field contains the given value
    * @param fieldname The name of the field to compare the given value with
    * @param value The value to compare the given field with
    * @generic <T> the type of the entry - must be the same as what is returned by the parseFunction - defaults to TEntry
@@ -449,10 +458,11 @@ export class Table {
    * @throws Error if the database is not connected
    * @throws Error if there is not exactly one entry that passes the given filter
    */
-  public get_unique_where_contains<T = TEntry>(fieldname: fieldname, value: string): T {
-    const result = this.get_all_unparsed().filter((entry: TEntry) => entry[fieldname].includes(value)).map((entry: TEntry) => this.parseFunction(entry));
-    if (result.length !== 1) throw new Error(`Expected 1 entry, got ${result.length}. This function should only be used when it's known that only one entry will be returned.`);
-    return result[0];
+  public get_unique_where_contains<T = TEntry>(fieldname: fieldname, value: string): T | null {
+    const result = this.get_all_unparsed().filter((entry: TEntry) => entry[fieldname].includes(value));
+    if (result.length === 0) return null;
+    if (result.length >= 1) throw new Error(`Expected 1 entry or none, got ${result.length}. This function should only be used when it's known that only one entry will be returned.`);
+    return this.parseFunction(result[0]);
   }
 
   /**
@@ -468,7 +478,7 @@ export class Table {
   }
 
   /**
-   * Assuming there is only one entry that matches the search, get the entry where the given field does not contain the given value
+   * Assuming there is only one entry that could/does match the search, get the entry where the given field does not contain the given value
    * @param fieldname The name of the field to compare the given value with
    * @param value The value to compare the given field with
    * @generic <T> the type of the entry - must be the same as what is returned by the parseFunction - defaults to TEntry
@@ -476,10 +486,11 @@ export class Table {
    * @throws Error if the database is not connected
    * @throws Error if there is not exactly one entry that passes the given filter
    */
-  public get_unique_where_not_contains<T = TEntry>(fieldname: fieldname, value: string): T {
-    const result = this.get_all_unparsed().filter((entry: TEntry) => !entry[fieldname].includes(value)).map((entry: TEntry) => this.parseFunction(entry));
-    if (result.length !== 1) throw new Error(`Expected 1 entry, got ${result.length}. This function should only be used when it's known that only one entry will be returned.`);
-    return result[0];
+  public get_unique_where_not_contains<T = TEntry>(fieldname: fieldname, value: string): T | null {
+    const result = this.get_all_unparsed().filter((entry: TEntry) => !entry[fieldname].includes(value));
+    if (result.length === 0) return null;
+    if (result.length >= 1) throw new Error(`Expected 1 entry or none, got ${result.length}. This function should only be used when it's known that only one entry will be returned.`);
+    return this.parseFunction(result[0]);
   }
 
   /**
@@ -495,7 +506,7 @@ export class Table {
   }
 
   /**
-   * Assuming there is only one entry that matches the search, get the entry where the given field starts with the given value
+   * Assuming there is only one entry that could/does match the search, get the entry where the given field starts with the given value
    * @param fieldname The name of the field to compare the given value with
    * @param value The value to compare the given field with
    * @generic <T> the type of the entry - must be the same as what is returned by the parseFunction - defaults to TEntry
@@ -503,10 +514,11 @@ export class Table {
    * @throws Error if the database is not connected
    * @throws Error if there is not exactly one entry that passes the given filter
    */
-  public get_unique_where_starts_with<T = TEntry>(fieldname: fieldname, value: string): T {
-    const result = this.get_all_unparsed().filter((entry: TEntry) => entry[fieldname].startsWith(value)).map((entry: TEntry) => this.parseFunction(entry));
-    if (result.length !== 1) throw new Error(`Expected 1 entry, got ${result.length}. This function should only be used when it's known that only one entry will be returned.`);
-    return result[0];
+  public get_unique_where_starts_with<T = TEntry>(fieldname: fieldname, value: string): T | null {
+    const result = this.get_all_unparsed().filter((entry: TEntry) => entry[fieldname].startsWith(value));
+    if (result.length === 0) return null;
+    if (result.length >= 1) throw new Error(`Expected 1 entry or none, got ${result.length}. This function should only be used when it's known that only one entry will be returned.`);
+    return this.parseFunction(result[0]);
   }
 
   /**
@@ -522,7 +534,7 @@ export class Table {
   }
 
   /**
-   * Assumes there is only one entry that matches the search, get the entry where the given field ends with the given value
+   * Assumes there is only one entry that could/does match the search, get the entry where the given field ends with the given value
    * @param fieldname The name of the field to compare the given value with
    * @param value The value to compare the given field with
    * @generic <T> the type of the entry - must be the same as what is returned by the parseFunction - defaults to TEntry
@@ -530,10 +542,11 @@ export class Table {
    * @throws Error if the database is not connected
    * @throws Error if there is not exactly one entry that passes the given filter
    */
-  public get_unique_where_ends_with<T = TEntry>(fieldname: fieldname, value: string): T {
-    const result = this.get_all_unparsed().filter((entry: TEntry) => entry[fieldname].endsWith(value)).map((entry: TEntry) => this.parseFunction(entry));
-    if (result.length !== 1) throw new Error(`Expected 1 entry, got ${result.length}. This function should only be used when it's known that only one entry will be returned.`);
-    return result[0];
+  public get_unique_where_ends_with<T = TEntry>(fieldname: fieldname, value: string): T | null {
+    const result = this.get_all_unparsed().filter((entry: TEntry) => entry[fieldname].endsWith(value));
+    if (result.length === 0) return null;
+    if (result.length >= 1) throw new Error(`Expected 1 entry or none, got ${result.length}. This function should only be used when it's known that only one entry will be returned.`);
+    return this.parseFunction(result[0]);
   }
 
   // *** FILTER-QUERY PATCH METHODS *** ///
@@ -984,7 +997,7 @@ export default class Database {
    * @throws Error if the database is not connected
    * @throws Error if there is not exactly one entry that passes the given filter
    */
-  public static get_unique_with_filter<T = TEntry>(tablename: string, filter: TEntriesFilter): T {
+  public static get_unique_with_filter<T = TEntry>(tablename: string, filter: TEntriesFilter): T | null {
     const table = this.get_table(tablename);
     return table.get_unique_with_filter<T>(filter);
   }
@@ -1015,7 +1028,7 @@ export default class Database {
    * @throws Error if the database is not connected
    * @throws Error if there is not exactly one entry that passes the given filter
    */
-  public static get_unique_where<T = TEntry>(tablename: string, fieldname: fieldname, value: string): T {
+  public static get_unique_where<T = TEntry>(tablename: string, fieldname: fieldname, value: string): T | null {
     const table = this.get_table(tablename);
     return table.get_unique_where<T>(fieldname, value);
   }
@@ -1046,7 +1059,7 @@ export default class Database {
    * @throws Error if the database is not connected
    * @throws Error if there is not exactly one entry that passes the given filter
    */
-  public static get_unique_where_not<T = TEntry>(tablename: string, fieldname: fieldname, value: string): T {
+  public static get_unique_where_not<T = TEntry>(tablename: string, fieldname: fieldname, value: string): T | null {
     const table = this.get_table(tablename);
     return table.get_unique_where_not<T>(fieldname, value);
   }
@@ -1077,7 +1090,7 @@ export default class Database {
    * @throws Error if the database is not connected
    * @throws Error if there is not exactly one entry that passes the given filter
    */
-  public static get_unique_where_gt<T = TEntry>(tablename: string, fieldname: fieldname, value: number): T {
+  public static get_unique_where_gt<T = TEntry>(tablename: string, fieldname: fieldname, value: number): T | null {
     const table = this.get_table(tablename);
     return table.get_unique_where_gt<T>(fieldname, value);
   }
@@ -1108,7 +1121,7 @@ export default class Database {
    * @throws Error if the database is not connected
    * @throws Error if there is not exactly one entry that passes the given filter
    */
-  public static get_unique_where_lt<T = TEntry>(tablename: string, fieldname: fieldname, value: number): T {
+  public static get_unique_where_lt<T = TEntry>(tablename: string, fieldname: fieldname, value: number): T | null {
     const table = this.get_table(tablename);
     return table.get_unique_where_lt<T>(fieldname, value);
   }
@@ -1139,7 +1152,7 @@ export default class Database {
    * @throws Error if the database is not connected
    * @throws Error if there is not exactly one entry that passes the given filter
    */
-  public static get_unique_where_gte<T = TEntry>(tablename: string, fieldname: fieldname, value: number): T {
+  public static get_unique_where_gte<T = TEntry>(tablename: string, fieldname: fieldname, value: number): T | null {
     const table = this.get_table(tablename);
     return table.get_unique_where_gte<T>(fieldname, value);
   }
@@ -1170,7 +1183,7 @@ export default class Database {
    * @throws Error if the database is not connected
    * @throws Error if there is not exactly one entry that passes the given filter
    */
-  public static get_unique_where_lte<T = TEntry>(tablename: string, fieldname: fieldname, value: number): T {
+  public static get_unique_where_lte<T = TEntry>(tablename: string, fieldname: fieldname, value: number): T | null {
     const table = this.get_table(tablename);
     return table.get_unique_where_lte<T>(fieldname, value);
   }
@@ -1201,7 +1214,7 @@ export default class Database {
    * @throws Error if the database is not connected
    * @throws Error if there is not exactly one entry that passes the given filter
    */
-  public static get_unique_where_contains<T = TEntry>(tablename: string, fieldname: fieldname, value: string): T {
+  public static get_unique_where_contains<T = TEntry>(tablename: string, fieldname: fieldname, value: string): T | null {
     const table = this.get_table(tablename);
     return table.get_unique_where_contains<T>(fieldname, value);
   }
@@ -1232,7 +1245,7 @@ export default class Database {
    * @throws Error if the database is not connected
    * @throws Error if there is not exactly one entry that passes the given filter
    */
-  public static get_unique_where_not_contains<T = TEntry>(tablename: string, fieldname: fieldname, value: string): T {
+  public static get_unique_where_not_contains<T = TEntry>(tablename: string, fieldname: fieldname, value: string): T | null {
     const table = this.get_table(tablename);
     return table.get_unique_where_not_contains<T>(fieldname, value);
   }
@@ -1263,7 +1276,7 @@ export default class Database {
    * @throws Error if the database is not connected
    * @throws Error if there is not exactly one entry that passes the given filter
    */
-  public static get_unique_where_starts_with<T = TEntry>(tablename: string, fieldname: fieldname, value: string): T {
+  public static get_unique_where_starts_with<T = TEntry>(tablename: string, fieldname: fieldname, value: string): T | null {
     const table = this.get_table(tablename);
     return table.get_unique_where_starts_with<T>(fieldname, value);
   }
@@ -1294,7 +1307,7 @@ export default class Database {
    * @throws Error if the database is not connected
    * @throws Error if there is not exactly one entry that passes the given filter
    */
-  public static get_unique_where_ends_with<T = TEntry>(tablename: string, fieldname: fieldname, value: string): T {
+  public static get_unique_where_ends_with<T = TEntry>(tablename: string, fieldname: fieldname, value: string): T | null {
     const table = this.get_table(tablename);
     return table.get_unique_where_ends_with<T>(fieldname, value);
   }
