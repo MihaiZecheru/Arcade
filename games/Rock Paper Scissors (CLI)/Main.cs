@@ -34,8 +34,9 @@ public static class RockPaperScissors
         else if (choice == ArcadeLib.MenuOption.PLAY_MULTIPLAYER)
         {
             // No need to ask for bet because the room comes with a bet already set
-            ArcadeLib.Rooms.RockPaperScissorsRoom room = ArcadeLib.PreGame.RoomMenuGetRoom();
-            PlayMultiplayer(room);
+            // Note: the user can create a new room from this menu
+            ArcadeLib.UUID room_id = (ArcadeLib.UUID)ArcadeLib.PreGame.SelectRoom("rps").GetAwaiter().GetResult();
+            PlayMultiplayer(room_id);
         }
     }
 
@@ -44,8 +45,8 @@ public static class RockPaperScissors
 
     }
 
-    public static void PlayMultiplayer(ArcadeLib.Rooms.RockPaperScissorsRoom room)
+    public static void PlayMultiplayer(ArcadeLib.UUID room_id)
     {
-
+        Console.WriteLine(room_id);
     }
 }
