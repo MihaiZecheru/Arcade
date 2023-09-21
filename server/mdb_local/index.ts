@@ -293,7 +293,7 @@ export class Table {
   public get_unique_where<T = TEntry>(fieldname: fieldname, value: string): T | null {
     const result = this.get_all_unparsed().filter((entry: TEntry) => entry[fieldname] === value);
     if (result.length === 0) return null;
-    if (result.length >= 1) throw new Error(`Expected 1 entry or none, got ${result.length}. This function should only be used when it's known that only one entry will be returned.`);
+    if (result.length > 1) throw new Error(`Expected 1 entry or none, got ${result.length}. This function should only be used when it's known that only one entry will be returned.`);
     return this.parseFunction(result[0]);
   }
 
