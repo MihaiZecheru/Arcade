@@ -119,7 +119,6 @@ export default class Server {
     if (Math.floor(wager) !== wager) throw new Error("Wager must be a whole number");
     
     const id: RoomID = uuid() as RoomID;
-    
     this.room_ids.push(id);
     this.server.rps[id] = new RPSRoom(id, wager);
 
