@@ -12,16 +12,16 @@ public static class PreGame
     /// <returns>The user's choice from the menu</returns>
     public static ArcadeLib.MenuOption MainMenu(string gamename)
     {
-        // TODO: make prettier
         var mode = AnsiConsole.Prompt(new SelectionPrompt<string>()
-            .Title("Choose mode:")
+            .Title("[blue]Choose mode:[/]")
             .AddChoices(new[] {
-                "Multiplayer",
-                "Single player (vs CPU)"
+                "[blue]Multiplayer[/]",
+                "[blue]Single player (vs CPU)[/]"
             }
-        ));
+            ).HighlightStyle(ArcadeLib.TextColor.GoldColor)
+        );
 
-        if (mode == "Multiplayer")
+        if (mode == "[blue]Multiplayer[/]")
             return ArcadeLib.MenuOption.PLAY_MULTIPLAYER;
         else
             return ArcadeLib.MenuOption.PLAY_SOLO;
@@ -45,15 +45,16 @@ public static class PreGame
                 throw new Exception($"No game exists with the name '{room_type}'. What game are you trying to get rooms for?");
         }
 
-        List<string> options = new List<string>() { "Create Room" };
-        rooms.ForEach((ArcadeLib.Rooms.IRoom room) => options.Add(room.id.ToString()));
+        List<string> options = new List<string>() { "[blue]Create Room[/]" };
+        rooms.ForEach((ArcadeLib.Rooms.IRoom room) => options.Add($"[blue]{room.id}[/]"));
         
         var selected_room_id = AnsiConsole.Prompt(new SelectionPrompt<string>()
-            .Title("Join a room or create your own")
+            .Title("[blue]Join a room or create your own[/]")
             .AddChoices(options)
+            .HighlightStyle(ArcadeLib.TextColor.GoldColor)
         );
 
-        if (selected_room_id == "Create Room")
+        if (selected_room_id == "[blue]Create Room[/]")
         {
             return await CreateRoomPrompt(room_type);
         }
