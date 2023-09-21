@@ -22,7 +22,7 @@ public class UUID
     /// </summary>
     /// <param name="value">The value to validate</param>
     /// <returns>Boolean indicating whether the given <paramref name="value"/> was a valid UserID</returns>
-    private static bool IsValidUserID(string value)
+    public static bool IsValidUserID(string value)
     {
         return validator.IsMatch(value);
     }
