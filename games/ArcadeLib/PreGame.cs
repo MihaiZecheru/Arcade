@@ -14,7 +14,7 @@ public static class PreGame
     {
         // TODO: make prettier
         var mode = AnsiConsole.Prompt(new SelectionPrompt<string>()
-            .Title("Choose mode")
+            .Title("Choose mode:")
             .AddChoices(new[] {
                 "Multiplayer",
                 "Single player (vs CPU)"
@@ -63,10 +63,27 @@ public static class PreGame
 
     public static async Task<ArcadeLib.UUID> CreateRoomPrompt(string room_type)
     {
-        var wager = AnsiConsole.Prompt(
-            new TextPrompt<int>("Set a wager for the room: ")
-                .Validate(bet => bet >= 1 ? ValidationResult.Success() : ValidationResult.Error("Your wager must be at least 1 token")
-        ));
+        int wager;
+
+        while (true)
+        {
+            Console.Clear();
+            AnsiConsole.Markup("[blue]Set a wager for the room:[/]");
+
+            string res = AnsiConsole.Prompt(
+                new TextPrompt<string>("")
+                    .PromptStyle(new Style().Foreground(Color.Gold1))
+            );
+
+            if (int.TryParse(res, out wager)) break;
+            else
+            {
+                AnsiConsole.MarkupLine($"[red]Invalid wager - must be an integer greater than 0[/]");
+                ArcadeLib.Misc.HideCursor();
+                Console.ReadKey(true);
+                ArcadeLib.Misc.ShowCursor();
+            }
+        }
 
         return await ArcadeLib.ArcadeServerAPI.CreateRoom(room_type, wager);
     }
