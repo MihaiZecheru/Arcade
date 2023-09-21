@@ -377,17 +377,7 @@ public static class Auth
 
         // Display the welcome message for 1.5 seconds before clearing. The welcome message will close if the user presses the enter key
         Misc.HideCursor();
-        DateTime startTime = DateTime.Now;
-        while ((DateTime.Now - startTime).TotalMilliseconds < 1500)
-        {
-            if (Console.KeyAvailable)
-            {
-                // Close the welcome message on enter
-                if (Console.ReadKey(true).Key == ConsoleKey.Enter) break;
-            }
-
-            Thread.Sleep(10);
-        }
+        ArcadeLib.Misc.DelayWithBreak(1500);
         Console.Clear(); // Cleanup: the screen will be ready for the game to begin
         Misc.ShowCursor();
     }

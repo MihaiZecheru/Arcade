@@ -47,4 +47,25 @@ public static class Misc
         }
         ShowCursor();
     }
+
+    /// <summary>
+    /// Set a delay for <paramref name="ms"/> milliseconds, with the option to break out of the delay on Enter keypress
+    /// </summary>
+    /// <param name="ms">The amount of milliseconds to delay for</param>
+    public static void DelayWithBreak(int ms)
+    {
+        if (ms < 10) throw new Exception("Delay must be at least 10 milliseconds");
+
+        DateTime startTime = DateTime.Now;
+        while ((DateTime.Now - startTime).TotalMilliseconds < ms)
+        {
+            if (Console.KeyAvailable)
+            {
+                // Break out of the delay on Enter keypress
+                if (Console.ReadKey(true).Key == ConsoleKey.Enter) break;
+            }
+
+            Thread.Sleep(10);
+        }
+    }
 }
