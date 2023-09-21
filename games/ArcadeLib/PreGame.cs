@@ -54,7 +54,10 @@ public static class PreGame
             .HighlightStyle(ArcadeLib.TextColor.GoldColor)
         );
 
-        if (selected_room_id == "[blue]Create Room[/]")
+        // Remove the color tags from the selected room
+        selected_room_id = selected_room_id.Replace("[blue]", "").Replace("[/]", "");
+
+        if (selected_room_id == "Create Room")
         {
             return await CreateRoomPrompt(room_type);
         }
@@ -64,8 +67,8 @@ public static class PreGame
 
     public static async Task<ArcadeLib.UUID> CreateRoomPrompt(string room_type)
     {
+        // Get wager from user
         int wager;
-
         while (true)
         {
             Console.Clear();
@@ -80,12 +83,11 @@ public static class PreGame
             else
             {
                 AnsiConsole.MarkupLine($"[red]Invalid wager - must be an integer greater than 0[/]");
-                ArcadeLib.Misc.HideCursor();
-                Console.ReadKey(true);
-                ArcadeLib.Misc.ShowCursor();
+                ArcadeLib.Misc.DelayWithBreak(1500);
             }
         }
 
+        // Create the room with the wager
         return await ArcadeLib.ArcadeServerAPI.CreateRoom(room_type, wager);
     }
 
