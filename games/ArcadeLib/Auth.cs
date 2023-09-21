@@ -376,9 +376,7 @@ public static class Auth
         Username = null;
 
         // Display the welcome message for 1.5 seconds before clearing. The welcome message will close if the user presses the enter key
-        Misc.HideCursor();
         ArcadeLib.Misc.DelayWithBreak(1500);
         Console.Clear(); // Cleanup: the screen will be ready for the game to begin
-        Misc.ShowCursor();
     }
 }

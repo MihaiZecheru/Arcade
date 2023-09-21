@@ -56,6 +56,7 @@ public static class Misc
     {
         if (ms < 10) throw new Exception("Delay must be at least 10 milliseconds");
 
+        Misc.HideCursor();
         DateTime startTime = DateTime.Now;
         while ((DateTime.Now - startTime).TotalMilliseconds < ms)
         {
@@ -67,5 +68,6 @@ public static class Misc
 
             Thread.Sleep(10);
         }
+        Misc.ShowCursor();
     }
 }
