@@ -50,7 +50,7 @@ describe('Test the User class methods', () => {
     user.username = "different username";
     user.save();
     const updated_user = Database.get_unique_where<IUser>('Users', 'user_id', user_id);
-    expect(updated_user.username).toBe("different username");
+    expect(updated_user!.username).toBe("different username");
   });
 
   test('generate_id method', () => {
