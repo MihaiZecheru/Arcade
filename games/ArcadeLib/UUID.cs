@@ -22,7 +22,7 @@ public class UUID
     /// </summary>
     /// <param name="value">The value to validate</param>
     /// <returns>Boolean indicating whether the given <paramref name="value"/> was a valid UserID</returns>
-    public static bool IsValidUserID(string value)
+    public static bool Valid(string value)
     {
         return validator.IsMatch(value);
     }
@@ -34,7 +34,7 @@ public class UUID
     /// <exception cref="ArgumentException">Invalid ID</exception>
     public UUID(string value)
     {
-        if (!IsValidUserID(value))
+        if (!Valid(value))
             throw new ArgumentException("Invalid UserID", nameof(value));
         _value = value;
     }
