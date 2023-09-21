@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace ArcadeLib;
 
@@ -119,12 +120,11 @@ public static class ArcadeServerAPI
     /// <exception cref="Exception">Throws error if <paramref name="room_type"/> is invalid or if there is an internal server error while creating the room</exception>
     public static async Task<ArcadeLib.UUID> CreateRoom(string room_type, int wager)
     {
-        // TODO: finish this, test this
         // TODO: keep adding new games as they're made here
         if (room_type != "rps" && room_type != "hilo")
             throw new Exception("Invalid room type");
 
-        string url = $"{ArcadeURL}/api/${room_type}/create";
+        string url = $"{ArcadeURL}/api/{room_type}/create";
         var values = new { wager };
 
         try
@@ -133,12 +133,13 @@ public static class ArcadeServerAPI
 
             if (response.IsSuccessStatusCode)
             {
-                string jsonResponse = await response.Content.ReadAsStringAsync();
-                return JsonConvert.DeserializeObject<ArcadeLib.Rooms.IRoom>(jsonResponse)!.id;
+                string room_id = await response.Content.ReadAsStringAsync();
+                if (!ArcadeLib.UUID.Valid(room_id)) throw new Exception();
+                return new ArcadeLib.UUID(room_id);
             }
             else
             {
-                throw new Exception("Error creating room");
+                throw new Exception();
             }
         }
         catch
