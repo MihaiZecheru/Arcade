@@ -35,7 +35,7 @@ public static class RockPaperScissors
         {
             // No need to ask for bet because the room comes with a bet already set
             // Note: the user can create a new room from this menu
-            ArcadeLib.UUID room_id = ArcadeLib.PreGame.SelectRoom("rps").GetAwaiter().GetResult();
+            ArcadeLib.UUID room_id = ArcadeLib.PreGame.SelectRoom("rps").GetAwaiter().GetResult()
             PlayMultiplayer(room_id);
         }
     }
