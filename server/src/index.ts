@@ -32,18 +32,25 @@ app.use(express.json());
 
 /**
  * Register to Arcade
+ * @param username string - Body param
+ * @param password string - Body param
+ * @param email string - Body param
+ * @param birthday string - Body param
  * @returns UserID
  */
 app.post("/api/register", router.main.register);
 
 /**
  * Login to Aracade
+ * @param username string - Body param
+ * @param password string - Body param
  * @returns UserID
  */
 app.post("/api/login", router.main.login);
 
 /**
  * Get a user by ID
+ * @param user_id UserID - url param
  * @returns User object
  */
 app.get("/api/user/:user_id", router.main.get_user_by_id);
@@ -58,18 +65,25 @@ app.get("/api/user/:user_id", router.main.get_user_by_id);
 
 /**
  * Create a room for the Rock Paper Scissors game
- * @returns The ID of the room
+ * @param wager int - body param
+ * @returns RoomID
  */
 app.post("/api/rps/create", router.rps.create_room);
 
+
+
+/******************************/
+/**** Express - Join Rooms ****/
+/******************************/
+
+
+
 /**
- * Create a room for the Hi-Lo game
- * @returns The ID of the room
+ * Join a Rock Paper Scissors room
+ * @param room_id RoomID - url param
+ * @returns RoomID
  */
-app.post("/api/hilo/create", async (req: any, res: any) => {
-  // res.code(200).send(await Server.hilo_create_room());
-  // TODO: implement
-});
+app.post("/api/rps/join/:room_id", router.rps.join_room);
 
 
 
@@ -81,11 +95,14 @@ app.post("/api/hilo/create", async (req: any, res: any) => {
 
 /**
  * Get all Rock Paper Scissors rooms
+ * @returns Array<RPSRoom>
  */
 app.get("/api/rps/all", router.rps.get_all_rooms);
 
 /**
  * Get Rock Paper Scissors room by ID
+ * @param room_id RoomID - url param
+ * @returns RPSRoom object
  */
 app.get("/api/rps/:room_id", router.rps.get_room_by_id);
 
@@ -99,8 +116,9 @@ app.get("/api/rps/:room_id", router.rps.get_room_by_id);
 
 /**
  * Websocket for the Rock Paper Scissors game - handles joining, playing, and finishing
- * @param room_id The ID of the room - url param
- * @param user_id The ID of the user - query param
+ * @param room_id RoomID - url param
+ * @param user_id The ID of the user joining (UserID) - query param
+ * @returns void
  */
 ws_app.ws("/api/rps/:room_id", router.rps.websocket);
 
