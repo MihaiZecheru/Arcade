@@ -45,8 +45,9 @@ public static class RockPaperScissors
 
     }
 
-    public static void PlayMultiplayer(ArcadeLib.UUID room_id)
+    public static async void PlayMultiplayer(ArcadeLib.UUID room_id)
     {
         Console.WriteLine(room_id);
+        // Join room here, don't make a separate function, just connect to the websocket
     }
 }
