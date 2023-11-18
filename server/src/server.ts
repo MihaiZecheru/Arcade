@@ -155,8 +155,8 @@ export default class Server {
    * Add a player to a rock-paper-scissors room
    * @param room_id The ID of the room the player is joining
    * @param user_id The ID of the player joining the room
-   * @returns Whether the room is full (if the room is ready)
-   * @throws {Error} If the room is full
+   * @returns Whether the room is now full (if the room is ready to start)
+   * @throws {Error} If the room is already full prior to join
    */
   public static rps_join_room(room_id: RoomID, user_id: UserID, ws: any): boolean {  
     this.server.rps[room_id].add_player(user_id, ws);
