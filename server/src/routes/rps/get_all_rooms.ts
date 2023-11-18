@@ -1,4 +1,3 @@
-import { RPSRoom } from "../../models/rooms";
 import Server from "../../server";
 
 export default function get_all_rooms(req: any, res: any): void {
