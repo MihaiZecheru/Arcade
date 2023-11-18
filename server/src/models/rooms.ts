@@ -62,6 +62,10 @@ export class RoomBaseClass {
       throw new Error(`Room '${this.id}' is full`);
     }
 
+    if (this.game_started) {
+      throw new Error(`Room '${this.id}' has a game in progress - wait for the game to finish before joining`);
+    }
+
     const player: IPlayer = {
       user_id, ws,
       player_number: this.player_count() + 1
@@ -174,9 +178,9 @@ export class RPSRoom extends RoomBaseClass {
 
   /**
    * Check if the room is full
-   * @returns If the room is full
+   * @returns True if the room is full, false otherwise
    */
   public room_full(): boolean {
-    return this.player1_choice !== null && this.player2_choice !== null;
+    return this.players.length == 2;
   }
 }
