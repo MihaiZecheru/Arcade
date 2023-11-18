@@ -63,7 +63,7 @@ public static class Auth
     {
         UpdateDisplay();
         SetCursorAtUsernamePrompt();
-        return MainLoop(); // Returns the user's ID
+        return AuthLoop(); // Returns the user's ID
     }
 
     /// <summary>
@@ -119,10 +119,10 @@ public static class Auth
     }
 
     /// <summary>
-    /// The MainLoop for the login screen -- will capture key events and update the screen accordingly
+    /// The 'MainLoop' for the login screen -- will capture key events and update the screen accordingly
     /// </summary>
     /// <returns>The logged-in user's ID</returns>
-    private static ArcadeLib.UUID MainLoop()
+    private static ArcadeLib.UUID AuthLoop()
     {
         while (true)
         {
@@ -164,7 +164,7 @@ public static class Auth
                             ArcadeLib.UUID UserID = ArcadeServerAPI.LoginSync(GetUsername().Trim(), GetPassword());
                             return UserID; // If the login was successful, return the UserID
                         }
-                        catch (Exception e)
+                        catch (Exception)
                         {
                             // If the login was invalid, reset the screen
                             ShowError("Invalid username or password");
