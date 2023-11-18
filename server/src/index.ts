@@ -73,22 +73,6 @@ app.post("/api/rps/create", router.rps.create_room);
 
 
 /******************************/
-/**** Express - Join Rooms ****/
-/******************************/
-
-
-
-/**
- * Join a Rock Paper Scissors room
- * @param room_id RoomID - url param
- * @param user_id UserID - body param
- * @returns RoomID
- */
-app.post("/api/rps/join/:room_id", router.rps.join_room);
-
-
-
-/******************************/
 /**** Express - Get Rooms *****/
 /******************************/
 
