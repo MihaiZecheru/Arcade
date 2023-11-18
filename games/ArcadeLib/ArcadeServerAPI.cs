@@ -6,6 +6,8 @@ namespace ArcadeLib;
 
 public static class ArcadeServerAPI
 {
+    // TODO: keep adding new games as they're made here
+    private static readonly string[] ROOM_TYPES = new string[]{ "rps", "hilo" };
     private static readonly string ArcadeURL = "http://localhost:3000";
     private static readonly HttpClient client = new HttpClient();
 
@@ -120,8 +122,7 @@ public static class ArcadeServerAPI
     /// <exception cref="Exception">Throws error if <paramref name="room_type"/> is invalid or if there is an internal server error while creating the room</exception>
     public static async Task<ArcadeLib.UUID> CreateRoom(string room_type, int wager)
     {
-        // TODO: keep adding new games as they're made here
-        if (room_type != "rps" && room_type != "hilo")
+        if (!ROOM_TYPES.Contains(room_type))
             throw new Exception("Invalid room type");
 
         string url = $"{ArcadeURL}/api/{room_type}/create";
