@@ -164,8 +164,15 @@ public static class Auth
                             ArcadeLib.UUID UserID = ArcadeServerAPI.LoginSync(GetUsername().Trim(), GetPassword());
                             return UserID; // If the login was successful, return the UserID
                         }
-                        catch (Exception)
+                        catch (Exception e)
                         {
+                            // If the server is not online, exit the program
+                            if (e.Message.StartsWith("No connection could be made because the target machine actively refused it."))
+                            {
+                                ShowError("Could not connect to the server - the server may be offline");
+                                Environment.Exit(0);
+                            }
+
                             // If the login was invalid, reset the screen
                             ShowError("Invalid username or password");
                             Username = new List<char>();
