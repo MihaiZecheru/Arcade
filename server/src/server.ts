@@ -59,8 +59,8 @@ export default class Server {
 
 
 
-  public static async get_user(user_id: UserID): Promise<User> {
-    return await User.get_user(user_id);
+  public static get_user(user_id: UserID): User {
+    return User.get_user(user_id);
   }
   
   /**
@@ -68,7 +68,7 @@ export default class Server {
    * @param user_id The ID of the user to get the balance of
    * @returns The user's balance
    */
-  public static async get_user_balance(user_id: UserID): Promise<number> {
+  public static get_user_balance(user_id: UserID): number {
     return Database.get_unique_where<IUser>("Users", "user_id", user_id)!.balance;
   }
 
@@ -78,8 +78,8 @@ export default class Server {
    * @param amount The amount to increase the balance by
    * @returns The user's new balance
    */
-  public static async increase_user_balance(user_id: UserID, amount: number): Promise<number> {
-    const balance = await this.get_user_balance(user_id);
+  public static increase_user_balance(user_id: UserID, amount: number): number {
+    const balance = this.get_user_balance(user_id);
     
     Database.patch_where("Users", "user_id", user_id, {
       balance: (balance + amount).toString()
@@ -94,8 +94,8 @@ export default class Server {
    * @param amount The amount to decrease the balance by
    * @returns The user's new balance
    */
-  public static async decrease_user_balance(user_id: UserID, amount: number): Promise<number> {
-    const balance = await this.get_user_balance(user_id);
+  public static decrease_user_balance(user_id: UserID, amount: number): number {
+    const balance = this.get_user_balance(user_id);
     
     Database.patch_where("Users", "user_id", user_id, {
       balance: (balance - amount).toString()
