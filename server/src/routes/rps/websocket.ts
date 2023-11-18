@@ -30,11 +30,15 @@ export default function websocket(ws: any, req: any): void {
     return ws.close();
   }
 
-  const room_is_full: boolean = Server.rps_join_room(room_id, user_id, ws);
-  console.log(`User ${user_id} connected to rock-paper-scissors room ${room_id}`);
+  /**
+   * The Server.rps_join_room function will handle errors with the room already being
+   * at max capacity or the game already being in progress
+   **/
+
+  const room_is_ready: boolean = Server.rps_join_room(room_id, user_id, ws);
   ws.send(`connected to room ${room_id}`);
 
-  if (room_is_full) {
+  if (room_is_ready) {
     Server.rps_start_game(room_id);
   }
 
