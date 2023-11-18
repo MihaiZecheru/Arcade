@@ -74,7 +74,7 @@ app.post("/api/hilo/create", async (req: any, res: any) => {
 
 
 /******************************/
-/*** Express - Get Rooms ***/
+/**** Express - Get Rooms *****/
 /******************************/
 
 
