@@ -59,7 +59,12 @@ public static class PreGame
 
         if (selected_room_id == "Create Room")
         {
-            return await CreateRoomPrompt(room_type);
+            /**
+             * Note: because creating a room doesn't automatically join the user to the room,
+             * the user has to join the room after he creates it (done in the PlayMultiplayer method)
+             **/
+            ArcadeLib.UUID room_id = await CreateRoomPrompt(room_type);
+            return room_id;
         }
 
         return selected_room_id;
