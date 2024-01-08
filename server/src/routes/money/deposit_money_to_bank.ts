@@ -13,7 +13,7 @@ export default function deposit_money_to_bank(req: any, res: any): void {
   const amount = req.body.amount;
   if (amount === undefined) res.status(400).send("Missing amount");
   if (typeof amount !== "number") res.status(400).send("Invalid amount");
-  if (amount < 0) res.status(400).send("Amount must be positive");
+  if (amount <= 0) res.status(400).send("Amount must be positive");
 
   try {
     return res.status(200).send(Server.user_deposit_money_to_bank(user_id as UserID, amount));
