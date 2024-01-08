@@ -10,7 +10,8 @@ beforeEach(() => {
     user.id = entry.user_id as UserID;
     user.username = entry.username;
     user.password = entry.password;
-    user.balance = parseInt(entry.balance);
+    user.wallet_balance = parseInt(entry.wallet_balance);
+    user.bank_balance = parseInt(entry.bank_balance);
     user.email = entry.email;
     user.birthday = entry.birthday;
     user.joined = entry.joined;
@@ -28,7 +29,8 @@ describe('Test the main.get_user_by_id function', () => {
     id: user_id,
     username: "tester",
     password: "test",
-    balance: 250,
+    wallet_balance: 0,
+    bank_balance: 250,
     email: "test@example.com",
     birthday: "01/01/1980",
     joined: "01/01/1980"

@@ -1,7 +1,7 @@
 import { uuid_regex } from '../src/models/ID';
 import router from '../src/routes/router';
 import Database, { TEntry } from '../mdb_local/index';
-import { USER_STARTING_BALANCE } from '../src/models/user';
+import { USER_STARTING_BANK_BALANCE } from '../src/models/user';
 import { describe, test, expect, beforeEach, afterEach } from '@jest/globals';
 import { IUser, UserID } from '../src/models/user';
 
@@ -12,7 +12,8 @@ beforeEach(() => {
     user.id = entry.user_id as UserID;
     user.username = entry.username;
     user.password = entry.password;
-    user.balance = parseInt(entry.balance);
+    user.wallet_balance = parseInt(entry.wallet_balance);
+    user.bank_balance = parseInt(entry.bank_balance);
     user.email = entry.email;
     user.birthday = entry.birthday;
     user.joined = entry.joined;
@@ -30,21 +31,22 @@ describe('Test the main.register function -- register a user to the database', (
 
   afterEach(() => {
     // Delete the user that was made for the test
-    Database.delete_where("Users", "user_id", res.text)
+    Database.delete_where("Users", "user_id", res.text);
   });
 
   test('register user successfully', async () => {
-    await router.main.register(req, res);
+    router.main.register(req, res);
     expect(res.statusCode).toBe(200);
     const user_id = res.text;
     expect(user_id).toMatch(uuid_regex);
 
-    const user: IUser = Database.get_unique_where("Users", "user_id", res.text);
+    const user: IUser = Database.get_unique_where<IUser>("Users", "user_id", res.text)!;
 
     expect(user.id).toMatch(user_id);
     expect(user.username).toBe(req.body.username);
     expect(user.password).toBe(req.body.password);
-    expect(user.balance).toBe(USER_STARTING_BALANCE);
+    expect(user.bank_balance).toBe(USER_STARTING_BANK_BALANCE);
+    expect(user.wallet_balance).toBe(0);
     expect(user.email).toBe(req.body.email);
     expect(user.birthday).toBe(req.body.birthday);
     expect(user.joined).toBeDefined();
