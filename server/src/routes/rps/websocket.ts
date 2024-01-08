@@ -85,7 +85,7 @@ function win(players: Array<IPlayer>, winner: IPlayer, wager: number): void {
   players.forEach((player: IPlayer) => {
     if (player.user_id === winner.user_id) {
       player.ws.send("winner");
-      Server.increase_user_balance(player.user_id, wager);
+      Server.increase_user_wallet_balance(player.user_id, wager);
     } else {
       player.ws.send("loser");
     }

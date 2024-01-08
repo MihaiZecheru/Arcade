@@ -8,7 +8,8 @@ export interface IUser {
   id: UserID;
   username: string;
   password: string;
-  balance: number;
+  wallet_balance: number; // int
+  bank_balance: number; // int
   email: string;
   birthday: string;
   joined: string;
@@ -18,36 +19,90 @@ export default class User implements IUser {
   public id: UserID;
   public username: string;
   public password: string;
-  public balance: number;
+  public wallet_balance: number; // int
+  public bank_balance: number; // int
   public email: string;
   public birthday: string;
   public joined: string;
 
-  constructor({ id: user_id, username, password, balance, email, birthday, joined }: IUser) {
+  /**
+   * The user's total balance, which is the sum of their wallet and bank balances
+   */
+  public get total_balance(): number {
+    return this.wallet_balance + this.bank_balance;
+  }
+
+  constructor({ id: user_id, username, password, wallet_balance, bank_balance, email, birthday, joined }: IUser) {
     this.id = user_id as UserID;
     this.username = username;
     this.password = password;
-    this.balance = balance;
+    this.wallet_balance = wallet_balance;
+    this.bank_balance = bank_balance;
     this.email = email;
     this.birthday = birthday;
     this.joined = joined;
   }
 
   /**
-   * Increase the user's balance by the given amount
+   * Increase the user's wallet balance by the given amount
    * @param amount The amount to increase the balance by
    */
-  public increase_balance(amount: number) {
-    this.balance += amount;
+  public increase_wallet_balance(amount: number) {
+    this.wallet_balance += amount;
+  }
+  
+  /**
+   * Increase the user's bank balance by the given amount
+   * @param amount The amount to increase the balance by
+   */
+  public increase_bank_balance(amount: number) {
+    this.bank_balance += amount;
   }
 
   /**
-   * Decrease the user's balance by the given amount
+   * Decrease the user's wallet balance by the given amount
    * @param amount The amount to decrease the balance by
+   * @error Insufficient funds
+   * @error Invalid amount
    */
-  public decrease_balance(amount: number) {
-    if (this.balance < amount) throw new Error("Insufficient token balance");
-    this.balance -= amount;
+  public decrease_wallet_balance(amount: number) {
+    if (this.wallet_balance < 0) throw new Error("Invalid amount - must be positive");
+    if (this.wallet_balance < amount) throw new Error("Insufficient funds");
+    this.wallet_balance -= amount;
+  }
+
+  /**
+   * Decrease the user's bank balance by the given amount
+   * @param amount The amount to decrease the balance by
+   * @error Insufficient funds
+   * @error Invalid amount
+   */
+  public decrease_bank_balance(amount: number) {
+    if (this.bank_balance < 0) throw new Error("Invalid amount - must be positive");
+    if (this.bank_balance < amount) throw new Error("Insufficient funds");
+    this.bank_balance -= amount;
+  }
+
+  /**
+   * withdraw money from the user's bank to their wallet
+   * @param amount The amount to withdraw
+   * @error Insufficient funds
+   * @error Invalid amount
+   */
+  public withdraw_money_from_bank(amount: number) {
+    this.decrease_bank_balance(amount);
+    this.increase_wallet_balance(amount);
+  }
+  
+  /**
+   * deposit money from the user's wallet to their bank
+   * @param amount The amount to deposit
+   * @error Insufficient funds
+   * @error Invalid amount
+   */
+  public deposit_money_to_bank(amount: number) {
+    this.decrease_wallet_balance(amount);
+    this.increase_bank_balance(amount);
   }
 
   /**
@@ -57,7 +112,8 @@ export default class User implements IUser {
     Database.patch_where("Users", "user_id", this.id, {
       username: this.username,
       password: this.password,
-      balance: this.balance.toString(),
+      wallet_balance: this.wallet_balance.toString(),
+      bank_balance: this.bank_balance.toString(),
       email: this.email
     });
   }
@@ -78,6 +134,7 @@ export default class User implements IUser {
    * Get a user from the database
    * @param user_id The ID of the user to get
    * @returns The user with the given ID
+   * @error User not found
    */
   public static get_user(user_id: UserID): User {
     const user: Array<IUser> = Database.get_where<IUser>("Users", "user_id", user_id);

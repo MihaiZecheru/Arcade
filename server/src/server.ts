@@ -55,7 +55,7 @@ export default class Server {
 
 
 
-  /*** User Balance ***/
+  /*** Users ***/
 
 
 
@@ -64,47 +64,140 @@ export default class Server {
   }
   
   /**
-   * Get a user's balance
-   * @param user_id The ID of the user to get the balance of
-   * @returns The user's balance
+   * Get a user's balance (wallet + bank)
+   * @param user_id The ID of the user to get the total balance of
+   * @returns The user's total balance (wallet + bank)
    */
-  public static get_user_balance(user_id: UserID): number {
-    return Database.get_unique_where<IUser>("Users", "user_id", user_id)!.balance;
+  public static get_user_total_balance(user_id: UserID): number {
+    const user: IUser = Database.get_unique_where<IUser>("Users", "user_id", user_id)!;
+    return user.bank_balance + user.wallet_balance;
   }
 
   /**
-   * Increase a user's balance by the given amount
-   * @param user_id The ID of the user to increase the balance of
-   * @param amount The amount to increase the balance by
-   * @returns The user's new balance
+   * Get a user's wallet balance
+   * @param user_id The ID of the user to get the wallet balance of
+   * @returns The user's wallet balance
    */
-  public static increase_user_balance(user_id: UserID, amount: number): number {
-    const balance = this.get_user_balance(user_id);
-    
-    Database.patch_where("Users", "user_id", user_id, {
-      balance: (balance + amount).toString()
-    });
-
-    return balance + amount;
+  public static get_user_wallet_balance(user_id: UserID): number {
+    return Database.get_unique_where<IUser>("Users", "user_id", user_id)!.wallet_balance;
   }
 
   /**
-   * Decrease a user's balance by the given amount
-   * @param user_id The ID of the user to decrease the balance of
-   * @param amount The amount to decrease the balance by
-   * @returns The user's new balance
+   * Get a user's bank balance
+   * @param user_id The ID of the user to get the bank balance of
+   * @returns The user's bank balance
    */
-  public static decrease_user_balance(user_id: UserID, amount: number): number {
-    const balance = this.get_user_balance(user_id);
-    
-    Database.patch_where("Users", "user_id", user_id, {
-      balance: (balance - amount).toString()
-    });
-
-    return balance - amount;
+  public static get_user_bank_balance(user_id: UserID): number {
+    return Database.get_unique_where<IUser>("Users", "user_id", user_id)!.bank_balance;
   }
 
+  /**
+   * Increase a user's wallet balance by the given amount
+   * @param user_id The ID of the user to increase the wallet balance of
+   * @param amount The amount to increase the wallet balance by (must be positive)
+   * @returns The user's new wallet balance
+   * @throws {Error} If the amount is negative
+   */
+  public static increase_user_wallet_balance(user_id: UserID, amount: number): number {
+    const wallet_balance = this.get_user_wallet_balance(user_id);
+    if (amount < 0) throw new Error("Amount must be positive");
+    
+    Database.patch_where("Users", "user_id", user_id, {
+      wallet_balance: (wallet_balance + amount).toString()
+    });
 
+    return wallet_balance + amount;
+  }
+
+  /**
+   * Increase a user's bank balance by the given amount
+   * @param user_id The ID of the user to increase the bank balance of
+   * @param amount The amount to increase the bank balance by (must be positive)
+   * @returns The user's new bank balance
+   * @throws {Error} If the amount is negative
+   */
+  public static increase_user_bank_balance(user_id: UserID, amount: number): number {
+    const bank_balance = this.get_user_bank_balance(user_id);
+    if (amount < 0) throw new Error("Amount must be positive");
+    
+    Database.patch_where("Users", "user_id", user_id, {
+      bank_balance: (bank_balance + amount).toString()
+    });
+
+    return bank_balance + amount;
+  }
+
+  /**
+   * Decrease a user's wallet balance by the given amount
+   * @param user_id The ID of the user to decrease the wallet balance of
+   * @param amount The amount to decrease the wallet balance by (must be positive)
+   * @returns The user's new wallet balance
+   * @throws {Error} If the user does not have enough money in their wallet
+   * @throws {Error} If the amount is negative
+   */
+  public static decrease_user_wallet_balance(user_id: UserID, amount: number): number {
+    const wallet_balance = this.get_user_wallet_balance(user_id);
+
+    if (wallet_balance < 0) throw new Error("Amount must be positive");
+    if (wallet_balance < amount) throw new Error("Insufficient funds");
+
+    Database.patch_where("Users", "user_id", user_id, {
+      wallet_balance: (wallet_balance - amount).toString()
+    });
+
+    return wallet_balance - amount;
+  }
+
+  /**
+   * Decrease a user's bank balance by the given amount
+   * @param user_id The ID of the user to decrease the bank balance of
+   * @param amount The amount to decrease the bank balance by (must be positive)
+   * @returns The user's new bank balance
+   * @throws {Error} If the user does not have enough money in their bank
+   * @throws {Error} If the amount is negative
+   */
+  public static decrease_user_bank_balance(user_id: UserID, amount: number): number {
+    const bank_balance = this.get_user_bank_balance(user_id);
+
+    if (bank_balance < 0) throw new Error("Amount must be positive");
+    if (bank_balance < amount) throw new Error("Insufficient funds");
+    
+    Database.patch_where("Users", "user_id", user_id, {
+      bank_balance: (bank_balance - amount).toString()
+    });
+
+    return bank_balance - amount;
+  }
+
+  /**
+   * Withdraw money from a user's bank to their wallet
+   * @param user_id The ID of the user to withdraw money from
+   * @param amount The amount to withdraw (must be positive)
+   * @returns The user's new wallet balance
+   * @throws {Error} If the user does not have enough money in their bank
+   * @throws {Error} If the amount is negative
+   */
+  public static user_withdraw_money_from_bank(user_id: UserID, amount: number): number {
+    if (amount < 0) throw new Error("Amount must be positive");
+    this.decrease_user_bank_balance(user_id, amount);
+    return this.increase_user_wallet_balance(user_id, amount);
+  }
+
+  /**
+   * Deposit money from a user's wallet to their bank
+   * @param user_id The ID of the user to deposit money to
+   * @param amount The amount to deposit (must be positive)
+   * @returns The user's new bank balance
+   * @throws {Error} If the user does not have enough money in their wallet
+   * @throws {Error} If the amount is negative
+   */
+  public static user_deposit_money_to_bank(user_id: UserID, amount: number): number {
+    if (amount < 0) throw new Error("Amount must be positive");
+    this.decrease_user_wallet_balance(user_id, amount);
+    return this.increase_user_bank_balance(user_id, amount);
+  }
+
+  
 
   /*** Rock Paper Scissors ***/
 
@@ -183,7 +276,7 @@ export default class Server {
     const room = this.rps_get_room(room_id);
     room.players.forEach((player: IPlayer) => {
       // deduct wager from player's balance
-      this.decrease_user_balance(player.user_id, room.wager);
+      this.decrease_user_wallet_balance(player.user_id, room.wager);
       
       // send game_start notice to player client
       player.ws.send("game_start");

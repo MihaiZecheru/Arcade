@@ -11,7 +11,8 @@ Database.set_table_parse_function("Users", (entry: TEntry): IUser => {
   user.id = entry.user_id as UserID;
   user.username = entry.username;
   user.password = entry.password;
-  user.balance = parseInt(entry.balance);
+  user.wallet_balance = parseInt(entry.wallet_balance); // only modified fields
+  user.bank_balance = parseInt(entry.bank_balance); // only modified fields
   user.email = entry.email;
   user.birthday = entry.birthday;
   user.joined = entry.joined;
@@ -54,6 +55,45 @@ app.post("/api/login", router.main.login);
  * @returns User object
  */
 app.get("/api/user/:user_id", router.main.get_user_by_id);
+
+
+
+/**********************************/
+/*** Express - Money Management ***/
+/**********************************/
+
+
+/**
+ * Get the total balance of a user, the sum of both the bank and wallet balances
+ * @param user_id UserID - url param
+ */
+app.get("/api/user/:user_id/balance/total", router.money.get_total_balance);
+
+/**
+ * Get the bank balance of a user
+ * @param user_id UserID - url param
+ */
+app.get("/api/user/:user_id/balance/bank", router.money.get_bank_balance);
+
+/**
+ * Get the wallet balance of a user
+ * @param user_id UserID - url param
+ */
+app.get("/api/user/:user_id/balance/wallet", router.money.get_wallet_balance);
+
+/**
+ * Deposit money from a user's wallet to their bank
+ * @param user_id UserID - url param
+ * @param amount int - Body param
+ */
+app.put("/api/user/:user_id/balance/deposit", router.money.deposit_money_to_bank);
+
+/**
+ * Withdraw money from a user's bank to their wallet
+ * @param user_id UserID - url param
+ * @param amount int - Body param
+ */
+app.put("/api/user/:user_id/balance/withdraw", router.money.withdraw_money_from_bank);
 
 
 
