@@ -11,13 +11,14 @@ export default function deposit_money_to_bank(req: any, res: any): void {
   if (users.length === 0) return res.status(400).send("User not found");
   
   const amount = req.body.amount;
-  if (amount === undefined) res.status(400).send("Missing amount");
-  if (typeof amount !== "number") res.status(400).send("Invalid amount");
-  if (amount <= 0) res.status(400).send("Amount must be positive");
+  if (amount === undefined) return res.status(400).send("Missing amount");
+  if (typeof amount !== "number") return res.status(400).send("Invalid amount");
+  if (amount <= 0) return res.status(400).send("Amount must be positive");
 
   try {
     return res.status(200).send(Server.user_withdraw_money_from_bank(user_id as UserID, amount));
   } catch (err: any) {
+    if (err.message === "Insufficient funds") return res.status(400).send(err.message);
     return res.status(500).send("Internal server error");
   }
 }
