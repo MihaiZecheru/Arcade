@@ -29,8 +29,8 @@ describe('Test the main.get_user_by_id function', () => {
     id: user_id,
     username: "tester",
     password: "test",
-    wallet_balance: 0,
-    bank_balance: 250,
+    wallet_balance: 250, // not the default value - just what the test user has
+    bank_balance: 1000, // not the default value - just what the test user has
     email: "test@example.com",
     birthday: "01/01/1980",
     joined: "01/01/1980"
