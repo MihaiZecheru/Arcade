@@ -7,7 +7,7 @@ export default function get_total_balance(req: any, res: any): void {
   const user_id = req.params.user_id;
 
   if (user_id === undefined) res.status(400).send("Missing user_id");
-  if (typeof user_id !== "string" || is_uuid(user_id)) res.status(400).send("Invalid user_id");
+  if (typeof user_id !== "string" || !is_uuid(user_id)) res.status(400).send("Invalid user_id");
   
   const users: Array<IUser> = Database.get_where<IUser>("Users", "user_id", user_id);
   if (users.length === 0) res.status(400).send("User not found");
