@@ -23,7 +23,7 @@ afterEach(() => {
   Database.disconnect();
 });
 
-describe('Test the get_total_balance function', () => {
+describe('Test the get_bank_balance function', () => {
   const req = { params: { user_id: "aa4d7f07-b82a-4b3b-bbf3-382d431b907b" } };
   const res = { text: '', send: (x: any) => { res.text = x }, statusCode: null, status: (x: any) => { res.statusCode = x; return res; } };
   
