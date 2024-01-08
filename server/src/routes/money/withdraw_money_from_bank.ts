@@ -3,7 +3,7 @@ import { is_uuid } from "../../models/ID";
 import { IUser, UserID } from "../../models/user";
 import Server from "../../server";
 
-export default function deposit_money_to_bank(req: any, res: any): void {
+export default function withdraw_money_from_bank(req: any, res: any): void {
   const user_id = req.params.user_id;
   if (typeof user_id !== "string" || !is_uuid(user_id)) return res.status(400).send("Invalid user_id");
 
