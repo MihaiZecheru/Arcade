@@ -9,7 +9,8 @@ describe('Test the User class methods', () => {
       id: entry.user_id as UserID,
       username: entry.username,
       password: entry.password,
-      balance: parseInt(entry.balance),
+      wallet_balance: parseInt(entry.wallet_balance),
+      bank_balance: parseInt(entry.bank_balance),
       email: entry.email,
       birthday: entry.birthday,
       joined: entry.joined,
@@ -28,21 +29,55 @@ describe('Test the User class methods', () => {
     new User(test_user).save(); // reset user in database
   });
 
-  test('increase_balance method', () => {
+  test('increase_wallet_balance method', () => {
     const user = new User(test_user);
-    user.increase_balance(100);
-    expect(user.balance).toBe(250 + 100);
+    user.increase_wallet_balance(100);
+    expect(user.wallet_balance).toBe(250 + 100);
   });
 
-  test('decrease_balance method with sufficient balance', () => {
+  test('decrease_wallet_balance method with sufficient balance', () => {
     const user = new User(test_user);
-    user.decrease_balance(100);
-    expect(user.balance).toBe(250 - 100);
+    user.decrease_wallet_balance(100);
+    expect(user.wallet_balance).toBe(250 - 100);
   });
 
-  test('decrease_balance method with insufficient balance', () => {
+  test('decrease_wallet_balance method with all balance (success)', () => {
     const user = new User(test_user);
-    expect(() => user.decrease_balance(10000)).toThrow('Insufficient token balance');
+    user.decrease_wallet_balance(250);
+    expect(user.wallet_balance).toBe(0);
+  });
+
+  test('decrease_wallet_balance method with insufficient balance', () => {
+    const user = new User(test_user);
+    expect(() => user.decrease_wallet_balance(50000)).toThrow('Insufficient funds');
+  });
+
+  test('increase_bank_balance method', () => {
+    const user = new User(test_user);
+    user.increase_bank_balance(105);
+    expect(user.bank_balance).toBe(1000 + 105);
+  });
+
+  test('decrease_bank_balance method with sufficient balance', () => {
+    const user = new User(test_user);
+    user.decrease_bank_balance(105);
+    expect(user.bank_balance).toBe(1000 - 105);
+  });
+
+  test('decrease_bank_balance method with all balance (success)', () => {
+    const user = new User(test_user);
+    user.decrease_bank_balance(1000);
+    expect(user.bank_balance).toBe(0);
+  });
+
+  test('decrease_bank_balance method with insufficient balance', () => {
+    const user = new User(test_user);
+    expect(() => user.decrease_bank_balance(50000)).toThrow('Insufficient funds');
+  });
+
+  test('get_total_balance getter', () => {
+    const user = new User(test_user);
+    expect(user.total_balance).toBe(user.wallet_balance + user.bank_balance);
   });
 
   test('save method', () => {
