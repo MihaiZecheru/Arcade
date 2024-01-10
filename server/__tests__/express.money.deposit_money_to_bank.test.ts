@@ -67,7 +67,8 @@ describe('Test the deposit_money_to_bank function', () => {
   });
 
   test('deposit 0$ to the bank (error)', () => {
-    deposit_money_to_bank({ params: { user_id: "aa4d7f07-b82a-4b3b-bbf3-382d431b907b" }, body: { amount: 0 } }, res);
+    req.body.amount = 0;
+    deposit_money_to_bank(req, res);
     expect(res.statusCode).toBe(400);
     expect(res.text).toBe('Amount must be positive');
   });
