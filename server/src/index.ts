@@ -133,6 +133,27 @@ app.get("/api/rps/:room_id", router.rps.get_room_by_id);
 
 
 
+/********************************/
+/**** Express - Close Rooms *****/
+/********************************/
+
+
+
+/**
+ * Close a RPSRoom
+ * Closing a room will delete it from the server,
+ * will update the stats for each of the players,
+ * and will update the wallet balances of the winning player
+ * @param room_id RoomID - url param
+ * @param winner UserID - body param
+ * @param loser UserID - body param
+ * @param wager int - body param
+ * @returns success message
+ */
+app.get("/api/rps/:room_id/close", router.rps.close_room);
+
+
+
 /***********************************/
 /*** Websocket - Join/Play Games ***/
 /***********************************/

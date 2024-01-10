@@ -14,6 +14,7 @@ import withdraw_money_from_bank from './money/withdraw_money_from_bank';
 import create_room from './rps/create_room';
 import get_all_rooms from './rps/get_all_rooms';
 import get_room_by_id from './rps/get_room_by_id';
+import close_room from './rps/close_room';
 import rps_websocket from './rps/websocket';
 
 const router = {
@@ -34,6 +35,7 @@ const router = {
     create_room,
     get_all_rooms,
     get_room_by_id,
+    close_room,
     websocket: rps_websocket,
   }
 };
