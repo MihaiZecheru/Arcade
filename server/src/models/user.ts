@@ -49,6 +49,7 @@ export default class User implements IUser {
    */
   public increase_wallet_balance(amount: number) {
     this.wallet_balance += amount;
+    this.save();
   }
   
   /**
@@ -57,6 +58,7 @@ export default class User implements IUser {
    */
   public increase_bank_balance(amount: number) {
     this.bank_balance += amount;
+    this.save();
   }
 
   /**
@@ -69,6 +71,7 @@ export default class User implements IUser {
     if (this.wallet_balance < 0) throw new Error("Invalid amount - must be positive");
     if (this.wallet_balance < amount) throw new Error("Insufficient funds");
     this.wallet_balance -= amount;
+    this.save();
   }
 
   /**
@@ -81,6 +84,7 @@ export default class User implements IUser {
     if (this.bank_balance < 0) throw new Error("Invalid amount - must be positive");
     if (this.bank_balance < amount) throw new Error("Insufficient funds");
     this.bank_balance -= amount;
+    this.save();
   }
 
   /**
@@ -92,6 +96,7 @@ export default class User implements IUser {
   public withdraw_money_from_bank(amount: number) {
     this.decrease_bank_balance(amount);
     this.increase_wallet_balance(amount);
+    this.save();
   }
   
   /**
@@ -103,6 +108,7 @@ export default class User implements IUser {
   public deposit_money_to_bank(amount: number) {
     this.decrease_wallet_balance(amount);
     this.increase_bank_balance(amount);
+    this.save();
   }
 
   /**
