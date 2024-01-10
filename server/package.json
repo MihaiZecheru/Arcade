@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --verbose",
+    "test": "jest",
     "dev": "nodemon src/index.ts",
     "prod": "ts-node src/index.ts"
   },
