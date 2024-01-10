@@ -22,7 +22,7 @@ type TServer = {
   "rps": {
     [room_id: RoomID]: RPSRoom
   },
-  "hilo": {} // TODO
+  // "hilo": {} // TODO
 };
 
 /**
@@ -39,7 +39,7 @@ export default class Server {
    */
   private static server: TServer = {
     "rps": {},
-    "hilo": {}
+    // "hilo": {}
   };
 
   /**
