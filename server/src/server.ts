@@ -4,11 +4,12 @@ import { rps_choice } from "./models/games/rps";
 import IPlayer from "./models/player";
 import { RPSRoom } from "./models/rooms";
 import Database from "../mdb_local";
+import Branded from "./branded";
 
 /**
  * The ID of a room on the server
  */
-export type RoomID = ID;
+export type RoomID = Branded<ID, "RoomID">;
 
 /**
  * All games in the server
@@ -306,8 +307,8 @@ export default class Server {
     const player1: IPlayer = this.server.rps[room_id].get_player_by_number(1)!;
     const player2: IPlayer = this.server.rps[room_id].get_player_by_number(2)!;
 
-    const player1_choice: rps_choice = this.server.rps[room_id].get_player_choice(player1.user_id);
-    const player2_choice: rps_choice = this.server.rps[room_id].get_player_choice(player2.user_id);
+    const player1_choice: rps_choice = this.server.rps[room_id].get_player_choice(1);
+    const player2_choice: rps_choice = this.server.rps[room_id].get_player_choice(2);
 
     // tie
     if (player1_choice === player2_choice) return null;

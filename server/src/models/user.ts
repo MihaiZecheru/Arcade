@@ -1,7 +1,8 @@
 import Database from "../../mdb_local/index";
+import Branded from "../branded";
 import uuid, { ID } from "./ID";
 
-export type UserID = ID;
+export type UserID = Branded<ID, "UserID">;
 export const USER_STARTING_BANK_BALANCE = 250;
 
 export interface IUser {
