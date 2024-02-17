@@ -48,6 +48,16 @@ export default class Server {
     return this.server[game][room_id] !== undefined;
   }
 
+  /**
+   * Delete a room
+   * @param game The game the room is for
+   * @param room_id The ID of the room to delete
+   */
+  public static delete_room(game: GameName, room_id: RoomID): void {
+    this.room_ids.splice(this.room_ids.indexOf(room_id), 1);
+    delete this.server[game][room_id];
+  }
+
 
 
   /*** Users ***/
