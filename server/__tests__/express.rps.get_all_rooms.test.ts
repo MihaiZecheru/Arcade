@@ -5,13 +5,13 @@ import { describe, test, expect } from '@jest/globals';
 
 describe('Test the get_all_rooms function', () => {
   test('get_all_rooms', () => {
-    const room1: RPSRoom = Server.rps_get_room(Server.rps_create_room(10));
-    const room2: RPSRoom = Server.rps_get_room(Server.rps_create_room(25));
+    const room1: RPSRoom = Server.RPS_get_room(Server.RPS_create_room(10));
+    const room2: RPSRoom = Server.RPS_get_room(Server.RPS_create_room(25));
 
     const req = {};
     const res = { text: null, send: (x: any) => { res.text = x }, statusCode: null, status: (x: any) => { res.statusCode = x; return res; } };
 
-    router.rps.get_all_rooms(req, res);
+    router.RPS.get_all_rooms(req, res);
     const rooms: Array<RPSRoom> = res.text!;
 
     expect(res.statusCode).toBe(200);
@@ -20,7 +20,7 @@ describe('Test the get_all_rooms function', () => {
     expect(rooms).toContain(room2);
     
     // cleanup
-    Server.rps_delete_room(room1.id);
-    Server.rps_delete_room(room2.id);
+    Server.RPS_delete_room(room1.id);
+    Server.RPS_delete_room(room2.id);
   });
 });

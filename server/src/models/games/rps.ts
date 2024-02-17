@@ -1,1 +1,1 @@
-export type rps_choice = "rock" | "paper" | "scissors";
+export type RPS_choice = "rock" | "paper" | "scissors";

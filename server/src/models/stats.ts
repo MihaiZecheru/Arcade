@@ -1,7 +1,7 @@
 import { RoomID } from "../server";
 import { UserID } from "./user";
 
-interface IStats {
+export interface IStats {
   user_id: UserID;
   wins: number;
   losses: number;

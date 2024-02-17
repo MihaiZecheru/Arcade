@@ -1,4 +1,4 @@
-import { rps_choice } from "./games/rps";
+import { RPS_choice } from "./games/RPS";
 import IPlayer from "./player";
 import { RoomID } from "../server";
 import { UserID } from "./user";
@@ -128,17 +128,17 @@ export class RoomBaseClass {
  * Rock Paper Scissors room
  */
 export class RPSRoom extends RoomBaseClass {
-  private player1_choice: rps_choice | null = null;
-  private player2_choice: rps_choice | null = null;
+  private player1_choice: RPS_choice | null = null;
+  private player2_choice: RPS_choice | null = null;
 
   /**
    * Get a player's choice
    * @param user_id The ID of the player
    * @returns The player's choice (rock, paper, or scissors)
    */
-  public get_player_choice(user_id: UserID): rps_choice;
-  public get_player_choice(player_number: number): rps_choice;
-  public get_player_choice(player: UserID | number): rps_choice {
+  public get_player_choice(user_id: UserID): RPS_choice;
+  public get_player_choice(player_number: number): RPS_choice;
+  public get_player_choice(player: UserID | number): RPS_choice {
     let _player: IPlayer;
     if (typeof player === "number") {
       try {
@@ -155,7 +155,7 @@ export class RPSRoom extends RoomBaseClass {
       }
     }
 
-    let choice: rps_choice | null = (_player.player_number === 1) ? this.player1_choice : this.player2_choice;
+    let choice: RPS_choice | null = (_player.player_number === 1) ? this.player1_choice : this.player2_choice;
     if (!choice) throw new Error(`Player '${_player.user_id}' has not made a choice yet`);
     return choice!;
   }
@@ -165,7 +165,7 @@ export class RPSRoom extends RoomBaseClass {
    * @param user_id The ID of the player
    * @param choice The player's choice (rock, paper, or scissors)
    */
-  public set_player_choice(user_id: UserID, choice: rps_choice): void {
+  public set_player_choice(user_id: UserID, choice: RPS_choice): void {
     const player = this.get_player_by_user_id(user_id);
     if (!player) throw new Error(`Player '${user_id}' is not in room '${this.id}`);
 

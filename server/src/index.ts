@@ -123,7 +123,7 @@ app.put("/api/user/:user_id/balance/withdraw", router.money.withdraw_money_from_
  * @param wager int - body param
  * @returns RoomID
  */
-app.post("/api/rps/create", router.rps.create_room);
+app.post("/api/RPS/create", router.RPS.create_room);
 
 
 
@@ -137,14 +137,14 @@ app.post("/api/rps/create", router.rps.create_room);
  * Get all Rock Paper Scissors rooms
  * @returns Array<RPSRoom>
  */
-app.get("/api/rps/all", router.rps.get_all_rooms);
+app.get("/api/RPS/all", router.RPS.get_all_rooms);
 
 /**
  * Get Rock Paper Scissors room by ID
  * @param room_id RoomID - url param
  * @returns RPSRoom object
  */
-app.get("/api/rps/:room_id", router.rps.get_room_by_id);
+app.get("/api/RPS/:room_id", router.RPS.get_room_by_id);
 
 
 
@@ -165,7 +165,7 @@ app.get("/api/rps/:room_id", router.rps.get_room_by_id);
  * @param wager int - body param
  * @returns success message
  */
-app.get("/api/rps/:room_id/close", router.rps.close_room);
+app.get("/api/RPS/:room_id/close", router.RPS.close_room);
 
 
 
@@ -181,7 +181,7 @@ app.get("/api/rps/:room_id/close", router.rps.close_room);
  * @param user_id The ID of the user joining (UserID) - query param
  * @returns void
  */
-ws_app.ws("/api/rps/:room_id", router.rps.websocket);
+ws_app.ws("/api/RPS/:room_id", router.RPS.websocket);
 
 /**
  * Start server
