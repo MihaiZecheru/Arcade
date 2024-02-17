@@ -1,8 +1,8 @@
-import Database from "../../mdb_local";
-import GameName from "../models/gamename";
-import IStats from "../models/stats";
-import User, { UserID } from "../models/user";
-import Server, { RoomID } from "../server";
+import Database from "../../../mdb_local";
+import GameName from "../../models/gamename";
+import IStats from "../../models/stats";
+import User, { UserID } from "../../models/user";
+import Server, { RoomID } from "../../server";
 
 function update_stats(game: GameName, room_id: RoomID, player: UserID, wager: number) {
   const player_stats: IStats = User.get_user(player).get_stats(game);
