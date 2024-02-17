@@ -4,6 +4,8 @@ import express_ws from "express-ws";
 
 import { IUser, UserID } from "./models/user";
 import Database, { TEntry } from "../mdb_local/index";
+import { RoomID } from "./server";
+import IGameLog from "./models/gamelog";
 Database.connect();
 
 Database.set_table_parse_function("Users", (entry: TEntry): IUser => {
@@ -19,6 +21,17 @@ Database.set_table_parse_function("Users", (entry: TEntry): IUser => {
   return user;
 });
 
+Database.set_table_parse_function("GameLog", (entry: TEntry): IGameLog => {
+  let gamelog: IGameLog = {} as IGameLog;
+  gamelog.game = entry.game;
+  gamelog.room_id = entry.room_id as RoomID;
+  gamelog.players = JSON.parse(entry.players) as Array<UserID>;
+  gamelog.winner = entry.winner as UserID;
+  gamelog.wager = parseInt(entry.wager);
+  gamelog.timestamp = parseInt(entry.timestamp);
+  return gamelog;
+});
+
 const app = express();
 const ws_app = express_ws(app).app;
 app.use(express.json());
@@ -28,7 +41,9 @@ app.use(express.json());
 /********************************************/
 /*** Express - Login, Register, & GetUser ***/
 /********************************************/
-
+app.get("/", (req, res) => {
+  res.send("Arcade server running");
+});
 
 
 /**
