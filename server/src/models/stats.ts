@@ -12,6 +12,7 @@ interface IStats {
 }
 
 export interface IStatsRPS extends IStats {
+  draws: number;
   rocks: number;
   papers: number;
   scissors: number;
