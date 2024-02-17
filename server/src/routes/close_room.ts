@@ -6,7 +6,7 @@ import Server, { RoomID } from "../server";
 
 function update_stats(game: GameName, room_id: RoomID, player: UserID, wager: number) {
   const player_stats: IStats = User.get_user(player).get_stats(game);
-  Database.patch_where("StatsRPS", "user_id", player, {
+  Database.patch_where(`Stats${game}`, "user_id", player, {
     wins: (player_stats.wins + 1).toString(),
     total_wagered: (player_stats.total_wagered + wager).toString(),
     winnings: (player_stats.winnings + wager).toString(),
@@ -39,6 +39,6 @@ export default function close_room(req: any, res: any) {
   update_stats(game, room_id, winner, wager);
   update_stats(game, room_id, winner, wager);
 
-  Server.delete_room(room_id);
+  Server.delete_room(game, room_id);
   res.status(200).send(`${game} room with ID ${room_id} closed`);
 }
