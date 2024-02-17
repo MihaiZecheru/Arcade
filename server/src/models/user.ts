@@ -1,6 +1,7 @@
 import Database from "../../mdb_local/index";
 import Branded from "../branded";
 import uuid, { ID } from "./ID";
+import GameName from "./gamename";
 import { IStats, IStatsRPS } from "./stats";
 
 export type UserID = Branded<ID, "UserID">;
@@ -115,12 +116,11 @@ export default class User implements IUser {
 
   /**
    * Get the user's stats for the given game
-   * @typedef T The type of the stats to get. Must be an extension of IStats
-   * @param game The game to get the stats for. Make sure it is properly capitalized to how it appears in the database
-   * @returns The user's stats for the given game in type <T>, where T is an extension of IStats
+   * @param game The game to get the stats for
+   * @returns The user's stats for the given game
    */
-  public get_stats<T extends IStats>(game: string): T {
-    return Database.get_unique_where<T>(`Stats${game}`, "user_id", this.id)!;
+  public get_stats(game: GameName): IStats {
+    return Database.get_unique_where<IStats>(`Stats${game}`, "user_id", this.id)!;
   }
 
   /**

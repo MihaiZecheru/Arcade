@@ -1,7 +1,7 @@
 import { RoomID } from "../server";
 import { UserID } from "./user";
 
-export interface IStats {
+export default interface IStats {
   user_id: UserID;
   wins: number;
   losses: number;
@@ -9,11 +9,4 @@ export interface IStats {
   winnings: number;
   money_lost: number;
   rooms_played_in: Array<RoomID>;
-}
-
-export interface IStatsRPS extends IStats {
-  draws: number;
-  rocks: number;
-  papers: number;
-  scissors: number;
 }
