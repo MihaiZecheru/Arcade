@@ -33,7 +33,7 @@ public static class Auth
     /// <summary>
     /// Return the user's login information (username and password) if there is a saved login that is valid. To be valid, the login must have been saved on the same day
     /// </summary>
-    /// <returns></returns>
+    /// <returns>A <see cref="Tuple{T1, T2}"/> containing the user's saved username and password</returns>
     public static Tuple<string, string>? TryGetLoginInfo()
     {
         if (!File.Exists("user-login.txt")) return null; // no saved login info if the file does not exist
@@ -60,6 +60,7 @@ public static class Auth
     /// <br/><br/>
     /// This method calls all three login-related functions and cleans up after itself by clearing the console to end the login process
     /// </summary>
+    /// <returns>The logged-in <see cref="ArcadeLib.ArcadeUser"/></returns>
     public static ArcadeLib.ArcadeUser Login()
     {
         Tuple<string, string>? _result = TryGetLoginInfo();
