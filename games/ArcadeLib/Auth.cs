@@ -43,7 +43,7 @@ public static class Auth
     }
 
     /// <summary>
-    /// Handle the entire login process and return the logged-in <see cref="ArcadeLib.ArcadeUser"/>
+    /// Handle the entire login process and set the "out" variable <paramref name="user"/> to the logged-in <see cref="ArcadeLib.ArcadeUser"/>
     /// <br/><br/>
     /// This method calls all three login-related functions and cleans up after itself by clearing the console to end the login process
     /// </summary>
