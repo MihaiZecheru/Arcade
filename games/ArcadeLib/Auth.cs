@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualBasic.FileIO;
 using Spectre.Console;
 using System.Diagnostics;
+using System.Security.Cryptography.X509Certificates;
 
 namespace ArcadeLib;
 
@@ -30,15 +31,50 @@ public static class Auth
     private static List<char> Password = new List<char>();
 
     /// <summary>
+    /// Return the user's login information (username and password) if there is a saved login that is valid. To be valid, the login must have been saved on the same day
+    /// </summary>
+    /// <returns></returns>
+    public static Tuple<string, string>? TryGetLoginInfo()
+    {
+        if (!File.Exists("user-login.txt")) return null; // no saved login info if the file does not exist
+        string[] raw_user = File.ReadAllLines("user-login.txt");
+        string username = raw_user[0].Split(':')[1];
+        string password = raw_user[1].Split(':')[1];
+        string login_date = raw_user[2].Split(':')[1];
+        // the login is not valid if it was saved on a different day
+        if (login_date != DateTime.Now.ToString("MM/dd/yyyy")) return null;
+        return new Tuple<string, string>(username, password);
+    }
+
+    /// <summary>
+    /// Save the user's login info to a file to prevent having to login every time the user wants to play. The login should be valid only for the day it was saved
+    /// </summary>
+    /// <param name="user">The user to save</param>
+    public static void SaveUserLogin(ArcadeLib.ArcadeUser user)
+    {
+        File.WriteAllText("user-login.txt", $"username:{user.Username}\npassword:{user.Password}\nlogin_date:{DateTime.Now.ToString("MM/dd/yyyy")}");
+    }
+
+    /// <summary>
     /// Handle the entire login process and return the logged-in <see cref="ArcadeLib.ArcadeUser"/>
     /// <br/><br/>
     /// This method calls all three login-related functions and cleans up after itself by clearing the console to end the login process
     /// </summary>
     public static ArcadeLib.ArcadeUser Login()
     {
+        Tuple<string, string>? _result = TryGetLoginInfo();
+        if (_result != null)
+        {
+            string username = _result.Item1;
+            string password = _result.Item2;
+            ArcadeLib.UUID _user_id = ArcadeServerAPI.LoginSync(username, password);
+            return ArcadeServerAPI.GetArcadeUserSync(_user_id);
+        }
+
         ArcadeLib.UUID UserID = ArcadeLib.Auth.LoginPrompt();
         ArcadeLib.ArcadeUser user = ArcadeServerAPI.GetArcadeUserSync(UserID);
         ArcadeLib.Auth.LoginComplete(user.Username);
+        ArcadeLib.Auth.SaveUserLogin(user);
         return user;
     }
 
@@ -50,9 +86,24 @@ public static class Auth
     /// <param name="user">The variable to save the user to</param>
     public static void Login(out ArcadeLib.ArcadeUser user)
     {
-        ArcadeLib.UUID UserID = ArcadeLib.Auth.LoginPrompt();
-        user = ArcadeServerAPI.GetArcadeUserSync(UserID);
-        ArcadeLib.Auth.LoginComplete(user.Username);
+        Tuple<string, string>? _result = TryGetLoginInfo();
+        
+        // Ask the user to login. He must input his username and password
+        if (_result == null)
+        {
+            ArcadeLib.UUID UserID = ArcadeLib.Auth.LoginPrompt();
+            user = ArcadeServerAPI.GetArcadeUserSync(UserID); // set the "out" variable to the logged-in user
+            ArcadeLib.Auth.LoginComplete(user.Username);
+            ArcadeLib.Auth.SaveUserLogin(user);
+        }
+        // Get the users saved login info and log him in
+        else
+        {
+            string username = _result.Item1;
+            string password = _result.Item2;
+            ArcadeLib.UUID _user_id = ArcadeServerAPI.LoginSync(username, password);
+            user = ArcadeServerAPI.GetArcadeUserSync(_user_id); // set the "out" variable to the logged-in user
+        }
     }
 
     /// <summary>
