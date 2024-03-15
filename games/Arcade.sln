@@ -5,7 +5,9 @@ VisualStudioVersion = 17.5.33516.290
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArcadeLib", "ArcadeLib\ArcadeLib.csproj", "{A08479E5-5D00-4C0B-B166-B6722A578C0F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rock Paper Scissors (CLI)", "Rock Paper Scissors (CLI)\Rock Paper Scissors (CLI).csproj", "{FB45901C-8420-4A90-9060-C2A7DFD7A406}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RockPaperScissors", "ArcadeRockPaperScissors\RockPaperScissors.csproj", "{6DE12BAD-6D27-4DD3-8BD5-6A65406EB85C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoginClient", "LoginClient\LoginClient.csproj", "{3700EB87-F268-4B22-856F-870A6B5173EB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +19,14 @@ Global
 		{A08479E5-5D00-4C0B-B166-B6722A578C0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A08479E5-5D00-4C0B-B166-B6722A578C0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A08479E5-5D00-4C0B-B166-B6722A578C0F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FB45901C-8420-4A90-9060-C2A7DFD7A406}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FB45901C-8420-4A90-9060-C2A7DFD7A406}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FB45901C-8420-4A90-9060-C2A7DFD7A406}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FB45901C-8420-4A90-9060-C2A7DFD7A406}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6DE12BAD-6D27-4DD3-8BD5-6A65406EB85C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6DE12BAD-6D27-4DD3-8BD5-6A65406EB85C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6DE12BAD-6D27-4DD3-8BD5-6A65406EB85C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6DE12BAD-6D27-4DD3-8BD5-6A65406EB85C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3700EB87-F268-4B22-856F-870A6B5173EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3700EB87-F268-4B22-856F-870A6B5173EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3700EB87-F268-4B22-856F-870A6B5173EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3700EB87-F268-4B22-856F-870A6B5173EB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
