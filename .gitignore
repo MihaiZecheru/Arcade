@@ -1,11 +1,16 @@
 server/node_modules/
 server/database/
 
-/games/Arcade/bin/
-/games/Arcade/obj/
-/games/.vs/Arcade/FileContentIndex
-/games/Rock Paper Scissors (CLI)/bin/Debug/net6.0
+# ----------------------------------------
+
+/games/ArcadeLib/bin/
+/games/ArcadeLib/obj/
+
+/games/ArcadeRockPaperScissors/bin
+/games/ArcadeRockPaperScissors/obj
+
+/games/Rock Paper Scissors (CLI)/bin
 /games/Rock Paper Scissors (CLI)/obj
-/games/.vs
-/games/ArcadeLib/bin/Debug/net6.0
-/games/ArcadeLib/obj
+
+/games/LoginClient/bin
+/games/LoginClient/obj
