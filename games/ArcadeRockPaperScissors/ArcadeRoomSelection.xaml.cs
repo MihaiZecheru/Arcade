@@ -9,9 +9,9 @@ using System.Windows;
 namespace ArcadeRockPaperScissors
 {
     /// <summary>
-    /// Interaction logic for App.xaml
+    /// Interaction logic for ArcadeRoomSelection.xaml
     /// </summary>
-    public partial class App : Application
+    public partial class ArcadeRoomSelection : Application
     {
 
     }
