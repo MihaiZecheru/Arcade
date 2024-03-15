@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="images\arcade.png" />
+    <None Remove="images\paper.jpg" />
+    <None Remove="images\rock.jpg" />
+    <None Remove="images\scissors.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ArcadeLib\ArcadeLib.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="images\arcade.png" />
+    <Resource Include="images\paper.jpg" />
+    <Resource Include="images\rock.jpg" />
+    <Resource Include="images\scissors.jpg" />
+  </ItemGroup>
+
+</Project>
