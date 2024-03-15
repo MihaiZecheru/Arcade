@@ -35,8 +35,8 @@ public class RockPaperScissorsRoom : ArcadeLib.Rooms.IRoom
     /// Get all active joinable Rock Paper Scissors rooms
     /// </summary>
     /// <returns>All active joinable Rock Paper Scissors rooms</returns>
-    public static async Task<List<ArcadeLib.Rooms.RockPaperScissorsRoom>> GetRooms()
+    public static List<ArcadeLib.Rooms.RockPaperScissorsRoom> GetRooms()
     {
-        return await ArcadeLib.ArcadeServerAPI.GetRoomsRPS();
+        return ArcadeLib.ArcadeServerAPI.GetRoomsRPS();
     }
 }
