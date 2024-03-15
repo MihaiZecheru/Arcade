@@ -32,13 +32,13 @@ public static class PreGame
     /// </summary>
     /// <param name="room_type">The type of room/the name of the game, ex: 'rps', 'hilo', etc.</param>
     /// <returns>The ID of the room the user wants to join</returns>
-    public static async Task<ArcadeLib.UUID> SelectRoom(string room_type)
+    public static ArcadeLib.UUID SelectRoom(string room_type)
     {
         List<ArcadeLib.Rooms.IRoom> rooms = new List<ArcadeLib.Rooms.IRoom>();
         switch (room_type)
         {
             case "rps":
-                rooms.AddRange(await ArcadeLib.Rooms.RockPaperScissorsRoom.GetRooms());
+                rooms.AddRange(ArcadeLib.Rooms.RockPaperScissorsRoom.GetRooms());
                 break;
 
             default:
@@ -63,14 +63,14 @@ public static class PreGame
              * Note: because creating a room doesn't automatically join the user to the room,
              * the user has to join the room after he creates it (done in the PlayMultiplayer method)
              **/
-            ArcadeLib.UUID room_id = await CreateRoomPrompt(room_type);
+            ArcadeLib.UUID room_id = CreateRoomPrompt(room_type);
             return room_id;
         }
 
         return selected_room_id;
     }
 
-    public static async Task<ArcadeLib.UUID> CreateRoomPrompt(string room_type)
+    public static ArcadeLib.UUID CreateRoomPrompt(string room_type)
     {
         // Get wager from user
         int wager;
@@ -93,7 +93,7 @@ public static class PreGame
         }
 
         // Create the room with the wager
-        return await ArcadeLib.ArcadeServerAPI.CreateRoom(room_type, wager);
+        return ArcadeLib.ArcadeServerAPI.CreateRoom(room_type, wager);
     }
 
     /// <summary>
