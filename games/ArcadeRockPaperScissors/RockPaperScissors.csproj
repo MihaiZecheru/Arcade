@@ -15,6 +15,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Page Remove="RoomSelection.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\ArcadeLib\ArcadeLib.csproj" />
   </ItemGroup>
 
