@@ -1,7 +1,11 @@
-﻿using Microsoft.VisualBasic.FileIO;
-using Spectre.Console;
+﻿using Spectre.Console;
 using System.Diagnostics;
-using System.Security.Cryptography.X509Certificates;
+using System.Net;
+using System.Net.Sockets;
+using System.Reflection;
+using System.Text;
+using System.Windows;
+using System.IO;
 
 namespace ArcadeLib;
 
@@ -56,54 +60,106 @@ public static class Auth
     }
 
     /// <summary>
-    /// Handle the entire login process and return the logged-in <see cref="ArcadeLib.ArcadeUser"/>
+    /// Open a new console window and run the LoginPopup app, which will prompt the user to login and return the user's UUID by writing it to the output stream.
+    /// The UUID is then read from the output stream and returned from this function. Use this function to prompt the user to login in a new window,
+    /// for example from a GUI/WPF game window that doesn't have a console
+    /// </summary>
+    /// <returns>The logged-in user's UUID</returns>
+    public static ArcadeLib.UUID? LoginOnNewConsoleWindow()
+    {
+        try
+        {
+            IPAddress ipAddress = IPAddress.Parse("127.0.0.1");
+            TcpListener server = new TcpListener(ipAddress, 3056);
+            server.Start();
+
+            // Get the directory where the assembly called this function is located
+            string assemblyPath = Assembly.GetExecutingAssembly().Location;
+            string assemblyDirectory = Path.GetDirectoryName(assemblyPath)!;
+            string loginPromptAppPath = @"Z:\main\programming\Arcade\games\LoginClient\bin\Debug\net6.0\LoginClient.exe";
+
+            if (!File.Exists(loginPromptAppPath)) return null;
+
+            ProcessStartInfo startInfo = new ProcessStartInfo(loginPromptAppPath);
+            startInfo.UseShellExecute = false;
+
+            using (Process process = Process.Start(startInfo))
+            {
+                if (process == null) return null; // Error
+
+                // Connect to the client
+                TcpClient client = server.AcceptTcpClient();
+                NetworkStream stream = client.GetStream();
+
+                // Receive the message from the client
+                byte[] data = new byte[256];
+                StringBuilder receivedData = new StringBuilder();
+                int bytes = 0;
+                do
+                {
+                    bytes = stream.Read(data, 0, data.Length);
+                    receivedData.Append(Encoding.ASCII.GetString(data, 0, bytes));
+                } while (stream.DataAvailable);
+
+                client.Close();
+                return new ArcadeLib.UUID(receivedData.ToString());
+            }
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// Handle the entire login process in the current console window and return the logged-in <see cref="ArcadeLib.ArcadeUser"/>
     /// <br/><br/>
     /// This method calls all three login-related functions and cleans up after itself by clearing the console to end the login process
     /// </summary>
     /// <returns>The logged-in <see cref="ArcadeLib.ArcadeUser"/></returns>
-    public static ArcadeLib.ArcadeUser Login()
+    public static ArcadeLib.ArcadeUser ShowLogin()
     {
         Tuple<string, string>? _result = TryGetLoginInfo();
         if (_result != null)
         {
             string username = _result.Item1;
             string password = _result.Item2;
-            ArcadeLib.UUID _user_id = ArcadeServerAPI.LoginSync(username, password);
-            return ArcadeServerAPI.GetArcadeUserSync(_user_id);
+            ArcadeLib.UUID _user_id = ArcadeServerAPI.Login(username, password);
+            return ArcadeServerAPI.GetArcadeUser(_user_id);
         }
 
         ArcadeLib.UUID UserID = ArcadeLib.Auth.LoginPrompt();
-        ArcadeLib.ArcadeUser user = ArcadeServerAPI.GetArcadeUserSync(UserID);
+        ArcadeLib.ArcadeUser user = ArcadeServerAPI.GetArcadeUser(UserID);
         ArcadeLib.Auth.LoginComplete(user.Username);
         ArcadeLib.Auth.SaveUserLogin(user);
         return user;
     }
 
     /// <summary>
-    /// Handle the entire login process and set the "out" variable <paramref name="user"/> to the logged-in <see cref="ArcadeLib.ArcadeUser"/>
+    /// Handle the entire login process in the current console window and set the "out" variable <paramref name="user"/> to the logged-in <see cref="ArcadeLib.ArcadeUser"/>
     /// <br/><br/>
     /// This method calls all three login-related functions and cleans up after itself by clearing the console to end the login process
     /// </summary>
     /// <param name="user">The variable to save the user to</param>
-    public static void Login(out ArcadeLib.ArcadeUser user)
+    public static void ShowLogin(out ArcadeLib.ArcadeUser user)
     {
-        Tuple<string, string>? _result = TryGetLoginInfo();
+        Tuple<string, string>? saved_login = TryGetLoginInfo();
         
         // Ask the user to login. He must input his username and password
-        if (_result == null)
+        if (saved_login == null)
         {
             ArcadeLib.UUID UserID = ArcadeLib.Auth.LoginPrompt();
-            user = ArcadeServerAPI.GetArcadeUserSync(UserID); // set the "out" variable to the logged-in user
+            user = ArcadeServerAPI.GetArcadeUser(UserID); // set the "out" variable to the logged-in user
             ArcadeLib.Auth.LoginComplete(user.Username);
             ArcadeLib.Auth.SaveUserLogin(user);
         }
         // Get the users saved login info and log him in
         else
         {
-            string username = _result.Item1;
-            string password = _result.Item2;
-            ArcadeLib.UUID _user_id = ArcadeServerAPI.LoginSync(username, password);
-            user = ArcadeServerAPI.GetArcadeUserSync(_user_id); // set the "out" variable to the logged-in user
+            string username = saved_login.Item1;
+            string password = saved_login.Item2;
+            ArcadeLib.UUID _user_id = ArcadeServerAPI.Login(username, password);
+            user = ArcadeServerAPI.GetArcadeUser(_user_id); // set the "out" variable to the logged-in user
         }
     }
 
@@ -111,7 +167,7 @@ public static class Auth
     /// Prompt the user for his login
     /// </summary>
     /// <returns>The user's ID</returns>
-    private static ArcadeLib.UUID LoginPrompt()
+    public static ArcadeLib.UUID LoginPrompt()
     {
         UpdateDisplay();
         SetCursorAtUsernamePrompt();
@@ -213,7 +269,7 @@ public static class Auth
                     {
                         try
                         {
-                            ArcadeLib.UUID UserID = ArcadeServerAPI.LoginSync(GetUsername().Trim(), GetPassword());
+                            ArcadeLib.UUID UserID = ArcadeServerAPI.Login(GetUsername().Trim(), GetPassword());
                             return UserID; // If the login was successful, return the UserID
                         }
                         catch (Exception e)
@@ -411,7 +467,7 @@ public static class Auth
         Misc.HideCursor();
         Console.Clear();
         new DotLine();
-        AnsiConsole.Write(new Text(errorMessage, new Style(ConsoleColor.Red)).Centered());
+        AnsiConsole.Write(new Text(errorMessage, new Spectre.Console.Style(ConsoleColor.Red)).Centered());
         new DotLine();
 
         Console.ReadKey(true);
@@ -437,5 +493,37 @@ public static class Auth
         // Display the welcome message for 1.5 seconds before clearing. The welcome message will close if the user presses the enter key
         ArcadeLib.Misc.DelayWithBreak(1500);
         Console.Clear(); // Cleanup: the screen will be ready for the game to begin
+    }
+
+    /// <summary>
+    /// Handle the login process for WPF applications/games. This method will check if the user has a saved login, and if not, it will prompt the user to login using the LoginClient app.
+    /// The LoginClient app will open in a separate terminal screen, kind of like a popup, and prompt the user to login. When he does, his UserID will be sent by socket back to this function.
+    /// The user's data will be retrieved from the database using his UserID, then saved to a file and returned.
+    /// </summary>
+    /// <param name="window">The WPF window calling this function</param>
+    /// <returns>The logged-in user</returns>
+    public static ArcadeLib.ArcadeUser HandleLoginWPF(System.Windows.Window window)
+    {
+        Tuple<string, string>? saved_login = ArcadeLib.Auth.TryGetLoginInfo();
+
+        if (saved_login == null)
+        {
+            ArcadeLib.UUID? user_id = ArcadeLib.Auth.LoginOnNewConsoleWindow();
+
+            if (user_id == null)
+            {
+                System.Windows.MessageBox.Show(window, "Login attempt was unsuccessful. Exiting now...", "Login Failed", MessageBoxButton.OK, MessageBoxImage.Error);
+                Environment.Exit(1);
+            }
+
+            ArcadeLib.ArcadeUser user = ArcadeLib.ArcadeServerAPI.GetArcadeUser(user_id!);
+            ArcadeLib.Auth.SaveUserLogin(user);
+            return user;
+        }
+        else
+        {
+            ArcadeLib.UUID user_id = ArcadeLib.ArcadeServerAPI.Login(saved_login.Item1, saved_login.Item2);
+            return ArcadeLib.ArcadeServerAPI.GetArcadeUser(user_id);
+        }
     }
 }
