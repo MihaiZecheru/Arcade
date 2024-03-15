@@ -160,12 +160,13 @@ app.get("/api/RPS/:room_id", router.RPS.get_room_by_id);
  * will update the stats for each of the players,
  * and will update the wallet balances of the winning player
  * @param room_id RoomID - url param
+ * @param game GameName - body param - the game being played in the room
  * @param winner UserID - body param
  * @param loser UserID - body param
  * @param wager int - body param
  * @returns success message
  */
-app.get("/api/RPS/:room_id/close", router.RPS.close_room);
+app.get("/api/close_room/:room_id", router.main.close_room);
 
 
 
