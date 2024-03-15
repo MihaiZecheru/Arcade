@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System.Text;
-using System.Text.RegularExpressions;
+using System.Net.Http;
 
 namespace ArcadeLib;
 
@@ -18,7 +18,7 @@ public static class ArcadeServerAPI
     /// <param name="password">The user's password</param>
     /// <exception cref="Exception">Thrown when the login fails</exception>
     /// <returns>The user's ID</returns>
-    public static async Task<ArcadeLib.UUID> Login(string username, string password)
+    public static ArcadeLib.UUID Login(string username, string password)
     {
         string url = $"{ArcadeURL}/api/login";
 
@@ -27,24 +27,11 @@ public static class ArcadeServerAPI
         var response = new StringContent(json, Encoding.UTF8, "application/json");
 
         // Will contain the user's ID if successful or an error message
-        var response_content = await (await client.PostAsync(url, response))
-            .Content.ReadAsStringAsync();
+        var response_content = client.PostAsync(url, response).Result.Content.ReadAsStringAsync().Result;
 
         if (response_content == "User not found" || response_content == "Incorrect password")
             throw new Exception(response_content);
         return new ArcadeLib.UUID(response_content);
-    }
-
-    /// <summary>
-    /// Syncronous version of <see cref="Login(string, string)"/>
-    /// </summary>
-    /// <param name="username">The user's username</param>
-    /// <param name="password">The user's password</param>
-    /// <exception cref="Exception"Thrown when the login fails></exception>
-    /// <returns>The user's ID</returns>
-    public static ArcadeLib.UUID LoginSync(string username, string password)
-    {
-        return Login(username, password).GetAwaiter().GetResult();
     }
 
     /// <summary>
@@ -53,17 +40,17 @@ public static class ArcadeServerAPI
     /// <param name="UserID">The user's ID</param>
     /// <exception cref="Exception">Error retrieving user data</exception>
     /// <returns><see cref="ArcadeUser"/> object</returns>
-    public static async Task<ArcadeUser> GetArcadeUser(ArcadeLib.UUID UserID)
+    public static ArcadeUser GetArcadeUser(ArcadeLib.UUID UserID)
     {
         string url = $"{ArcadeURL}/api/user/{UserID}";
 
         try
         {
-            var response = await client.GetAsync(url);
+            var response = client.GetAsync(url).Result;
 
             if (response.IsSuccessStatusCode)
             {
-                string jsonResponse = await response.Content.ReadAsStringAsync();
+                string jsonResponse = response.Content.ReadAsStringAsync().Result;
                 return (ArcadeUser)JsonConvert.DeserializeObject<ArcadeUser>(jsonResponse)!;
             }
             else
@@ -77,29 +64,18 @@ public static class ArcadeServerAPI
         }
     }
 
-    /// <summary>
-    /// Syncronous version of <see cref="GetArcadeUser(ArcadeLib.UUID)"/>
-    /// </summary>
-    /// <param name="UserID">The user's ID</param>
-    /// <exception cref="Exception">Error retrieving user data</exception>
-    /// <returns><see cref="ArcadeUser"/> object</returns>
-    public static ArcadeUser GetArcadeUserSync(ArcadeLib.UUID UserID)
-    {
-        return GetArcadeUser(UserID).GetAwaiter().GetResult();
-    }
-
-    public static async Task<List<ArcadeLib.Rooms.RockPaperScissorsRoom>> GetRoomsRPS()
+    public static List<ArcadeLib.Rooms.RockPaperScissorsRoom> GetRoomsRPS()
     {
         // TODO: test this
         string url = $"{ArcadeURL}/api/rps/all";
 
         try
         {
-            var response = await client.GetAsync(url);
+            var response = client.GetAsync(url).Result;
 
             if (response.IsSuccessStatusCode)
             {
-                string jsonResponse = await response.Content.ReadAsStringAsync();
+                string jsonResponse = response.Content.ReadAsStringAsync().Result;
                 return JsonConvert.DeserializeObject<List<ArcadeLib.Rooms.RockPaperScissorsRoom>>(jsonResponse)!;
             }
             else
@@ -120,7 +96,7 @@ public static class ArcadeServerAPI
     /// <param name="wager">The bet being placed on the room</param>
     /// <returns>The ID of the room</returns>
     /// <exception cref="Exception">Throws error if <paramref name="room_type"/> is invalid or if there is an internal server error while creating the room</exception>
-    public static async Task<ArcadeLib.UUID> CreateRoom(string room_type, int wager)
+    public static ArcadeLib.UUID CreateRoom(string room_type, int wager)
     {
         if (!ROOM_TYPES.Contains(room_type))
             throw new Exception("Invalid room type");
@@ -130,11 +106,11 @@ public static class ArcadeServerAPI
 
         try
         {
-            var response = await client.PostAsync(url, new StringContent(JsonConvert.SerializeObject(values), Encoding.UTF8, "application/json"));
+            var response = client.PostAsync(url, new StringContent(JsonConvert.SerializeObject(values), Encoding.UTF8, "application/json")).Result;
 
             if (response.IsSuccessStatusCode)
             {
-                string room_id = await response.Content.ReadAsStringAsync();
+                string room_id = response.Content.ReadAsStringAsync().Result;
                 if (!ArcadeLib.UUID.Valid(room_id)) throw new Exception();
                 return new ArcadeLib.UUID(room_id);
             }
