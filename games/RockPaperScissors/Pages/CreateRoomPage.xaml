@@ -92,7 +92,7 @@
                 </Style>
             </Button.Resources>
         </Button>
-        <Button x:Name="WagerTwentyFiveBtn" Cursor="Hand" Content="25" HorizontalAlignment="Left" Margin="301,219,0,0" VerticalAlignment="Top" FontFamily="Comfortaa" FontSize="15" Height="40" Width="55" Background="Ivory" BorderThickness="0" Style="{DynamicResource ButtonStyle1}" Grid.RowSpan="2" MouseEnter="Button_MouseEnter" Tag="25" Click="WagerButton_Click">
+        <Button x:Name="WagerTwentyFiveBtn" Cursor="Hand" Content="25" HorizontalAlignment="Left" Margin="301,219,0,0" VerticalAlignment="Top" FontFamily="Comfortaa" FontSize="15" Height="40" Width="55" Background="Ivory" BorderThickness="0" Style="{DynamicResource ButtonStyle1}" Grid.RowSpan="2" MouseEnter="Button_MouseEnter" Tag="25" Click="WagerButton_Click" MouseLeave="Button_MouseLeave">
             <Button.Resources>
                 <Style TargetType="{x:Type Border}">
                     <Setter Property="CornerRadius" Value="4"/>
