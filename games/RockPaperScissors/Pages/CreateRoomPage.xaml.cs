@@ -23,7 +23,8 @@ public partial class CreateRoomPage : Page
     /// </summary>
     private void TextBox_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
     {
-        if ((int)e.Key == (int)ConsoleKey.Enter)
+        // Return is the enter key
+        if (e.Key.ToString() == "Return")
         {
             string txt = WagerInputBox.Text.Trim();
             
@@ -79,6 +80,7 @@ public partial class CreateRoomPage : Page
     /// <param name="wager">The wager to place on the room</param>
     private void PlaceWager(int wager)
     {
+        MessageBox.Show($"Creating room with a wager of {wager}", "Room Created", MessageBoxButton.OK, MessageBoxImage.Information);
         // Navigate to the lobby page
         ((MainWindow)Application.Current.MainWindow).NavigateToPage(new Pages.LobbyPage());
 
@@ -118,5 +120,11 @@ public partial class CreateRoomPage : Page
     private void WagerInputBox_LostFocus(object sender, RoutedEventArgs e)
     {
         if (string.IsNullOrEmpty(WagerInputBox.Text)) WagerInputBox.Text = "0";
+    }
+
+    private void WagerButton_Click(object sender, RoutedEventArgs e)
+    {
+        int wager = int.Parse(((Button)sender).Tag.ToString()!);
+        PlaceWager(wager);
     }
 }

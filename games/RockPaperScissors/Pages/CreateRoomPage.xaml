@@ -71,63 +71,63 @@
                 </Style>
             </TextBox.Resources>
         </TextBox>
-        <Button x:Name="WagerOneBtn" Cursor="Hand" Content="1" HorizontalAlignment="Left" Margin="301,156,0,0" VerticalAlignment="Top" FontFamily="Comfortaa" FontSize="15" Height="40" Width="55" Background="Ivory" BorderThickness="0" Style="{DynamicResource ButtonStyle1}" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave">
+        <Button x:Name="WagerOneBtn" Cursor="Hand" Content="1" HorizontalAlignment="Left" Margin="301,156,0,0" VerticalAlignment="Top" FontFamily="Comfortaa" FontSize="15" Height="40" Width="55" Background="Ivory" BorderThickness="0" Style="{DynamicResource ButtonStyle1}" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" Tag="1" Click="WagerButton_Click">
             <Button.Resources>
                 <Style TargetType="{x:Type Border}">
                     <Setter Property="CornerRadius" Value="4"/>
                 </Style>
             </Button.Resources>
         </Button>
-        <Button x:Name="WagerFiveBtn" Cursor="Hand" Content="5" HorizontalAlignment="Center" Margin="0,156,0,0" VerticalAlignment="Top" FontFamily="Comfortaa" FontSize="15" Height="40" Width="56" Background="Ivory" BorderThickness="0" Style="{DynamicResource ButtonStyle1}" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave">
+        <Button x:Name="WagerFiveBtn" Cursor="Hand" Content="5" HorizontalAlignment="Center" Margin="0,156,0,0" VerticalAlignment="Top" FontFamily="Comfortaa" FontSize="15" Height="40" Width="56" Background="Ivory" BorderThickness="0" Style="{DynamicResource ButtonStyle1}" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" Tag="5" Click="WagerButton_Click">
             <Button.Resources>
                 <Style TargetType="{x:Type Border}">
                     <Setter Property="CornerRadius" Value="4"/>
                 </Style>
             </Button.Resources>
         </Button>
-        <Button x:Name="WagerTenBtn" Cursor="Hand" Content="10" HorizontalAlignment="Left" Margin="446,156,0,0" VerticalAlignment="Top" FontFamily="Comfortaa" FontSize="15" Height="40" Width="55" Background="Ivory" BorderThickness="0" Style="{DynamicResource ButtonStyle1}" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave">
+        <Button x:Name="WagerTenBtn" Cursor="Hand" Content="10" HorizontalAlignment="Left" Margin="446,156,0,0" VerticalAlignment="Top" FontFamily="Comfortaa" FontSize="15" Height="40" Width="55" Background="Ivory" BorderThickness="0" Style="{DynamicResource ButtonStyle1}" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" Tag="10" Click="WagerButton_Click">
             <Button.Resources>
                 <Style TargetType="{x:Type Border}">
                     <Setter Property="CornerRadius" Value="4"/>
                 </Style>
             </Button.Resources>
         </Button>
-        <Button x:Name="WagerTwentyFiveBtn" Cursor="Hand" Content="25" HorizontalAlignment="Left" Margin="301,219,0,0" VerticalAlignment="Top" FontFamily="Comfortaa" FontSize="15" Height="40" Width="55" Background="Ivory" BorderThickness="0" Style="{DynamicResource ButtonStyle1}" Grid.RowSpan="2" MouseEnter="Button_MouseEnter">
+        <Button x:Name="WagerTwentyFiveBtn" Cursor="Hand" Content="25" HorizontalAlignment="Left" Margin="301,219,0,0" VerticalAlignment="Top" FontFamily="Comfortaa" FontSize="15" Height="40" Width="55" Background="Ivory" BorderThickness="0" Style="{DynamicResource ButtonStyle1}" Grid.RowSpan="2" MouseEnter="Button_MouseEnter" Tag="25" Click="WagerButton_Click">
             <Button.Resources>
                 <Style TargetType="{x:Type Border}">
                     <Setter Property="CornerRadius" Value="4"/>
                 </Style>
             </Button.Resources>
         </Button>
-        <Button x:Name="WagerFiftyBtn" Cursor="Hand" Content="50" HorizontalAlignment="Center" Margin="0,219,0,0" VerticalAlignment="Top" FontFamily="Comfortaa" FontSize="15" Height="40" Width="56" Background="Ivory" BorderThickness="0" Style="{DynamicResource ButtonStyle1}" Grid.RowSpan="2" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave">
+        <Button x:Name="WagerFiftyBtn" Cursor="Hand" Content="50" HorizontalAlignment="Center" Margin="0,219,0,0" VerticalAlignment="Top" FontFamily="Comfortaa" FontSize="15" Height="40" Width="56" Background="Ivory" BorderThickness="0" Style="{DynamicResource ButtonStyle1}" Grid.RowSpan="2" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" Tag="50" Click="WagerButton_Click">
             <Button.Resources>
                 <Style TargetType="{x:Type Border}">
                     <Setter Property="CornerRadius" Value="4"/>
                 </Style>
             </Button.Resources>
         </Button>
-        <Button x:Name="WagerOneHundredBtn" Cursor="Hand" Content="100" HorizontalAlignment="Left" Margin="446,219,0,0" VerticalAlignment="Top" FontFamily="Comfortaa" FontSize="15" Height="40" Width="55" Background="Ivory" BorderThickness="0" Style="{DynamicResource ButtonStyle1}" Grid.RowSpan="2" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave">
+        <Button x:Name="WagerOneHundredBtn" Cursor="Hand" Content="100" HorizontalAlignment="Left" Margin="446,219,0,0" VerticalAlignment="Top" FontFamily="Comfortaa" FontSize="15" Height="40" Width="55" Background="Ivory" BorderThickness="0" Style="{DynamicResource ButtonStyle1}" Grid.RowSpan="2" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" Tag="100" Click="WagerButton_Click">
             <Button.Resources>
                 <Style TargetType="{x:Type Border}">
                     <Setter Property="CornerRadius" Value="4"/>
                 </Style>
             </Button.Resources>
         </Button>
-        <Button x:Name="WagerFivePercentBtn" Cursor="Hand" Content="5%" HorizontalAlignment="Left" Margin="301,34,0,0" VerticalAlignment="Top" FontFamily="Comfortaa" FontSize="15" Height="40" Width="55" Background="Ivory" BorderThickness="0" Style="{DynamicResource ButtonStyle1}" Grid.Row="1" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave">
+        <Button x:Name="WagerFivePercentBtn" Cursor="Hand" Content="5%" HorizontalAlignment="Left" Margin="301,34,0,0" VerticalAlignment="Top" FontFamily="Comfortaa" FontSize="15" Height="40" Width="55" Background="Ivory" BorderThickness="0" Style="{DynamicResource ButtonStyle1}" Grid.Row="1" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" Tag="Must be set programatically">
             <Button.Resources>
                 <Style TargetType="{x:Type Border}">
                     <Setter Property="CornerRadius" Value="4"/>
                 </Style>
             </Button.Resources>
         </Button>
-        <Button x:Name="WagerTenPercentBtn" Cursor="Hand" Content="10%" HorizontalAlignment="Center" Margin="0,34,0,0" VerticalAlignment="Top" FontFamily="Comfortaa" FontSize="15" Height="40" Width="56" Background="Ivory" BorderThickness="0" Style="{DynamicResource ButtonStyle1}" Grid.Row="1" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave">
+        <Button x:Name="WagerTenPercentBtn" Cursor="Hand" Content="10%" HorizontalAlignment="Center" Margin="0,34,0,0" VerticalAlignment="Top" FontFamily="Comfortaa" FontSize="15" Height="40" Width="56" Background="Ivory" BorderThickness="0" Style="{DynamicResource ButtonStyle1}" Grid.Row="1" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" Tag="Must be set programatically">
             <Button.Resources>
                 <Style TargetType="{x:Type Border}">
                     <Setter Property="CornerRadius" Value="4"/>
                 </Style>
             </Button.Resources>
         </Button>
-        <Button x:Name="WagerFifteenPercentBtn" Cursor="Hand" Content="15%" ToolTip="Programtically put what 15% of the user's balance is here" HorizontalAlignment="Left" Margin="446,34,0,0" VerticalAlignment="Top" FontFamily="Comfortaa" FontSize="15" Height="40" Width="55" Background="Ivory" BorderThickness="0" Style="{DynamicResource ButtonStyle1}" Grid.Row="1" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave">
+        <Button x:Name="WagerFifteenPercentBtn" Cursor="Hand" Content="15%" ToolTip="Programtically put what 15% of the user's balance is here" HorizontalAlignment="Left" Margin="446,34,0,0" VerticalAlignment="Top" FontFamily="Comfortaa" FontSize="15" Height="40" Width="55" Background="Ivory" BorderThickness="0" Style="{DynamicResource ButtonStyle1}" Grid.Row="1" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" Tag="Must be set programatically">
             <Button.Resources>
                 <Style TargetType="{x:Type Border}">
                     <Setter Property="CornerRadius" Value="4"/>
