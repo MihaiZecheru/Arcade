@@ -1,7 +1,7 @@
 import Database from "../../../mdb_local";
-import { RPS_choice } from "../../models/games/RPS";
+import { RockPaperScissors_choice } from "../../models/games/RockPaperScissors";
 import IPlayer from "../../models/player";
-import { RPSRoom } from "../../models/rooms";
+import { RockPaperScissorsRoom } from "../../models/rooms";
 import Server, { RoomID } from "../../server";
 import { UserID } from "../../models/user";
 
@@ -25,21 +25,21 @@ export default function websocket(ws: any, req: any): void {
   }
 
   // check if room exists
-  if (!Server.room_exists("RPS", room_id)) {
+  if (!Server.room_exists("RockPaperScissors", room_id)) {
     ws.send("Room does not exist");
     return ws.close();
   }
 
   /**
-   * The Server.RPS_join_room function will handle errors with the room already being
+   * The Server.RockPaperScissors_join_room function will handle errors with the room already being
    * at max capacity or the game already being in progress
    **/
 
-  const room_is_ready: boolean = Server.RPS_join_room(room_id, user_id, ws);
+  const room_is_ready: boolean = Server.RockPaperScissors_join_room(room_id, user_id, ws);
   ws.send(`connected to room ${room_id}`);
 
   if (room_is_ready) {
-    Server.RPS_start_game(room_id);
+    Server.RockPaperScissors_start_game(room_id);
   }
 
   // ** play the game ** //
@@ -54,20 +54,20 @@ function on_message(msg: any, room_id: RoomID): void {
    * 1p, 2s, 1r, 2p, etc.
    */
 
-  const room: RPSRoom = Server.RPS_get_room(room_id);
+  const room: RockPaperScissorsRoom = Server.RockPaperScissors_get_room(room_id);
   const player_number: number = parseInt(msg[0]);
-  const choice: RPS_choice = msg[1] === 'r' ? "rock" : msg[1] === 'p' ? "paper" : "scissors";
+  const choice: RockPaperScissors_choice = msg[1] === 'r' ? "rock" : msg[1] === 'p' ? "paper" : "scissors";
   const player_user_id: UserID = room.get_player_by_number(player_number)?.user_id!;
-  const end = Server.RPS_player_choose(room_id, player_user_id, choice);
+  const end = Server.RockPaperScissors_player_choose(room_id, player_user_id, choice);
 
   // finish the game if both players have chosen
   if (end) finish_game(room);
 }
 
-function finish_game(room: RPSRoom): void {
+function finish_game(room: RockPaperScissorsRoom): void {
   // both players have chosen
   const room_id = room.id;
-  const winner = Server.RPS_decide_winner(room_id);
+  const winner = Server.RockPaperScissors_decide_winner(room_id);
   const players = room.players;
   const wager = room.wager;
 
