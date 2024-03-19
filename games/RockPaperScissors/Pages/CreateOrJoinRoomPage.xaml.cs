@@ -42,7 +42,7 @@ public partial class CreateOrJoinRoomPage : Page
     private void CreateRoomBtn_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
     {
         ColorAnimation ca = new ColorAnimation(CreateRoomBtnColor, CreateRoomBtnHoverColor, new Duration(TimeSpan.FromMilliseconds(250)));
-        DoBtnColorAnimation(ca, CreateRoomBtn);
+        ArcadeLib.WPF.DoBackgroundColorAnimation(ca, CreateRoomBtn);
     }
 
     /// <summary>
@@ -51,7 +51,7 @@ public partial class CreateOrJoinRoomPage : Page
     private void CreateRoomBtn_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
     {
         ColorAnimation ca = new ColorAnimation(CreateRoomBtnHoverColor, CreateRoomBtnColor, new Duration(TimeSpan.FromMilliseconds(250)));
-        DoBtnColorAnimation(ca, CreateRoomBtn);
+        ArcadeLib.WPF.DoBackgroundColorAnimation(ca, CreateRoomBtn);
     }
 
     /// <summary>
@@ -60,7 +60,7 @@ public partial class CreateOrJoinRoomPage : Page
     private void JoinRoomBtn_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
     {
         ColorAnimation ca = new ColorAnimation(JoinRoomBtnColor, JoinRoomBtnHoverColor, new Duration(TimeSpan.FromMilliseconds(250)));
-        DoBtnColorAnimation(ca, JoinRoomBtn);
+        ArcadeLib.WPF.DoBackgroundColorAnimation(ca, JoinRoomBtn);
     }
 
     /// <summary>
@@ -69,15 +69,6 @@ public partial class CreateOrJoinRoomPage : Page
     private void JoinRoomBtn_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
     {
         ColorAnimation ca = new ColorAnimation(JoinRoomBtnHoverColor, JoinRoomBtnColor, new Duration(TimeSpan.FromMilliseconds(250)));
-        DoBtnColorAnimation(ca, JoinRoomBtn);
-    }
-
-    private void DoBtnColorAnimation(System.Windows.Media.Animation.ColorAnimation ca, System.Windows.Controls.Button btn)
-    {
-        Storyboard.SetTarget(ca, btn);
-        Storyboard.SetTargetProperty(ca, new PropertyPath("Background.Color"));
-        Storyboard stb = new Storyboard();
-        stb.Children.Add(ca);
-        stb.Begin();
+        ArcadeLib.WPF.DoBackgroundColorAnimation(ca, JoinRoomBtn);
     }
 }
