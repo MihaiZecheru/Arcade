@@ -4,10 +4,14 @@ using System.Net.Http;
 
 namespace ArcadeLib;
 
+// TODO: keep adding new games as they're made here
+public enum RoomType
+{
+    RockPaperScissors,
+}
+
 public static class ArcadeServerAPI
 {
-    // TODO: keep adding new games as they're made here
-    private static readonly string[] ROOM_TYPES = new string[]{ "rps", "hilo" };
     private static readonly string ArcadeURL = "http://localhost:3000";
     private static readonly HttpClient client = new HttpClient();
 
@@ -64,7 +68,7 @@ public static class ArcadeServerAPI
         }
     }
 
-    public static List<ArcadeLib.Rooms.RockPaperScissorsRoom> GetRoomsRPS()
+    public static List<ArcadeLib.Rooms.RockPaperScissorsRoom> GetRoomsRockPaperScissors()
     {
         // TODO: test this
         string url = $"{ArcadeURL}/api/rps/all";
@@ -92,15 +96,12 @@ public static class ArcadeServerAPI
     /// <summary>
     /// Create a new room
     /// </summary>
-    /// <param name="room_type">The type of the room/the name of the game. Ex: 'rps', 'hilo', etc.</param>
     /// <param name="wager">The bet being placed on the room</param>
+    /// <param name="room_type">The type of the room, i.e the name of the game. RoomType is an Enum. Ex: RoomType.RockPaperScissors.</param>
     /// <returns>The ID of the room</returns>
     /// <exception cref="Exception">Throws error if <paramref name="room_type"/> is invalid or if there is an internal server error while creating the room</exception>
-    public static ArcadeLib.UUID CreateRoom(string room_type, int wager)
+    public static ArcadeLib.UUID CreateRoom(int wager, RoomType room_type)
     {
-        if (!ROOM_TYPES.Contains(room_type))
-            throw new Exception("Invalid room type");
-
         string url = $"{ArcadeURL}/api/{room_type}/create";
         var values = new { wager };
 
