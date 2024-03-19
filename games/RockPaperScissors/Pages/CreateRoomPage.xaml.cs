@@ -80,7 +80,10 @@ public partial class CreateRoomPage : Page
     /// <param name="wager">The wager to place on the room</param>
     private void PlaceWager(int wager)
     {
-        MessageBox.Show($"Creating room with a wager of {wager}", "Room Created", MessageBoxButton.OK, MessageBoxImage.Information);
+        // Confirm the wager with the user
+        bool cancel = MessageBox.Show($"Creating a room with a wager of {wager}", "Confirm Wager", MessageBoxButton.OKCancel, MessageBoxImage.Information, MessageBoxResult.Cancel) == MessageBoxResult.Cancel;
+        if (cancel) return;
+
         // Navigate to the lobby page
         ((MainWindow)Application.Current.MainWindow).NavigateToPage(new Pages.LobbyPage());
 
