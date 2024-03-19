@@ -2,20 +2,17 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="images\arcade.png" />
+    <None Remove="images\Arcade.png" />
     <None Remove="images\paper.jpg" />
     <None Remove="images\rock.jpg" />
     <None Remove="images\scissors.jpg" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Page Remove="RoomSelection.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="images\arcade.png" />
+    <Resource Include="images\Arcade.png" />
     <Resource Include="images\paper.jpg" />
     <Resource Include="images\rock.jpg" />
     <Resource Include="images\scissors.jpg" />

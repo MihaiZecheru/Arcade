@@ -37,6 +37,6 @@ public class RockPaperScissorsRoom : ArcadeLib.Rooms.IRoom
     /// <returns>All active joinable Rock Paper Scissors rooms</returns>
     public static List<ArcadeLib.Rooms.RockPaperScissorsRoom> GetRooms()
     {
-        return ArcadeLib.ArcadeServerAPI.GetRoomsRPS();
+        return ArcadeLib.ArcadeServerAPI.GetRoomsRockPaperScissors();
     }
 }
