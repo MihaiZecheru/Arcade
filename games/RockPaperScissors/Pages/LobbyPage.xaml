@@ -9,6 +9,7 @@
       Title="LobbyPage">
 
     <Grid>
-        
+        <TextBlock HorizontalAlignment="Left" Margin="284,0,0,0" TextWrapping="Wrap" Text="TODO: Add loading screen as the room is created (spinner) and then display lobby screen for people to join" VerticalAlignment="Center"/>
+
     </Grid>
 </Page>
