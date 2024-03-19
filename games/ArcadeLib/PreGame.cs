@@ -66,6 +66,11 @@ public static class PreGame
         return selected_room_id;
     }
 
+    /// <summary>
+    /// Prompt the user to set a wager for the room and then create the room
+    /// </summary>
+    /// <param name="room_type">The type of the room, i.e the name of the game. RoomType is an Enum. Ex: RoomType.RockPaperScissors.</param>
+    /// <returns>The UUID of the created room</returns>
     public static ArcadeLib.UUID CreateRoomPrompt(ArcadeLib.Rooms.RoomType room_type)
     {
         // Get wager from user
