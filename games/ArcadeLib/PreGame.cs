@@ -1,7 +1,6 @@
 ﻿namespace ArcadeLib;
 
 using Spectre.Console;
-using Spectre.Console.Advanced;
 
 public static class PreGame
 {
@@ -30,19 +29,16 @@ public static class PreGame
     /// <summary>
     /// Prompt the user to choose a room to join, return the selected room
     /// </summary>
-    /// <param name="room_type">The type of room/the name of the game, ex: 'rps', 'hilo', etc.</param>
+    /// <param name="room_type">The type of the room, i.e the name of the game. RoomType is an Enum. Ex: RoomType.RockPaperScissors.</param>
     /// <returns>The ID of the room the user wants to join</returns>
-    public static ArcadeLib.UUID SelectRoom(string room_type)
+    public static ArcadeLib.UUID SelectRoom(ArcadeLib.Rooms.RoomType room_type)
     {
         List<ArcadeLib.Rooms.IRoom> rooms = new List<ArcadeLib.Rooms.IRoom>();
         switch (room_type)
         {
-            case "rps":
+            case ArcadeLib.Rooms.RoomType.RockPaperScissors:
                 rooms.AddRange(ArcadeLib.Rooms.RockPaperScissorsRoom.GetRooms());
                 break;
-
-            default:
-                throw new Exception($"No game exists with the name '{room_type}'. What game are you trying to get rooms for?");
         }
 
         List<string> options = new List<string>() { "[blue]Create Room[/]" };
@@ -70,7 +66,7 @@ public static class PreGame
         return selected_room_id;
     }
 
-    public static ArcadeLib.UUID CreateRoomPrompt(string room_type)
+    public static ArcadeLib.UUID CreateRoomPrompt(ArcadeLib.Rooms.RoomType room_type)
     {
         // Get wager from user
         int wager;
@@ -93,7 +89,7 @@ public static class PreGame
         }
 
         // Create the room with the wager
-        return ArcadeLib.ArcadeServerAPI.CreateRoom(room_type, wager);
+        return ArcadeLib.ArcadeServerAPI.CreateRoom(wager, room_type);
     }
 
     /// <summary>

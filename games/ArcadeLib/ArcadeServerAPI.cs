@@ -4,12 +4,6 @@ using System.Net.Http;
 
 namespace ArcadeLib;
 
-// TODO: keep adding new games as they're made here
-public enum RoomType
-{
-    RockPaperScissors,
-}
-
 public static class ArcadeServerAPI
 {
     private static readonly string ArcadeURL = "http://localhost:3000";
@@ -100,7 +94,7 @@ public static class ArcadeServerAPI
     /// <param name="room_type">The type of the room, i.e the name of the game. RoomType is an Enum. Ex: RoomType.RockPaperScissors.</param>
     /// <returns>The ID of the room</returns>
     /// <exception cref="Exception">Throws error if <paramref name="room_type"/> is invalid or if there is an internal server error while creating the room</exception>
-    public static ArcadeLib.UUID CreateRoom(int wager, RoomType room_type)
+    public static ArcadeLib.UUID CreateRoom(int wager, ArcadeLib.Rooms.RoomType room_type)
     {
         string url = $"{ArcadeURL}/api/{room_type}/create";
         var values = new { wager };

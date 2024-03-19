@@ -59,7 +59,7 @@ public partial class CreateRoomPage : Page
     private void PlaceWager(int wager)
     {
         // Create a new room with the specified wager
-        ArcadeLib.ArcadeServerAPI.CreateRoom("RockPaperScissors", wager);
+        ArcadeLib.ArcadeServerAPI.CreateRoom(wager, ArcadeLib.Rooms.RoomType.RockPaperScissors);
         
 
         // Navigate to the lobby page
