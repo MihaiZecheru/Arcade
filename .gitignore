@@ -7,8 +7,8 @@ server/database/
 /games/ArcadeLib/bin/
 /games/ArcadeLib/obj/
 
-/games/ArcadeRockPaperScissors/bin
-/games/ArcadeRockPaperScissors/obj
+/games/RockPaperScissors/bin
+/games/RockPaperScissors/obj
 
 /games/Rock Paper Scissors (CLI)/bin
 /games/Rock Paper Scissors (CLI)/obj
