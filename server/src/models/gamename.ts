@@ -1,2 +1,2 @@
-type GameName = "RPS"// | "Hi-Lo";
+type GameName = "RockPaperScissors"// | "Hi-Lo";
 export default GameName;

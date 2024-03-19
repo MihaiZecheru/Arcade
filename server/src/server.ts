@@ -1,8 +1,8 @@
 import User, { IUser, UserID } from "./models/user";
 import uuid, { ID } from "./models/ID";
-import { RPS_choice } from "./models/games/RPS";
+import { RockPaperScissors_choice } from "./models/games/RockPaperScissors";
 import IPlayer from "./models/player";
-import { RPSRoom } from "./models/rooms";
+import { RockPaperScissorsRoom } from "./models/rooms";
 import Database from "../mdb_local";
 import Branded from "./branded";
 import GameName from "./models/gamename";
@@ -16,8 +16,8 @@ export type RoomID = Branded<ID, "RoomID">;
  * The Server class's data
  */
 type TServer = {
-  "RPS": {
-    [room_id: RoomID]: RPSRoom
+  "RockPaperScissors": {
+    [room_id: RoomID]: RockPaperScissorsRoom
   }
 };
 
@@ -34,7 +34,7 @@ export default class Server {
    * The server's data
    */
   private static server: TServer = {
-    "RPS": {},
+    "RockPaperScissors": {},
   };
 
   /**
@@ -212,13 +212,13 @@ export default class Server {
    * Create a room for the rock-paper-scissors game. Note: this does not take any money from the players as rooms are created before players join
    * @returns The ID of the room
    */
-  public static RPS_create_room(wager: number): RoomID {
+  public static RockPaperScissors_create_room(wager: number): RoomID {
     if (wager <= 0) throw new Error("Wager must be greater than 0");
     if (Math.floor(wager) !== wager) throw new Error("Wager must be a whole number");
     
     const id: RoomID = uuid() as RoomID;
     this.room_ids.push(id);
-    this.server.RPS[id] = new RPSRoom(id, wager);
+    this.server.RockPaperScissors[id] = new RockPaperScissorsRoom(id, wager);
 
     return id;
   }
@@ -227,9 +227,9 @@ export default class Server {
    * Delete a rock-paper-scissors room
    * @param room_id The ID of the room to delete
    */
-  public static RPS_delete_room(room_id: RoomID): void {
+  public static RockPaperScissors_delete_room(room_id: RoomID): void {
     this.room_ids.splice(this.room_ids.indexOf(room_id), 1);
-    delete this.server.RPS[room_id];
+    delete this.server.RockPaperScissors[room_id];
   }
 
   /**
@@ -237,16 +237,16 @@ export default class Server {
    * @param room_id The ID of the room to get
    * @returns The room with the given ID
    */
-  public static RPS_get_room(room_id: RoomID): RPSRoom {
-    return this.server.RPS[room_id];
+  public static RockPaperScissors_get_room(room_id: RoomID): RockPaperScissorsRoom {
+    return this.server.RockPaperScissors[room_id];
   }
 
   /**
    * Get all rock-paper-scissors rooms
    * @returns All rock-paper-scissors rooms
    */
-  public static RPS_get_all_rooms(): Array<RPSRoom> {
-    return Object.values(this.server.RPS);
+  public static RockPaperScissors_get_all_rooms(): Array<RockPaperScissorsRoom> {
+    return Object.values(this.server.RockPaperScissors);
   }
 
   /**
@@ -256,9 +256,9 @@ export default class Server {
    * @returns Whether the room is now full and ready to start
    * @throws {Error} If the room is already full prior to join, if the game is already in progress, or if the user is already in the room
    */
-  public static RPS_join_room(room_id: RoomID, user_id: UserID, ws: any): boolean {  
-    this.server.RPS[room_id].add_player(user_id, ws);
-    return this.server.RPS[room_id].room_full();
+  public static RockPaperScissors_join_room(room_id: RoomID, user_id: UserID, ws: any): boolean {  
+    this.server.RockPaperScissors[room_id].add_player(user_id, ws);
+    return this.server.RockPaperScissors[room_id].room_full();
   }
 
   /**
@@ -267,18 +267,18 @@ export default class Server {
    * @param user_id The ID of the player to remove from the room
    * @throws {Error} If the given user is not in the room
    */
-  public static RPS_leave_room(room_id: RoomID, user_id: UserID) {
-    this.server.RPS[room_id].remove_player(user_id);
+  public static RockPaperScissors_leave_room(room_id: RoomID, user_id: UserID) {
+    this.server.RockPaperScissors[room_id].remove_player(user_id);
   }
 
   /**
    * Start a rock-paper-scissors game and deduct the wager from both players
    * @param room_id The ID of the room that's starting
    */
-  public static RPS_start_game(room_id: RoomID) {
-    this.server.RPS[room_id].game_started = true;
+  public static RockPaperScissors_start_game(room_id: RoomID) {
+    this.server.RockPaperScissors[room_id].game_started = true;
     
-    const room = this.RPS_get_room(room_id);
+    const room = this.RockPaperScissors_get_room(room_id);
     room.players.forEach((player: IPlayer) => {
       // deduct wager from player's balance
       this.decrease_user_wallet_balance(player.user_id, room.wager);
@@ -296,9 +296,9 @@ export default class Server {
    * @param choice The choice the player is making - rock, paper, or scissors
    * @returns True if both players have chosen, false otherwise
    */
-  public static RPS_player_choose(room_id: RoomID, player_id: UserID, choice: RPS_choice): boolean {
-    this.server.RPS[room_id].set_player_choice(player_id, choice);
-    return this.server.RPS[room_id].room_full();
+  public static RockPaperScissors_player_choose(room_id: RoomID, player_id: UserID, choice: RockPaperScissors_choice): boolean {
+    this.server.RockPaperScissors[room_id].set_player_choice(player_id, choice);
+    return this.server.RockPaperScissors[room_id].room_full();
   }
 
   /**
@@ -307,12 +307,12 @@ export default class Server {
    * @param room_id The ID of the room to get the winner of
    * @returns The ID of the winner, or null if there is no winner
    */
-  public static RPS_decide_winner(room_id: RoomID): IPlayer | null {
-    const player1: IPlayer = this.server.RPS[room_id].get_player_by_number(1)!;
-    const player2: IPlayer = this.server.RPS[room_id].get_player_by_number(2)!;
+  public static RockPaperScissors_decide_winner(room_id: RoomID): IPlayer | null {
+    const player1: IPlayer = this.server.RockPaperScissors[room_id].get_player_by_number(1)!;
+    const player2: IPlayer = this.server.RockPaperScissors[room_id].get_player_by_number(2)!;
 
-    const player1_choice: RPS_choice = this.server.RPS[room_id].get_player_choice(1);
-    const player2_choice: RPS_choice = this.server.RPS[room_id].get_player_choice(2);
+    const player1_choice: RockPaperScissors_choice = this.server.RockPaperScissors[room_id].get_player_choice(1);
+    const player2_choice: RockPaperScissors_choice = this.server.RockPaperScissors[room_id].get_player_choice(2);
 
     // tie
     if (player1_choice === player2_choice) return null;

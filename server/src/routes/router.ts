@@ -11,11 +11,11 @@ import get_wallet_balance from './money/get_wallet_balance';
 import deposit_money_to_bank from './money/deposit_money_to_bank';
 import withdraw_money_from_bank from './money/withdraw_money_from_bank';
 
-// RPS
-import create_room from './RPS/create_room';
-import get_all_rooms from './RPS/get_all_rooms';
-import get_room_by_id from './RPS/get_room_by_id';
-import RPS_websocket from './RPS/websocket';
+// RockPaperScissors
+import create_room from './RockPaperScissors/create_room';
+import get_all_rooms from './RockPaperScissors/get_all_rooms';
+import get_room_by_id from './RockPaperScissors/get_room_by_id';
+import RockPaperScissors_websocket from './RockPaperScissors/websocket';
 
 const router = {
   main: {
@@ -31,11 +31,11 @@ const router = {
     deposit_money_to_bank,
     withdraw_money_from_bank
   },
-  RPS: {
+  RockPaperScissors: {
     create_room,
     get_all_rooms,
     get_room_by_id,
-    websocket: RPS_websocket,
+    websocket: RockPaperScissors_websocket,
   }
 };
 

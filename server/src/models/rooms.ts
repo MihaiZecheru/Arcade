@@ -1,14 +1,14 @@
-import { RPS_choice } from "./games/RPS";
+import { RockPaperScissors_choice } from "./games/RockPaperScissors";
 import IPlayer from "./player";
 import { RoomID } from "../server";
 import { UserID } from "./user";
 
 /**
- * Contains the maximum amount of players any sub-class of RoomBaseClass can have, ie RPSRoom
+ * Contains the maximum amount of players any sub-class of RoomBaseClass can have, ie RockPaperScissorsRoom
  */
 const ROOM_CAPS: { [room_name: string]: number } = {
   "RoomBaseClass": 2, // should not be used. only here for testing
-  "RPSRoom": 2
+  "RockPaperScissorsRoom": 2
 };
 
 function GET_MAX_ROOM_CAPACITY(classname: string): number {
@@ -127,18 +127,18 @@ export class RoomBaseClass {
 /**
  * Rock Paper Scissors room
  */
-export class RPSRoom extends RoomBaseClass {
-  private player1_choice: RPS_choice | null = null;
-  private player2_choice: RPS_choice | null = null;
+export class RockPaperScissorsRoom extends RoomBaseClass {
+  private player1_choice: RockPaperScissors_choice | null = null;
+  private player2_choice: RockPaperScissors_choice | null = null;
 
   /**
    * Get a player's choice
    * @param user_id The ID of the player
    * @returns The player's choice (rock, paper, or scissors)
    */
-  public get_player_choice(user_id: UserID): RPS_choice;
-  public get_player_choice(player_number: number): RPS_choice;
-  public get_player_choice(player: UserID | number): RPS_choice {
+  public get_player_choice(user_id: UserID): RockPaperScissors_choice;
+  public get_player_choice(player_number: number): RockPaperScissors_choice;
+  public get_player_choice(player: UserID | number): RockPaperScissors_choice {
     let _player: IPlayer;
     if (typeof player === "number") {
       try {
@@ -155,7 +155,7 @@ export class RPSRoom extends RoomBaseClass {
       }
     }
 
-    let choice: RPS_choice | null = (_player.player_number === 1) ? this.player1_choice : this.player2_choice;
+    let choice: RockPaperScissors_choice | null = (_player.player_number === 1) ? this.player1_choice : this.player2_choice;
     if (!choice) throw new Error(`Player '${_player.user_id}' has not made a choice yet`);
     return choice!;
   }
@@ -165,7 +165,7 @@ export class RPSRoom extends RoomBaseClass {
    * @param user_id The ID of the player
    * @param choice The player's choice (rock, paper, or scissors)
    */
-  public set_player_choice(user_id: UserID, choice: RPS_choice): void {
+  public set_player_choice(user_id: UserID, choice: RockPaperScissors_choice): void {
     const player = this.get_player_by_user_id(user_id);
     if (!player) throw new Error(`Player '${user_id}' is not in room '${this.id}`);
 

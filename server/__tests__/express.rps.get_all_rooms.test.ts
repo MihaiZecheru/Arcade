@@ -1,18 +1,18 @@
 import router from '../src/routes/router';
-import { RPSRoom } from '../src/models/rooms';
+import { RockPaperScissorsRoom } from '../src/models/rooms';
 import Server from '../src/server';
 import { describe, test, expect } from '@jest/globals';
 
 describe('Test the get_all_rooms function', () => {
   test('get_all_rooms', () => {
-    const room1: RPSRoom = Server.RPS_get_room(Server.RPS_create_room(10));
-    const room2: RPSRoom = Server.RPS_get_room(Server.RPS_create_room(25));
+    const room1: RockPaperScissorsRoom = Server.RockPaperScissors_get_room(Server.RockPaperScissors_create_room(10));
+    const room2: RockPaperScissorsRoom = Server.RockPaperScissors_get_room(Server.RockPaperScissors_create_room(25));
 
     const req = {};
     const res = { text: null, send: (x: any) => { res.text = x }, statusCode: null, status: (x: any) => { res.statusCode = x; return res; } };
 
-    router.RPS.get_all_rooms(req, res);
-    const rooms: Array<RPSRoom> = res.text!;
+    router.RockPaperScissors.get_all_rooms(req, res);
+    const rooms: Array<RockPaperScissorsRoom> = res.text!;
 
     expect(res.statusCode).toBe(200);
     expect(rooms.length).toBe(2);
@@ -20,7 +20,7 @@ describe('Test the get_all_rooms function', () => {
     expect(rooms).toContain(room2);
     
     // cleanup
-    Server.RPS_delete_room(room1.id);
-    Server.RPS_delete_room(room2.id);
+    Server.RockPaperScissors_delete_room(room1.id);
+    Server.RockPaperScissors_delete_room(room2.id);
   });
 });

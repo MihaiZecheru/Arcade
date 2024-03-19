@@ -123,7 +123,7 @@ app.put("/api/user/:user_id/balance/withdraw", router.money.withdraw_money_from_
  * @param wager int - body param
  * @returns RoomID
  */
-app.post("/api/RPS/create", router.RPS.create_room);
+app.post("/api/RockPaperScissors/create", router.RockPaperScissors.create_room);
 
 
 
@@ -135,16 +135,16 @@ app.post("/api/RPS/create", router.RPS.create_room);
 
 /**
  * Get all Rock Paper Scissors rooms
- * @returns Array<RPSRoom>
+ * @returns Array<RockPaperScissorsRoom>
  */
-app.get("/api/RPS/all", router.RPS.get_all_rooms);
+app.get("/api/RockPaperScissors/all", router.RockPaperScissors.get_all_rooms);
 
 /**
  * Get Rock Paper Scissors room by ID
  * @param room_id RoomID - url param
- * @returns RPSRoom object
+ * @returns RockPaperScissorsRoom object
  */
-app.get("/api/RPS/:room_id", router.RPS.get_room_by_id);
+app.get("/api/RockPaperScissors/:room_id", router.RockPaperScissors.get_room_by_id);
 
 
 
@@ -155,7 +155,7 @@ app.get("/api/RPS/:room_id", router.RPS.get_room_by_id);
 
 
 /**
- * Close a RPSRoom
+ * Close a RockPaperScissorsRoom
  * Closing a room will delete it from the server,
  * will update the stats for each of the players,
  * and will update the wallet balances of the winning player
@@ -182,7 +182,7 @@ app.get("/api/close_room/:room_id", router.main.close_room);
  * @param user_id The ID of the user joining (UserID) - query param
  * @returns void
  */
-ws_app.ws("/api/RPS/:room_id", router.RPS.websocket);
+ws_app.ws("/api/RockPaperScissors/:room_id", router.RockPaperScissors.websocket);
 
 /**
  * Start server
